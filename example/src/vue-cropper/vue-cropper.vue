@@ -50,8 +50,8 @@ export default {
 		// reload 图片布局函数
 		reload () {
 			// 得到外层容器的宽度高度
-			let w =  window.getComputedStyle(this.$refs.cropper).width.replace('px', '') - 4
-			let h =  window.getComputedStyle(this.$refs.cropper).height.replace('px', '') - 4
+			let w =  window.getComputedStyle(this.$refs.cropper).width.replace('px', '')
+			let h =  window.getComputedStyle(this.$refs.cropper).height.replace('px', '')
 
 			// 存入图片真实高度
 			this.trueWidth = this.$refs.cropperImg.width
@@ -67,8 +67,9 @@ export default {
 			}
 
 			this.$nextTick(() => {
-				this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (w - this.trueWidth * this.scale) / 2
-				this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (h - this.trueHeight * this.scale) / 2
+				// this.x = this.trueWidth * (this.scale - 1)
+				this.x = (-(this.trueWidth - this.trueWidth * this.scale) / 2 + (w - this.trueWidth * this.scale) / 2) / this.scale
+				this.y = (-(this.trueHeight - this.trueHeight * this.scale) / 2 + (h - this.trueHeight * this.scale) / 2) / this.scale
 				this.loading = false
 				console.log('reload')
 			})
@@ -92,12 +93,11 @@ export default {
 		position: relative;
 		width: 100%;
 		height: 500px;
-		padding: 2px;
 		box-sizing: border-box;
 		user-select: none;
 		direction: ltr;
 		touch-action: none;
-		overflow: hidden;
+		/*overflow: hidden;*/
   	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
 	}
 

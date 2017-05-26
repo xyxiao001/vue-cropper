@@ -2,7 +2,7 @@
 	<div class="content">
 		<h1>vue-cropper</h1>
 		<p>一个基于vue的图片裁剪插件</p>
-		<vueCropper ref="cropper" :img="option.img2"></vueCropper>
+		<vueCropper ref="cropper" :img="option.img3"></vueCropper>
 	</div>
 </template>
 
