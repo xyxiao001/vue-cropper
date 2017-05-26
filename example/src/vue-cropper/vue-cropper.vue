@@ -113,7 +113,7 @@ export default {
 		// 改变大小函数
 		changeSize (e) {
 			var change = event.deltaY
-			change < 0 ? this.scale += 0.1 : this.scale > 0.1 ? this.scale -= 0.1 : this.scale
+			change < 0 ? this.scale += 0.05 : this.scale > 0.05 ? this.scale -= 0.05 : this.scale
 			event.preventDefault()
 		},
 		// reload 图片布局函数
@@ -180,6 +180,7 @@ export default {
 
 	.cropper-box-canvas img {
 		position: relative;
+		user-select: none;
 	}
 
 	.crapper-drag-box {
