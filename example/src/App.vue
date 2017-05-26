@@ -3,7 +3,12 @@
 		<h1>vue-cropper</h1>
 		<p>一个基于vue的图片裁剪插件</p>
 		<vueCropper ref="cropper" :img="option[num].img"></vueCropper>
-		<button @click="changeImg">改变图片</button>
+		<div class="test">
+			<button @click="changeImg" class="btn">替换图片</button>
+			<button @click="startCrop" v-if="!crap" class="btn">开始截图</button>
+			<button @click="stopCrop" v-else class="btn">停止截图</button>
+			<button @click="clearCrop" class="btn">清除截图</button>
+		</div>
 	</div>
 </template>
 
@@ -12,6 +17,7 @@ import vueCropper from './vue-cropper'
 export default {
   data: function () {
     return {
+		  crap: false,
 			option: [
 				{
 					img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
@@ -41,6 +47,19 @@ export default {
 	methods: {
 		changeImg () {
 			this.num = ~~(Math.random() * this.option.length)
+		},
+		startCrop () {
+			// 开始截图
+			this.crap = true
+			this.$refs.cropper.startCrop()
+		},
+		stopCrop () {
+			// 开始截图
+			this.crap = false
+			this.$refs.cropper.stopCrop()
+		},
+		clearCrop () {
+			this.$refs.cropper.clearCrop()
 		}
 	},
 	components: {
@@ -56,5 +75,30 @@ export default {
 	.content {
 		margin: auto;
 		max-width: 1200px;
+	}
+
+	.test {
+		margin-top: 10px;
+		margin-bottom: 100px;
+	}
+
+	.btn {
+		line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #c0ccda;
+    color: #1f2d3d;
+    text-align: center;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    padding: 9px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #50bfff;
+    border-color: #50bfff;
+    transition: all .2s ease;
 	}
 </style>

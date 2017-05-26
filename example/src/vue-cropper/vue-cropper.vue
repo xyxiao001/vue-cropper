@@ -17,12 +17,37 @@
 		</div>
 		<div
 			class="cropper-drag-box"
-		  :class="{'cropper-move': move}"
+		  :class="{'cropper-move': move && !crop, 'cropper-crop': crop, 'cropper-modal': cropping}"
 			@mousedown="startMove"
       @touchstart="startMove"
 			@mouseover="scaleImg"
 			@mouseout="cancleScale"
 			>
+			</div>
+			<div
+				v-show="cropping"
+				class="cropper-crop-box"
+				:style="{
+					'width': cropW + 'px',
+					'height': cropH + 'px',
+					'transform': 'translate3d('+ cropOffsertX + 'px,' + cropOffsertY + 'px,' + '0)'
+				}">
+				<span class="cropper-view-box">
+					<img
+					:style="{
+						'width': trueWidth + 'px',
+						'height': trueHeight + 'px',
+						'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ (x - cropOffsertX) / scale  + 'px,' + (y - cropOffsertY) / scale + 'px,' + '0)'
+						}"
+						:src="img"
+						alt="cropper-img"
+						>
+				</span>
+				<span
+				  class="cropper-face cropper-move"
+					@mousedown="cropMove"
+		      @touchstart="cropMove"
+				></span>
 		</div>
 	</div>
 </template>
@@ -50,7 +75,19 @@ export default {
 			// 移动的y
 			moveY: 0,
 			// 是否开启滚轮放大缩小
-			canScale: true
+			canScale: true,
+			// 开启截图
+			crop: false,
+			// 正在截图
+			cropping: false,
+			// 裁剪框大小
+			cropW: 0,
+			cropH: 0,
+			// 裁剪框的坐标轴
+			cropX: 0,
+			cropY: 0,
+			cropOffsertX: 0,
+			cropOffsertY: 0,
     }
   },
 	props: {
@@ -74,25 +111,38 @@ export default {
 		// 当按下鼠标键
 		startMove (e) {
 			// 如果move 为true 表示当前可以拖动
-			if (this.move) {
+			if (this.move && !this.crop) {
 				// 开始移动
 				window.addEventListener('mousemove', this.moveImg)
-      	window.addEventListener('touchmove', this.moveImg)
       	window.addEventListener('mouseup', this.leaveImg)
+				window.addEventListener('touchmove', this.moveImg)
       	window.addEventListener('touchend', this.leaveImg)
-				this.moveX = (event.clientX ? event.clientX : event.touches[0].clientX) - this.x
-	      this.moveY = (event.clientY ? event.clientY : event.touches[0].clientY) - this.y
+				this.moveX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.x
+	      this.moveY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.y
+			} else {
+				// 截图ing
+				this.cropping = true
+				// 绑定截图事件
+				window.addEventListener('mousemove', this.createCrop)
+				window.addEventListener('mouseup', this.endCrop)
+				this.cropOffsertX = e.offsetX ? e.offsetX : e.touches[0].offsetX
+				this.cropOffsertY = e.offsetY ? e.offsetY : e.touches[0].offsetY
+				this.cropX = e.clientX ? e.clientX : e.touches[0].clientX
+				this.cropY = e.clientY ? e.clientY : e.touches[0].clientY
+				this.cropW = 0
+				this.cropH = 0
 			}
 		},
 		// 移动图片
 		moveImg (e) {
-			var nowX = event.clientX ? event.clientX : event.touches[0].clientX
-      var nowY = event.clientY ? event.clientY : event.touches[0].clientY
+			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
+      var nowY = e.clientY ? e.clientY : e.touches[0].clientY
 			this.$nextTick(() => {
 				this.x = ~~(nowX - this.moveX)
 				this.y = ~~(nowY - this.moveY)
 			})
 		},
+		// 移动图片结束
 		leaveImg (e) {
 			window.removeEventListener('mousemove', this.moveImg)
       window.removeEventListener('touchmove', this.moveImg)
@@ -105,6 +155,7 @@ export default {
 				window.addEventListener('mousewheel', this.changeSize)
 			}
 		},
+		// 移出框
 		cancleScale () {
 			if (this.canScale) {
 				window.removeEventListener('mousewheel', this.changeSize)
@@ -112,9 +163,63 @@ export default {
 		},
 		// 改变大小函数
 		changeSize (e) {
-			var change = event.deltaY
+			var change = e.deltaY
 			change < 0 ? this.scale += 0.05 : this.scale > 0.05 ? this.scale -= 0.05 : this.scale
-			event.preventDefault()
+			e.preventDefault()
+		},
+
+		// 创建截图框
+		createCrop (e) {
+			// 移动生成大小
+			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
+      var nowY = e.clientY ? e.clientY : e.touches[0].clientY
+			this.$nextTick(() => {
+				this.cropW = ~~(nowX - this.cropX)
+				this.cropH = ~~(nowY - this.cropY)
+			})
+		},
+
+		// 创建完成
+		endCrop () {
+			if (this.cropW === 0 && this.cropH === 0) {
+				this.cropping = false
+			}
+			window.removeEventListener('mousemove', this.createCrop)
+			window.removeEventListener('mouseup', this.endCrop)
+		},
+		// 开始截图
+		startCrop () {
+			this.crop = true
+			console.log('开始截图')
+		},
+		// 停止截图
+		stopCrop () {
+			this.crop = false
+			console.log('停止截图')
+		},
+		// 清除截图
+		clearCrop () {
+			this.cropping = false
+			console.log('清除截图')
+		},
+		// 截图移动
+		cropMove (e) {
+			window.addEventListener('mousemove', this.moveCrop)
+			window.addEventListener('mouseup', this.leaveCrop)
+			this.cropX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.offsetX
+			this.cropY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.offsetY
+		},
+		moveCrop (e) {
+			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
+      var nowY = e.clientY ? e.clientY : e.touches[0].clientY
+			this.$nextTick(() => {
+				this.cropOffsertX = ~~(nowX - this.cropX)
+				this.cropOffsertY = ~~(nowY - this.cropY)
+			})
+		},
+		leaveCrop (e) {
+			window.removeEventListener('mousemove', this.moveCrop)
+			window.removeEventListener('mouseup', this.leaveCrop)
 		},
 		// reload 图片布局函数
 		reload () {
@@ -170,7 +275,7 @@ export default {
   	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
 	}
 
-	.cropper-box, .cropper-box-canvas, .cropper-drag-box {
+	.cropper-box, .cropper-box-canvas, .cropper-drag-box, .cropper-crop-box, .cropper-face{
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -184,10 +289,31 @@ export default {
 	}
 
 	.crapper-drag-box {
-		z-index: 2;
+		/*z-index: 2*/
 	}
 
 	.cropper-move {
 		cursor: move;
+	}
+
+	.cropper-crop {
+    cursor: crosshair;
+	}
+
+	.cropper-modal {
+		background: rgba(0, 0, 0, 0.5);
+	}
+
+	.cropper-crop-box {
+		/*border: 2px solid #39f;*/
+	}
+
+	.cropper-view-box {
+		display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+		outline: 1px solid #39f;
+    outline-color: rgba(51, 153, 255, 0.75);
 	}
 </style>
