@@ -8,6 +8,7 @@
 			<button @click="startCrop" v-if="!crap" class="btn">开始截图</button>
 			<button @click="stopCrop" v-else class="btn">停止截图</button>
 			<button @click="clearCrop" class="btn">清除截图</button>
+			<button @click="finish" class="btn">生成图片</button>
 		</div>
 	</div>
 </template>
@@ -60,6 +61,9 @@ export default {
 		},
 		clearCrop () {
 			this.$refs.cropper.clearCrop()
+		},
+		finish () {
+			this.$refs.cropper.finish()
 		}
 	},
 	components: {
