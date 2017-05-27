@@ -48,6 +48,7 @@
 					@mousedown="cropMove"
 		      @touchstart="cropMove"
 				></span>
+				<span class="crop-info" :style="{'top': cropInfo}">{{  this.cropW }} × {{ this.cropH }}</span>
 		</div>
 	</div>
 </template>
@@ -90,13 +91,18 @@ export default {
 			cropX: 0,
 			cropY: 0,
 			cropOffsertX: 0,
-			cropOffsertY: 0,
+			cropOffsertY: 0
     }
   },
 	props: {
 		img: {
 			type: String,
 			default: ''
+		}
+	},
+	computed: {
+		cropInfo () {
+			return this.cropOffsertY > 20 ? '-20px' : '0px'
 		}
 	},
 	watch: {
@@ -212,6 +218,7 @@ export default {
 			this.cropX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.cropOffsertX
 			this.cropY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.cropOffsertY
 		},
+
 		moveCrop (e) {
 			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
       var nowY = e.clientY ? e.clientY : e.touches[0].clientY
@@ -235,6 +242,7 @@ export default {
 				}
 			})
 		},
+
 		leaveCrop (e) {
 			window.removeEventListener('mousemove', this.moveCrop)
 			window.removeEventListener('mouseup', this.leaveCrop)
@@ -340,5 +348,16 @@ export default {
 		left: 0;
 		background-color: #fff;
 		opacity: 0.1;
+	}
+
+	.crop-info {
+		position: absolute;
+		left: 0;
+		min-width: 65px;
+		text-align: center;
+		color: white;
+		line-height: 20px;
+		background-color: rgba(0, 0, 0, 0.8);
+		font-size: 12px;
 	}
 </style>
