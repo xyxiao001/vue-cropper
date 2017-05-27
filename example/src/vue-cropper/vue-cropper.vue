@@ -56,6 +56,9 @@
 export default {
   data: function () {
     return {
+			// 容器高宽
+			w: 0,
+			h: 0,
 			// 图片缩放比例
 			scale: 1,
 			// 图片偏移x轴
@@ -206,15 +209,30 @@ export default {
 		cropMove (e) {
 			window.addEventListener('mousemove', this.moveCrop)
 			window.addEventListener('mouseup', this.leaveCrop)
-			this.cropX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.offsetX
-			this.cropY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.offsetY
+			this.cropX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.cropOffsertX
+			this.cropY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.cropOffsertY
 		},
 		moveCrop (e) {
 			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
       var nowY = e.clientY ? e.clientY : e.touches[0].clientY
 			this.$nextTick(() => {
-				this.cropOffsertX = ~~(nowX - this.cropX)
-				this.cropOffsertY = ~~(nowY - this.cropY)
+				var fw = ~~(nowX - this.cropX)
+				var fh = ~~(nowY - this.cropY)
+				if (fw <= 0) {
+					this.cropOffsertX = 0
+				} else if (~~(fw + this.cropW) > this.w) {
+					this.cropOffsertX = this.w - this.cropW
+				} else {
+					this.cropOffsertX = fw
+				}
+
+				if (fh <= 0) {
+					this.cropOffsertY = 0
+				} else if (~~(fh + this.cropH) > this.h) {
+					this.cropOffsertY = this.h - this.cropH
+				} else {
+					this.cropOffsertY = fh
+				}
 			})
 		},
 		leaveCrop (e) {
@@ -224,26 +242,26 @@ export default {
 		// reload 图片布局函数
 		reload () {
 			// 得到外层容器的宽度高度
-			let w =  window.getComputedStyle(this.$refs.cropper).width.replace('px', '')
-			let h =  window.getComputedStyle(this.$refs.cropper).height.replace('px', '')
+			this.w =  window.getComputedStyle(this.$refs.cropper).width.replace('px', '')
+			this.h =  window.getComputedStyle(this.$refs.cropper).height.replace('px', '')
 
 			// 存入图片真实高度
 			this.trueWidth = this.$refs.cropperImg.width
 			this.trueHeight = this.$refs.cropperImg.height
 
-			if (this.trueWidth > w) {
+			if (this.trueWidth > this.w) {
 				// 如果图片宽度大于容器宽度
-				this.scale = w / this.trueWidth
+				this.scale = this.w / this.trueWidth
 			}
 
-			if (this.trueHeight * this.scale > h) {
-				this.scale = h / this.trueHeight
+			if (this.trueHeight * this.scale > this.h) {
+				this.scale = this.h / this.trueHeight
 			}
 
 			this.$nextTick(() => {
 				// this.x = this.trueWidth * (this.scale - 1)
-				this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (w - this.trueWidth * this.scale) / 2
-				this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (h - this.trueHeight * this.scale) / 2
+				this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (this.w - this.trueWidth * this.scale) / 2
+				this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (this.h - this.trueHeight * this.scale) / 2
 				this.loading = false
 				console.log('reload')
 			})
@@ -315,5 +333,12 @@ export default {
     height: 100%;
 		outline: 1px solid #39f;
     outline-color: rgba(51, 153, 255, 0.75);
+	}
+
+	.cropper-face {
+		top: 0;
+		left: 0;
+		background-color: #fff;
+		opacity: 0.1;
 	}
 </style>
