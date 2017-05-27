@@ -218,18 +218,18 @@ export default {
 			this.$nextTick(() => {
 				var fw = ~~(nowX - this.cropX)
 				var fh = ~~(nowY - this.cropY)
-				if (fw <= 0) {
-					this.cropOffsertX = 0
+				if (fw <= 2) {
+					this.cropOffsertX = 2
 				} else if (~~(fw + this.cropW) > this.w) {
-					this.cropOffsertX = this.w - this.cropW
+					this.cropOffsertX = this.w - this.cropW - 2
 				} else {
 					this.cropOffsertX = fw
 				}
 
-				if (fh <= 0) {
-					this.cropOffsertY = 0
+				if (fh <= 2) {
+					this.cropOffsertY = 2
 				} else if (~~(fh + this.cropH) > this.h) {
-					this.cropOffsertY = this.h - this.cropH
+					this.cropOffsertY = this.h - this.cropH - 2
 				} else {
 					this.cropOffsertY = fh
 				}
