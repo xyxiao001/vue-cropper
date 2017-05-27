@@ -90,6 +90,8 @@ export default {
 			// 裁剪框的坐标轴
 			cropX: 0,
 			cropY: 0,
+			cropChangeX: 0,
+			cropChangeY: 0,
 			cropOffsertX: 0,
 			cropOffsertY: 0
     }
@@ -102,7 +104,7 @@ export default {
 	},
 	computed: {
 		cropInfo () {
-			return this.cropOffsertY > 20 ? '-20px' : '0px'
+			return this.cropOffsertY > 20 ? '-21px' : '1px'
 		}
 	},
 	watch: {
@@ -138,6 +140,8 @@ export default {
 				this.cropOffsertY = e.offsetY ? e.offsetY : e.touches[0].offsetY
 				this.cropX = e.clientX ? e.clientX : e.touches[0].clientX
 				this.cropY = e.clientY ? e.clientY : e.touches[0].clientY
+				this.cropChangeX = this.cropOffsertX
+				this.cropChangeY = this.cropOffsertY
 				this.cropW = 0
 				this.cropH = 0
 			}
@@ -183,8 +187,23 @@ export default {
 			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
       var nowY = e.clientY ? e.clientY : e.touches[0].clientY
 			this.$nextTick(() => {
-				this.cropW = ~~(nowX - this.cropX)
-				this.cropH = ~~(nowY - this.cropY)
+				var fw = ~~(nowX - this.cropX)
+				var fh = ~~(nowY - this.cropY)
+				if (fw > 0) {
+					this.cropW = fw
+					this.cropOffsertX = this.cropChangeX
+				} else {
+					this.cropW = Math.abs(fw)
+					this.cropOffsertX = this.cropChangeX + fw
+				}
+
+				if (fh > 0) {
+					this.cropH = fh
+					this.cropOffsertY = this.cropChangeY
+				} else {
+					this.cropH = Math.abs(fh)
+					this.cropOffsertY = this.cropChangeY + fh
+				}
 			})
 		},
 
