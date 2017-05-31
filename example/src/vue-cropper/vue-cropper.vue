@@ -106,7 +106,7 @@ export default {
 			cropOffsertX: 0,
 			cropOffsertY: 0,
 			// 输出图片压缩比
-			outputSize: 0.5
+			outputSize: 1
     }
   },
 	props: {
@@ -125,6 +125,7 @@ export default {
 		img () {
 			this.loading = true
 			this.scale = 1
+			this.clearCrop()
 			this.$refs.cropperImg.onload = () => {
         // 图片加载成功后布局
 				this.reload()
@@ -149,8 +150,10 @@ export default {
 				// 绑定截图事件
 				window.addEventListener('mousemove', this.createCrop)
 				window.addEventListener('mouseup', this.endCrop)
-				this.cropOffsertX = e.offsetX ? e.offsetX : e.touches[0].offsetX
-				this.cropOffsertY = e.offsetY ? e.offsetY : e.touches[0].offsetY
+				window.addEventListener('touchmove', this.createCrop)
+				window.addEventListener('touchend', this.endCrop)
+				this.cropOffsertX = e.offsetX ? e.offsetX : (e.touches[0].pageX)
+				this.cropOffsertY = e.offsetY ? e.offsetY : (e.touches[0].pageY - document.body.scrollTop)
 				this.cropX = e.clientX ? e.clientX : e.touches[0].clientX
 				this.cropY = e.clientY ? e.clientY : e.touches[0].clientY
 				this.cropChangeX = this.cropOffsertX
@@ -227,6 +230,8 @@ export default {
 			}
 			window.removeEventListener('mousemove', this.createCrop)
 			window.removeEventListener('mouseup', this.endCrop)
+			window.removeEventListener('touchmove', this.createCrop)
+			window.removeEventListener('touchend', this.endCrop)
 		},
 		// 开始截图
 		startCrop () {
@@ -249,6 +254,8 @@ export default {
 		cropMove (e) {
 			window.addEventListener('mousemove', this.moveCrop)
 			window.addEventListener('mouseup', this.leaveCrop)
+			window.addEventListener('touchmove', this.moveCrop)
+			window.addEventListener('touchend', this.leaveCrop)
 			this.cropX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.cropOffsertX
 			this.cropY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.cropOffsertY
 		},
@@ -280,6 +287,8 @@ export default {
 		leaveCrop (e) {
 			window.removeEventListener('mousemove', this.moveCrop)
 			window.removeEventListener('mouseup', this.leaveCrop)
+			window.removeEventListener('touchmove', this.moveCrop)
+			window.removeEventListener('touchend', this.leaveCrop)
 		},
 
 		// 获取转换成base64 的图片信息
@@ -293,7 +302,7 @@ export default {
 				let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
 				// 图片y轴偏移
 				let dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
-				console.log(dx, dy)
+				// console.log(dx, dy)
 				ctx.drawImage(this.$refs.cropperOutput, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
 			} else {
 				canvas.width = this.trueWidth * this.scale
