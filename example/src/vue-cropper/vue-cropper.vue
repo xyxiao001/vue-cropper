@@ -152,8 +152,8 @@ export default {
 				window.addEventListener('mouseup', this.endCrop)
 				window.addEventListener('touchmove', this.createCrop)
 				window.addEventListener('touchend', this.endCrop)
-				this.cropOffsertX = e.offsetX ? e.offsetX : (e.touches[0].pageX - 10)
-				this.cropOffsertY = e.offsetY ? e.offsetY : (e.touches[0].pageY - 60)
+				this.cropOffsertX = e.offsetX ? e.offsetX : (e.touches[0].pageX - this.$refs.cropper.offsetLeft)
+				this.cropOffsertY = e.offsetY ? e.offsetY : (e.touches[0].pageY - this.$refs.cropper.offsetTop)
 				this.cropX = e.clientX ? e.clientX : e.touches[0].clientX
 				this.cropY = e.clientY ? e.clientY : e.touches[0].clientY
 				this.cropChangeX = this.cropOffsertX
