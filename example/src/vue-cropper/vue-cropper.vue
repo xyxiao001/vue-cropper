@@ -233,6 +233,8 @@ export default {
 		// 清除截图
 		clearCrop () {
 			this.cropping = false
+			this.cropW = 0
+			this.cropH = 0
 			console.log('清除截图')
 		},
 		// 截图移动
@@ -277,8 +279,15 @@ export default {
 			let canvas = document.createElement('canvas')
       canvas.width = this.cropW
       canvas.height = this.cropH
-      let ctx = canvas.getContext('2d')
-      ctx.drawImage(this.$refs.cropperImg, (this.x - this.cropOffsertX) * this.scale, (this.y - this.cropOffsertY) * this.scale, this.trueWidth * this.scale, this.trueHeight * this.scale)
+			if (~~(canvas.width) !== 0) {
+				let ctx = canvas.getContext('2d')
+				ctx.drawImage(this.$refs.cropperImg, (this.x - this.cropOffsertX), (this.y - this.cropOffsertY), this.trueWidth, this.trueHeight)
+			} else {
+				canvas.width = this.trueWidth * this.scale
+				canvas.height = this.trueHeight * this.scale
+				let ctx = canvas.getContext('2d')
+				ctx.drawImage(this.$refs.cropperImg, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
+			}
       let data = canvas.toDataURL("image/png", 1.0)
 			window.open(data)
 			console.log('获取图片信息')
@@ -333,7 +342,7 @@ export default {
 	.vue-cropper {
 		position: relative;
 		width: 100%;
-		height: 500px;
+		height: 100%;
 		box-sizing: border-box;
 		user-select: none;
 		direction: ltr;

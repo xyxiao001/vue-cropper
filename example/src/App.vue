@@ -70,7 +70,7 @@ export default {
 		vueCropper
 	},
 	mounted () {
-		this.num = 2
+		this.num = 4
 	}
 }
 </script>
@@ -79,6 +79,7 @@ export default {
 	.content {
 		margin: auto;
 		max-width: 1200px;
+		height: 500px;
 	}
 
 	.test {
