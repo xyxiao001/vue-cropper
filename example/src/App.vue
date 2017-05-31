@@ -76,6 +76,10 @@ export default {
 			//上传图片
 			// this.option.img
 			var file = e.target.files[0]
+			if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+				 alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+				 return false
+			 }
 			var reader = new FileReader()
 			reader.onload = (e) => {
 				this.option.img = e.target.result
