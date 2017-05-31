@@ -70,7 +70,8 @@ export default {
 		vueCropper
 	},
 	mounted () {
-		this.num = 4
+		// this.changeImg()
+		this.num = 1
 	}
 }
 </script>

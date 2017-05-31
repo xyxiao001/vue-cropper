@@ -1,5 +1,11 @@
 <template>
 	<div class="vue-cropper" ref="cropper">
+		<img
+			:src="img"
+		  ref="cropperOutput"
+			style="display: none"
+			crossOrigin = "*"
+		/>
 		<div class="cropper-box">
 			<div class="cropper-box-canvas"
 			 	v-show="!loading"
@@ -13,7 +19,7 @@
 					alt="cropper-img"
 					ref="cropperImg"
 					crossOrigin = "*"
-					>
+					/>
 			</div>
 		</div>
 		<div
@@ -42,7 +48,7 @@
 						}"
 						:src="img"
 						alt="cropper-img"
-						>
+						/>
 				</span>
 				<span
 				  class="cropper-face cropper-move"
@@ -251,18 +257,18 @@ export default {
 			this.$nextTick(() => {
 				var fw = ~~(nowX - this.cropX)
 				var fh = ~~(nowY - this.cropY)
-				if (fw <= 2) {
-					this.cropOffsertX = 2
+				if (fw <= 1) {
+					this.cropOffsertX = 1
 				} else if (~~(fw + this.cropW) > this.w) {
-					this.cropOffsertX = this.w - this.cropW - 2
+					this.cropOffsertX = this.w - this.cropW - 1
 				} else {
 					this.cropOffsertX = fw
 				}
 
-				if (fh <= 2) {
-					this.cropOffsertY = 2
+				if (fh <= 1) {
+					this.cropOffsertY = 1
 				} else if (~~(fh + this.cropH) > this.h) {
-					this.cropOffsertY = this.h - this.cropH - 2
+					this.cropOffsertY = this.h - this.cropH - 1
 				} else {
 					this.cropOffsertY = fh
 				}
@@ -281,12 +287,17 @@ export default {
       canvas.height = this.cropH
 			if (~~(canvas.width) !== 0) {
 				let ctx = canvas.getContext('2d')
-				ctx.drawImage(this.$refs.cropperImg, (this.x - this.cropOffsertX), (this.y - this.cropOffsertY), this.trueWidth, this.trueHeight)
+				// 图片x轴偏移
+				let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
+				// 图片y轴偏移
+				let dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
+				console.log(dx, dy)
+				ctx.drawImage(this.$refs.cropperOutput, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
 			} else {
 				canvas.width = this.trueWidth * this.scale
 				canvas.height = this.trueHeight * this.scale
 				let ctx = canvas.getContext('2d')
-				ctx.drawImage(this.$refs.cropperImg, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
+				ctx.drawImage(this.$refs.cropperOutput, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
 			}
       let data = canvas.toDataURL("image/png", 1.0)
 			window.open(data)
@@ -294,7 +305,9 @@ export default {
 		},
 		// 调用canvas生成图片
 		finish() {
-			this.getCropDate()
+			this.$nextTick(() => {
+				this.getCropDate()
+			})
 			// console.log(1)
 		},
 		// reload 图片布局函数
