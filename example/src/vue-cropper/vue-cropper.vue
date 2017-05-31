@@ -104,7 +104,9 @@ export default {
 			cropChangeX: 0,
 			cropChangeY: 0,
 			cropOffsertX: 0,
-			cropOffsertY: 0
+			cropOffsertY: 0,
+			// 输出图片压缩比
+			outputSize: 0.5
     }
   },
 	props: {
@@ -299,7 +301,7 @@ export default {
 				let ctx = canvas.getContext('2d')
 				ctx.drawImage(this.$refs.cropperOutput, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
 			}
-      let data = canvas.toDataURL("image/png", 1.0)
+      let data = canvas.toDataURL("image/jpeg", this.outputSize)
 			window.open(data)
 			console.log('获取图片信息')
 		},

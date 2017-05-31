@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<h1>vue-cropper</h1>
+		<h1><a style="text-decoration: none" href="https://github.com/xyxiao001/vue-cropper" target="_blank">vue-cropper</a></h1>
 		<p>一个基于vue的图片裁剪插件</p>
 		<vueCropper ref="cropper" :img="option[num].img"></vueCropper>
 		<div class="test">
