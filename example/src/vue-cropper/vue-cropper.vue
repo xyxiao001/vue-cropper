@@ -278,7 +278,7 @@ export default {
       canvas.width = this.cropW
       canvas.height = this.cropH
       let ctx = canvas.getContext('2d')
-      ctx.drawImage(this.$refs.cropperImg, 0, 0, this.trueWidth / this.scale, this.trueHeight / this.scale)
+      ctx.drawImage(this.$refs.cropperImg, (this.x - this.cropOffsertX) * this.scale, (this.y - this.cropOffsertY) * this.scale, this.trueWidth * this.scale, this.trueHeight * this.scale)
       let data = canvas.toDataURL("image/png", 1.0)
 			window.open(data)
 			console.log('获取图片信息')
@@ -286,7 +286,7 @@ export default {
 		// 调用canvas生成图片
 		finish() {
 			this.getCropDate()
-			console.log(1)
+			// console.log(1)
 		},
 		// reload 图片布局函数
 		reload () {

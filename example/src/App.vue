@@ -70,7 +70,7 @@ export default {
 		vueCropper
 	},
 	mounted () {
-		this.num = ~~(Math.random() * this.option.length)
+		this.num = 2
 	}
 }
 </script>
