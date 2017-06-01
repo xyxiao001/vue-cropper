@@ -15,7 +15,8 @@
 			<button @click="startCrop" v-if="!crap" class="btn">开始截图</button>
 			<button @click="stopCrop" v-else class="btn">停止截图</button>
 			<button @click="clearCrop" class="btn">清除截图</button>
-			<button @click="finish" class="btn">生成图片</button>
+			<button @click="finish" class="btn">预览图片</button>
+			<a @click="down" class="btn" :href="downImg" download="demo">下载图片</a>
 		</div>
 	</div>
 </template>
@@ -53,7 +54,8 @@ export default {
 				img: '',
 				size: 0.8,
 				outputType: 'jpeg'
-			}
+			},
+			downImg: '#'
     }
   },
 	methods: {
@@ -77,6 +79,11 @@ export default {
 		finish () {
 			// 输出
 			window.open(this.$refs.cropper.getCropDate())
+		},
+
+		down () {
+			// 输出
+			this.downImg = this.$refs.cropper.getCropDate()
 		},
 
 		uploadImg (e) {
@@ -140,5 +147,6 @@ export default {
     background-color: #50bfff;
     border-color: #50bfff;
     transition: all .2s ease;
+		text-decoration: none;
 	}
 </style>
