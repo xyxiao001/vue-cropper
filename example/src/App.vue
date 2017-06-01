@@ -2,7 +2,12 @@
 	<div class="content">
 		<h1><a style="text-decoration: none" href="https://github.com/xyxiao001/vue-cropper" target="_blank">vue-cropper</a></h1>
 		<p>一个基于vue的图片裁剪插件</p>
-		<vueCropper ref="cropper" :img="option.img"></vueCropper>
+		<vueCropper
+			ref="cropper"
+			:img="option.img"
+			:outputSize="option.size"
+			:outputType="option.outputType"
+		></vueCropper>
 		<div class="test">
 			<button @click="changeImg" class="btn">替换图片</button>
 			<label class="btn" for="uploads">我要上传</label>
@@ -46,6 +51,8 @@ export default {
 			],
 			option: {
 				img: '',
+				size: 0.8,
+				outputType: 'jpeg'
 			}
     }
   },
@@ -69,7 +76,7 @@ export default {
 		},
 		finish () {
 			// 输出
-			this.$refs.cropper.finish()
+			window.open(this.$refs.cropper.getCropDate())
 		},
 
 		uploadImg (e) {

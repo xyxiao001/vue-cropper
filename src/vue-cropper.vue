@@ -104,15 +104,22 @@ export default {
 			cropChangeX: 0,
 			cropChangeY: 0,
 			cropOffsertX: 0,
-			cropOffsertY: 0,
-			// 输出图片压缩比
-			outputSize: 0.5
+			cropOffsertY: 0
     }
   },
 	props: {
 		img: {
 			type: String,
 			default: ''
+		},
+		// 输出图片压缩比
+		outputSize: {
+			type: Number,
+			default: 1
+		},
+		outputType: {
+			type: String,
+			default: 'jpeg'
 		}
 	},
 	computed: {
@@ -125,6 +132,7 @@ export default {
 		img () {
 			this.loading = true
 			this.scale = 1
+			this.clearCrop()
 			this.$refs.cropperImg.onload = () => {
         // 图片加载成功后布局
 				this.reload()
@@ -149,8 +157,10 @@ export default {
 				// 绑定截图事件
 				window.addEventListener('mousemove', this.createCrop)
 				window.addEventListener('mouseup', this.endCrop)
-				this.cropOffsertX = e.offsetX ? e.offsetX : e.touches[0].offsetX
-				this.cropOffsertY = e.offsetY ? e.offsetY : e.touches[0].offsetY
+				window.addEventListener('touchmove', this.createCrop)
+				window.addEventListener('touchend', this.endCrop)
+				this.cropOffsertX = e.offsetX ? e.offsetX : (e.touches[0].pageX - this.$refs.cropper.offsetLeft)
+				this.cropOffsertY = e.offsetY ? e.offsetY : (e.touches[0].pageY - this.$refs.cropper.offsetTop)
 				this.cropX = e.clientX ? e.clientX : e.touches[0].clientX
 				this.cropY = e.clientY ? e.clientY : e.touches[0].clientY
 				this.cropChangeX = this.cropOffsertX
@@ -227,6 +237,8 @@ export default {
 			}
 			window.removeEventListener('mousemove', this.createCrop)
 			window.removeEventListener('mouseup', this.endCrop)
+			window.removeEventListener('touchmove', this.createCrop)
+			window.removeEventListener('touchend', this.endCrop)
 		},
 		// 开始截图
 		startCrop () {
@@ -249,6 +261,8 @@ export default {
 		cropMove (e) {
 			window.addEventListener('mousemove', this.moveCrop)
 			window.addEventListener('mouseup', this.leaveCrop)
+			window.addEventListener('touchmove', this.moveCrop)
+			window.addEventListener('touchend', this.leaveCrop)
 			this.cropX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.cropOffsertX
 			this.cropY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.cropOffsertY
 		},
@@ -280,6 +294,8 @@ export default {
 		leaveCrop (e) {
 			window.removeEventListener('mousemove', this.moveCrop)
 			window.removeEventListener('mouseup', this.leaveCrop)
+			window.removeEventListener('touchmove', this.moveCrop)
+			window.removeEventListener('touchend', this.leaveCrop)
 		},
 
 		// 获取转换成base64 的图片信息
@@ -293,7 +309,7 @@ export default {
 				let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
 				// 图片y轴偏移
 				let dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
-				console.log(dx, dy)
+				// console.log(dx, dy)
 				ctx.drawImage(this.$refs.cropperOutput, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
 			} else {
 				canvas.width = this.trueWidth * this.scale
@@ -301,16 +317,11 @@ export default {
 				let ctx = canvas.getContext('2d')
 				ctx.drawImage(this.$refs.cropperOutput, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
 			}
-      let data = canvas.toDataURL("image/jpeg", this.outputSize)
-			window.open(data)
-			console.log('获取图片信息')
+      let data = canvas.toDataURL('image/' + this.outputType, this.outputSize)
+			return data
 		},
 		// 调用canvas生成图片
 		finish() {
-			this.$nextTick(() => {
-				this.getCropDate()
-			})
-			// console.log(1)
 		},
 		// reload 图片布局函数
 		reload () {

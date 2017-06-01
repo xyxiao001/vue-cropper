@@ -104,15 +104,22 @@ export default {
 			cropChangeX: 0,
 			cropChangeY: 0,
 			cropOffsertX: 0,
-			cropOffsertY: 0,
-			// 输出图片压缩比
-			outputSize: 1
+			cropOffsertY: 0
     }
   },
 	props: {
 		img: {
 			type: String,
 			default: ''
+		},
+		// 输出图片压缩比
+		outputSize: {
+			type: Number,
+			default: 1
+		},
+		outputType: {
+			type: String,
+			default: 'jpeg'
 		}
 	},
 	computed: {
@@ -310,16 +317,11 @@ export default {
 				let ctx = canvas.getContext('2d')
 				ctx.drawImage(this.$refs.cropperOutput, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
 			}
-      let data = canvas.toDataURL("image/jpeg", this.outputSize)
-			window.open(data)
-			console.log('获取图片信息')
+      let data = canvas.toDataURL('image/' + this.outputType, this.outputSize)
+			return data
 		},
 		// 调用canvas生成图片
 		finish() {
-			this.$nextTick(() => {
-				this.getCropDate()
-			})
-			// console.log(1)
 		},
 		// reload 图片布局函数
 		reload () {
