@@ -371,6 +371,9 @@ export default {
 		height: 100%;
 		box-sizing: border-box;
 		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
 		direction: ltr;
 		touch-action: none;
 		overflow: hidden;
@@ -383,11 +386,13 @@ export default {
 		right: 0;
 		bottom: 0;
 		left: 0;
+		user-select: none;
 	}
 
 	.cropper-box-canvas img {
 		position: relative;
 		user-select: none;
+		transform: none;
 	}
 
 	.crapper-drag-box {
@@ -417,6 +422,11 @@ export default {
     height: 100%;
 		outline: 1px solid #39f;
     outline-color: rgba(51, 153, 255, 0.75);
+		user-select: none;
+	}
+
+	.cropper-view-box img {
+		user-select: none;
 	}
 
 	.cropper-face {
