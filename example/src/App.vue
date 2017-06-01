@@ -66,7 +66,7 @@ export default {
 			this.$refs.cropper.startCrop()
 		},
 		stopCrop () {
-			// 开始截图
+			//  停止截图
 			this.crap = false
 			this.$refs.cropper.stopCrop()
 		},
