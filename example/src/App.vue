@@ -81,9 +81,10 @@ export default {
 			window.open(this.$refs.cropper.getCropDate())
 		},
 
-		down () {
+		down (e) {
+			// e.preventDefault()
 			// 输出
-			this.downImg = this.$refs.cropper.getCropDate()
+			this.downImg = this.$refs.cropper.getCropBlob()
 		},
 
 		uploadImg (e) {

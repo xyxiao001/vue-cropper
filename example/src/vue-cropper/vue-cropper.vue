@@ -320,6 +320,20 @@ export default {
       let data = canvas.toDataURL('image/' + this.outputType, this.outputSize)
 			return data
 		},
+		//转化base64 为blob对象
+		getCropBlob() {
+		  var arr = this.getCropDate().split(',')
+		  var mime = arr[0].match(/:(.*?);/)[1]
+		  var bstr = atob(arr[1])
+		  var n = bstr.length
+		  var u8arr = new Uint8Array(n)
+			while (n--) {
+		    u8arr[n] = bstr.charCodeAt(n)
+		  }
+		  return window.URL.createObjectURL(new Blob([u8arr], {
+		    type: mime
+		  }))
+		},
 		// 调用canvas生成图片
 		finish() {
 		},
