@@ -15,8 +15,10 @@
 			<button @click="startCrop" v-if="!crap" class="btn">开始截图</button>
 			<button @click="stopCrop" v-else class="btn">停止截图</button>
 			<button @click="clearCrop" class="btn">清除截图</button>
-			<button @click="finish" class="btn">预览图片</button>
-			<a @click="down" class="btn" :href="downImg" download="demo">下载图片</a>
+			<button @click="finish('base64')" class="btn">预览图片(base64)</button>
+			<button @click="finish('blob')" class="btn">预览图片(blob)</button>
+			<a @click="down('base64')" class="btn" :href="downImg" download="demo">下载图片(base64)</a>
+			<a @click="down('blob')" class="btn" :href="downImg" download="demo">下载图片(blob)</a>
 		</div>
 	</div>
 </template>
@@ -76,15 +78,15 @@ export default {
 			// 清除截图
 			this.$refs.cropper.clearCrop()
 		},
-		finish () {
+		finish (type) {
 			// 输出
-			window.open(this.$refs.cropper.getCropDate())
+			window.open(type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate())
 		},
 
-		down (e) {
+		down (type) {
 			// e.preventDefault()
 			// 输出
-			this.downImg = this.$refs.cropper.getCropBlob()
+			this.downImg = type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate()
 		},
 
 		uploadImg (e) {
