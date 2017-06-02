@@ -56,18 +56,18 @@
 		      @touchstart="cropMove"
 				></span>
 				<span class="crop-info" :style="{'top': cropInfo}">{{  this.cropW }} × {{ this.cropH }}</span>
-				<span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchStart="changeCropSize($event, false, true, 0, 1)"></span>
-				<span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchStart="changeCropSize($event, true, false, 1, 0)"></span>
-				<span class="crop-line line-s" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchStart="changeCropSize($event, false, true, 0, 2)"></span>
-				<span class="crop-line line-d" @mousedown="changeCropSize($event, true, false, 2, 0)" @touchStart="changeCropSize($event, true, false, 2, 0)"></span>
-				<span class="crop-point point1" @mousedown="changeCropSize($event, true, true, 1, 1)" @touchStart="changeCropSize($event, true, true, 1, 1)"></span>
-				<span class="crop-point point2" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchStart="changeCropSize($event, false, true, 0, 1)"></span>
-				<span class="crop-point point3" @mousedown="changeCropSize($event, true, true, 2, 1)" @touchStart="changeCropSize($event, true, true, 2, 1)"></span>
-				<span class="crop-point point4" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchStart="changeCropSize($event, true, false, 1, 0)"></span>
-				<span class="crop-point point5" @mousedown="changeCropSize($event, true, false, 2, 0)" @touchStart="changeCropSize($event, true, false, 2, 0)"></span>
-				<span class="crop-point point6" @mousedown="changeCropSize($event, true, true, 1, 2)" @touchStart="changeCropSize($event, true, true, 1, 2)"></span>
-				<span class="crop-point point7" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchStart="changeCropSize($event, false, true, 0, 2)"></span>
-				<span class="crop-point point8" @mousedown="changeCropSize($event, true, true, 2, 2)" @touchStart="changeCropSize($event, true, true, 2, 2)"></span>
+				<span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)"></span>
+				<span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)"></span>
+				<span class="crop-line line-s" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchstart="changeCropSize($event, false, true, 0, 2)"></span>
+				<span class="crop-line line-d" @mousedown="changeCropSize($event, true, false, 2, 0)" @touchstart="changeCropSize($event, true, false, 2, 0)"></span>
+				<span class="crop-point point1" @mousedown="changeCropSize($event, true, true, 1, 1)" @touchstart="changeCropSize($event, true, true, 1, 1)"></span>
+				<span class="crop-point point2" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)"></span>
+				<span class="crop-point point3" @mousedown="changeCropSize($event, true, true, 2, 1)" @touchstart="changeCropSize($event, true, true, 2, 1)"></span>
+				<span class="crop-point point4" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)"></span>
+				<span class="crop-point point5" @mousedown="changeCropSize($event, true, false, 2, 0)" @touchstart="changeCropSize($event, true, false, 2, 0)"></span>
+				<span class="crop-point point6" @mousedown="changeCropSize($event, true, true, 1, 2)" @touchstart="changeCropSize($event, true, true, 1, 2)"></span>
+				<span class="crop-point point7" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchstart="changeCropSize($event, false, true, 0, 2)"></span>
+				<span class="crop-point point8" @mousedown="changeCropSize($event, true, true, 2, 2)" @touchstart="changeCropSize($event, true, true, 2, 2)"></span>
 		</div>
 	</div>
 </template>
@@ -625,5 +625,45 @@ export default {
 		bottom: -5px;
 		right: -4px;
 		cursor: nw-resize;
+	}
+
+	@media screen and (max-width: 500px) {
+		.crop-point {
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			opacity: .45;
+			background-color: #39f;
+			border-radius: 100%;
+		}
+
+		.point1 {
+			top: -10px;
+	    left: -10px;
+		}
+
+		.point2, .point4, .point5, .point7 {
+			display: none;
+		}
+
+		.point3 {
+			top: -10px;
+			right: -10px;
+		}
+
+		.point4 {
+			top: 0;
+			left: 0;
+		}
+
+		.point6 {
+			bottom: -10px;
+			left: -10px;
+		}
+
+		.point8 {
+			bottom: -10px;
+			right: -10px;
+		}
 	}
 </style>
