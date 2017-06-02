@@ -151,6 +151,7 @@ export default {
     border-color: #50bfff;
     transition: all .2s ease;
 		text-decoration: none;
+		user-select: none;
 	}
 
 	.des {
