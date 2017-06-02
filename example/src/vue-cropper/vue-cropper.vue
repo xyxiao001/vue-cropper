@@ -56,18 +56,18 @@
 		      @touchstart="cropMove"
 				></span>
 				<span class="crop-info" :style="{'top': cropInfo}">{{  this.cropW }} × {{ this.cropH }}</span>
-				<span class="crop-line line-w"></span>
-				<span class="crop-line line-a"></span>
-				<span class="crop-line line-s"></span>
-				<span class="crop-line line-d"></span>
-				<span class="crop-point point1"></span>
-				<span class="crop-point point2"></span>
-				<span class="crop-point point3"></span>
-				<span class="crop-point point4"></span>
-				<span class="crop-point point5"></span>
-				<span class="crop-point point6"></span>
-				<span class="crop-point point7"></span>
-				<span class="crop-point point8"></span>
+				<span class="crop-line line-w" @mousedown="changeCropSize($event, false, true)" @touchStart="changeCropSize($event, false, true)"></span>
+				<span class="crop-line line-a" @mousedown="changeCropSize($event, true, false)" @touchStart="changeCropSize($event, true, false)"></span>
+				<span class="crop-line line-s" @mousedown="changeCropSize($event, false, true)" @touchStart="changeCropSize($event, false, true)"></span>
+				<span class="crop-line line-d" @mousedown="changeCropSize($event, true, false)" @touchStart="changeCropSize($event, true, false)"></span>
+				<span class="crop-point point1" @mousedown="changeCropSize($event, true, true)" @touchStart="changeCropSize($event, true, true)"></span>
+				<span class="crop-point point2" @mousedown="changeCropSize($event, false, true)" @touchStart="changeCropSize($event, false, true)"></span>
+				<span class="crop-point point3" @mousedown="changeCropSize($event, true, true)" @touchStart="changeCropSize($event, true, true)"></span>
+				<span class="crop-point point4" @mousedown="changeCropSize($event, true, false)" @touchStart="changeCropSize($event, true, false)"></span>
+				<span class="crop-point point5" @mousedown="changeCropSize($event, true, false)" @touchStart="changeCropSize($event, true, false)"></span>
+				<span class="crop-point point6" @mousedown="changeCropSize($event, true, true)" @touchStart="changeCropSize($event, true, true)"></span>
+				<span class="crop-point point7" @mousedown="changeCropSize($event, false, true)" @touchStart="changeCropSize($event, false, true)"></span>
+				<span class="crop-point point8" @mousedown="changeCropSize($event, true, true)" @touchStart="changeCropSize($event, true, true)"></span>
 		</div>
 	</div>
 </template>
@@ -106,6 +106,11 @@ export default {
 			// 裁剪框大小
 			cropW: 0,
 			cropH: 0,
+			cropOldW: 0,
+			cropOldH: 0,
+			// 判断是否能够改变
+			canChangeX: false,
+			canChangeY: false,
 			// 裁剪框的坐标轴
 			cropX: 0,
 			cropY: 0,
@@ -236,6 +241,49 @@ export default {
 					this.cropOffsertY = this.cropChangeY  + fh > 0 ? this.cropChangeY + fh : 0
 				}
 			})
+		},
+
+		// 改变截图框大小
+		changeCropSize (e, w, h) {
+			window.addEventListener('mousemove', this.changeCropNow)
+			window.addEventListener('mouseup', this.changeCropEnd)
+			window.addEventListener('touchmove', this.changeCropNow)
+			window.addEventListener('touchend', this.changeCropEnd)
+			this.canChangeX = w
+			this.canChangeY = h
+			this.cropX = e.clientX ? e.clientX : e.touches[0].clientX
+			this.cropY = e.clientY ? e.clientY : e.touches[0].clientY
+			this.cropOldW = this.cropW
+			this.cropOldH = this.cropH
+			this.cropChangeX = this.cropOffsertX
+			this.cropChangeY = this.cropOffsertY
+		},
+
+		// 正在改变
+		changeCropNow (e) {
+			var nowX = e.clientX ? e.clientX : e.touches ? e.touches[0].clientX : 0
+      var nowY = e.clientY ? e.clientY : e.touches ? e.touches[0].clientY : 0
+			this.$nextTick(() => {
+				var fw = ~~(nowX - this.cropX)
+				var fh = ~~(nowY - this.cropY)
+				if (this.canChangeX) {
+					this.cropW = this.cropOldW - fw > 0 ? this.cropOldW - fw : Math.abs(fw) - this.cropOldW
+					this.cropOffsertX = this.cropOldW - fw > 0 ? this.cropChangeX + fw : this.cropChangeX + this.cropOldW
+				}
+
+				if (this.canChangeY) {
+					this.cropH = this.cropOldH - fh > 0 ? this.cropOldH - fh : Math.abs(fh) - this.cropOldH
+					this.cropOffsertY = this.cropOldH - fh > 0 ? this.cropChangeY + fh : this.cropChangeY + this.cropOldH
+				}
+			})
+		},
+
+		// 结束改变
+		changeCropEnd (e) {
+			window.removeEventListener('mousemove', this.changeCropNow)
+			window.removeEventListener('mouseup', this.changeCropEnd)
+			window.removeEventListener('touchmove', this.changeCropNow)
+			window.removeEventListener('touchend', this.changeCropEnd)
 		},
 
 		// 创建完成
@@ -540,14 +588,14 @@ export default {
 
 	.point5 {
 		top: 50%;
-    right: -5px;
+    right: -4px;
     margin-top: -3px;
     cursor: w-resize;
 	}
 
 	.point6 {
 		bottom: -5px;
-		left: -3px;
+		left: -4px;
 		cursor: sw-resize;
 	}
 
@@ -560,7 +608,7 @@ export default {
 
 	.point8 {
 		bottom: -5px;
-		right: -3px;
+		right: -4px;
 		cursor: nw-resize;
 	}
 </style>
