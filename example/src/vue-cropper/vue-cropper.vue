@@ -314,19 +314,19 @@ export default {
 		// 开始截图
 		startCrop () {
 			this.crop = true
-			console.log('开始截图')
+			// console.log('开始截图')
 		},
 		// 停止截图
 		stopCrop () {
 			this.crop = false
-			console.log('停止截图')
+			// console.log('停止截图')
 		},
 		// 清除截图
 		clearCrop () {
 			this.cropping = false
 			this.cropW = 0
 			this.cropH = 0
-			console.log('清除截图')
+			// console.log('清除截图')
 		},
 		// 截图移动
 		cropMove (e) {
@@ -430,12 +430,12 @@ export default {
 				this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (this.w - this.trueWidth * this.scale) / 2
 				this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (this.h - this.trueHeight * this.scale) / 2
 				this.loading = false
-				console.log('reload')
+				// console.log('reload')
 			})
 		},
 		// 重置函数， 恢复组件置初始状态
 		refresh () {
-			console.log('refresh')
+			// console.log('refresh')
 		}
 	},
 	mounted () {
