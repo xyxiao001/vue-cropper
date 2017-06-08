@@ -6,53 +6,126 @@
 			<code class="language-html">npm install vue-cropper</code>
 		</div>
 		<div class="show-info">
-			<h2>Usage</h2>
-				<code class="language-html">
-&lt;template>
+			<h2>example1</h2>
+			<div class="test">
+				<vueCropper
+					ref="cropper"
+					:img="option.img"
+					:outputSize="option.size"
+					:outputType="option.outputType"
+					:info="true"
+				></vueCropper>
+			</div>
+			<div class="test-button">
+				<button @click="changeImg" class="btn">替换图片</button>
+				<label class="btn" for="uploads">我要上传</label>
+				<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg">
+				<button @click="startCrop" v-if="!crap" class="btn">开始截图</button>
+				<button @click="stopCrop" v-else class="btn">停止截图</button>
+				<button @click="clearCrop" class="btn">清除截图</button>
+				<button @click="finish('base64')" class="btn">预览图片(base64)</button>
+				<button @click="finish('blob')" class="btn">预览图片(blob)</button>
+				<a @click="down('base64')" class="btn" :href="downImg" download="demo">下载图片(base64)</a>
+				<a @click="down('blob')" class="btn" :href="downImg" download="demo">下载图片(blob)</a>
+			</div>
+			<code class="language-html">
+	&lt;template>
 	&lt;div class="wrapper">
-		&lt;vueCropper
-			ref="cropper"
-			:img="img">
-		&lt;/vueCropper>
+	&lt;vueCropper
+		ref="cropper"
+		:img="option.img"
+		:outputSize="option.size"
+		:outputType="option.outputType"
+		:info="true"
+	>&lt;/vueCropper>
 	&lt;/div>
-&lt;/template>
-&lt;script>
-import vueCropper from 'vue-cropper'
+	&lt;div class="test-button">
+	&lt;button @click="changeImg" class="btn">替换图片&lt;/button>
+	&lt;label class="btn" for="uploads">我要上传&lt;/label>
+	&lt;input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);"
+	 accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg">
+	&lt;button @click="startCrop" v-if="!crap" class="btn">开始截图&lt;/button>
+	&lt;button @click="stopCrop" v-else class="btn">停止截图&lt;/button>
+	&lt;button @click="clearCrop" class="btn">清除截图&lt;/button>
+	&lt;button @click="finish('base64')" class="btn">预览图片(base64)&lt;/button>
+	&lt;button @click="finish('blob')" class="btn">预览图片(blob)&lt;/button>
+	&lt;a @click="down('base64')" class="btn" :href="downImg" download="demo">下载图片(base64)&lt;/a>
+	&lt;a @click="down('blob')" class="btn" :href="downImg" download="demo">下载图片(blob)&lt;/a>
+	&lt;/div>
+	&lt;/template>
+	&lt;script>
+	import vueCropper from 'vue-cropper'
 
-export default {
-	components: {
-		vueCropper
-	},
-	data: function() {
-		return {
-			img: '1.png'
-		}
+	export default {
+		data: function () {
+	    return {
+			  crap: false,
+				lists: [
+					{
+						img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
+					},
+					{
+						img: 'http://ofyaji162.bkt.clouddn.com/touxiang.jpg'
+					}
+				],
+				option: {
+					img: '',
+					size: 0.8,
+					outputType: 'jpeg'
+				},
+				downImg: '#'
+	    }
+	  },
+		methods: {
+			changeImg () {
+				this.option.img = this.lists[~~(Math.random() * this.lists.length)].img
+			},
+			startCrop () {
+				// 开始截图
+				this.crap = true
+				this.$refs.cropper.startCrop()
+			},
+			stopCrop () {
+				//  停止截图
+				this.crap = false
+				this.$refs.cropper.stopCrop()
+			},
+			clearCrop () {
+				// 清除截图
+				this.$refs.cropper.clearCrop()
+			},
+			finish (type) {
+				// 输出
+				window.open(type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate())
+			},
+
+			down (type) {
+				// e.preventDefault()
+				// 输出
+				this.downImg = type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate()
+			},
+
+			uploadImg (e) {
+				//上传图片
+				// this.option.img
+				var file = e.target.files[0]
+				if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+					 alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+					 return false
+				 }
+				var reader = new FileReader()
+				reader.onload = (e) => {
+					this.option.img = e.target.result
+				}
+				reader.readAsDataURL(file)
+			}
+		},
+		components: {
+			vueCropper
+		},
 	}
-}
-&lt;/script>
-				</code>
-		</div>
-		<div class="show-info">
-			<p>例子1</p>
-		</div>
-		<vueCropper
-			ref="cropper"
-			:img="option.img"
-			:outputSize="option.size"
-			:outputType="option.outputType"
-			:info="true"
-		></vueCropper>
-		<div class="test">
-			<button @click="changeImg" class="btn">替换图片</button>
-			<label class="btn" for="uploads">我要上传</label>
-			<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg">
-			<button @click="startCrop" v-if="!crap" class="btn">开始截图</button>
-			<button @click="stopCrop" v-else class="btn">停止截图</button>
-			<button @click="clearCrop" class="btn">清除截图</button>
-			<button @click="finish('base64')" class="btn">预览图片(base64)</button>
-			<button @click="finish('blob')" class="btn">预览图片(blob)</button>
-			<a @click="down('base64')" class="btn" :href="downImg" download="demo">下载图片(base64)</a>
-			<a @click="down('blob')" class="btn" :href="downImg" download="demo">下载图片(blob)</a>
+	&lt;/script>
+			</code>
 		</div>
 	</div>
 </template>
@@ -164,10 +237,9 @@ export default {
 		height: 500px;
 	}
 
-	.test {
+	.test-button {
 		display: flex;
 		flex-wrap: wrap;
-		margin-bottom: 100px;
 	}
 
 	.btn {
@@ -181,7 +253,7 @@ export default {
     text-align: center;
     box-sizing: border-box;
     outline: none;
-    margin:10px 10px 20px 0px;
+    margin:20px 10px 0px 0px;
     padding: 9px 15px;
     font-size: 14px;
     border-radius: 4px;
@@ -209,8 +281,8 @@ export default {
 		white-space: pre;
 	}
 
-	.show-info {
-		margin-bottom: 20px;
+	.show-info h2 {
+		line-height: 50px;
 	}
 
 	/*.title, .title:hover, .title-focus, .title:visited {
@@ -229,6 +301,10 @@ export default {
     background-size: 200% 100%;
     animation: slide 5s infinite linear;
 		font-size: 40px;
+	}
+
+	.test {
+	  height: 500px;
 	}
 
 	@keyframes slide {
