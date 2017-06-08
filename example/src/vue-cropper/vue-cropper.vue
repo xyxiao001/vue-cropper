@@ -55,7 +55,7 @@
 					@mousedown="cropMove"
 		      @touchstart="cropMove"
 				></span>
-				<span class="crop-info" :style="{'top': cropInfo}">{{  this.cropW }} × {{ this.cropH }}</span>
+				<span class="crop-info" v-if="info" :style="{'top': cropInfo}">{{  this.cropW }} × {{ this.cropH }}</span>
 				<span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)"></span>
 				<span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)"></span>
 				<span class="crop-line line-s" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchstart="changeCropSize($event, false, true, 0, 2)"></span>
@@ -136,11 +136,15 @@ export default {
 		outputType: {
 			type: String,
 			default: 'jpeg'
+		},
+		info: {
+			type: Boolean,
+			default: true
 		}
 	},
 	computed: {
 		cropInfo () {
-			return this.cropOffsertY > 20 ? '-21px' : '1px'
+			return this.cropOffsertY > 20 ? '-20px' : '0px'
 		}
 	},
 	watch: {
@@ -273,11 +277,21 @@ export default {
 				var fh = ~~(nowY - this.cropY)
 				if (this.canChangeX) {
 					if (this.changeCropTypeX === 1) {
-						this.cropW = this.cropOldW - fw > 0 ? this.cropOldW - fw : Math.abs(fw) - this.cropOldW
-						this.cropOffsertX = this.cropOldW - fw > 0 ? this.cropChangeX + fw : this.cropChangeX + this.cropOldW
+						if (this.cropOldW - fw > 0) {
+							this.cropW = this.cropOldW - fw
+							this.cropOffsertX = this.cropChangeX + fw
+						} else {
+							this.cropW = Math.abs(fw) - this.cropOldW
+							this.cropOffsertX = this.cropChangeX + this.cropOldW
+						}
 					} else if (this.changeCropTypeX === 2) {
-						this.cropW = this.cropOldW + fw > 0 ? this.cropOldW + fw : Math.abs(fw + this.cropOldW)
-						this.cropOffsertX = this.cropOldW + fw > 0 ? this.cropChangeX : this.cropChangeX - Math.abs(fw + this.cropOldW)
+						if (this.cropOldW + fw > 0) {
+							this.cropW = this.cropOldW + fw
+							this.cropOffsertX = this.cropChangeX
+						} else {
+							this.cropW = Math.abs(fw + this.cropOldW)
+							this.cropOffsertX = this.cropChangeX - Math.abs(fw + this.cropOldW)
+						}
 					}
 				}
 
@@ -521,7 +535,7 @@ export default {
 
 	.crop-info {
 		position: absolute;
-		left: 5px;
+		left: 0px;
 		min-width: 65px;
 		text-align: center;
 		color: white;

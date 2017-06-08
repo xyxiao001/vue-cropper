@@ -1,12 +1,46 @@
 <template>
 	<div class="content">
-		<h1><a style="text-decoration: none" href="https://github.com/xyxiao001/vue-cropper" target="_blank">vue-cropper</a></h1>
-		<p class="des">一个基于vue的图片裁剪插件</p>
+		<h1><a class="title" href="https://github.com/xyxiao001/vue-cropper" target="_blank">vue-cropper</a></h1>
+		<div class="show-info">
+			<h2>install</h2>
+			<code class="language-html">npm install vue-cropper</code>
+		</div>
+		<div class="show-info">
+			<h2>Usage</h2>
+				<code class="language-html">
+&lt;template>
+	&lt;div class="wrapper">
+		&lt;vueCropper
+			ref="cropper"
+			:img="img">
+		&lt;/vueCropper>
+	&lt;/div>
+&lt;/template>
+&lt;script>
+import vueCropper from 'vue-cropper'
+
+export default {
+	components: {
+		vueCropper
+	},
+	data: function() {
+		return {
+			img: '1.png'
+		}
+	}
+}
+&lt;/script>
+				</code>
+		</div>
+		<div class="show-info">
+			<p>例子1</p>
+		</div>
 		<vueCropper
 			ref="cropper"
 			:img="option.img"
 			:outputSize="option.size"
 			:outputType="option.outputType"
+			:info="true"
 		></vueCropper>
 		<div class="test">
 			<button @click="changeImg" class="btn">替换图片</button>
@@ -25,6 +59,7 @@
 
 <script>
 import vueCropper from './vue-cropper'
+
 export default {
   data: function () {
     return {
@@ -109,6 +144,10 @@ export default {
 	},
 	mounted () {
 		this.changeImg()
+		// hljs.configure({useBR: true})
+		document.querySelectorAll('pre code').forEach((val, index) => {
+		  hljs.highlightBlock(val)
+		})
 	}
 }
 </script>
@@ -157,4 +196,48 @@ export default {
 	.des {
 		line-height: 30px;
 	}
+
+	code.language-html {
+		padding: 10px 20px;
+		margin: 10px 0px;
+		display: block;
+		background-color: #333;
+		color: #fff;
+		overflow-x: auto;
+		font-family: Consolas, Monaco, Droid, Sans, Mono, Source, Code, Pro, Menlo, Lucida, Sans, Type, Writer, Ubuntu, Mono;
+		border-radius: 5px;
+		white-space: pre;
+	}
+
+	.show-info {
+		margin-bottom: 20px;
+	}
+
+	/*.title, .title:hover, .title-focus, .title:visited {
+		color: black;
+	}*/
+
+	.title {
+		display: block;
+		text-decoration: none;
+		text-align: center;
+		line-height: 1.5;
+		margin: 20px 0px;
+		background-image: -webkit-linear-gradient(left,#3498db,#f47920 10%,#d71345 20%,#f7acbc 30%,#ffd400 40%,#3498db 50%,#f47920 60%,#d71345 70%,#f7acbc 80%,#ffd400 90%,#3498db);
+    color: transparent;
+    -webkit-background-clip: text;
+    background-size: 200% 100%;
+    animation: slide 5s infinite linear;
+		font-size: 40px;
+	}
+
+	@keyframes slide {
+    0%  {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+
 </style>

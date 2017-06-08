@@ -40,6 +40,12 @@
         <td>jpg (jpg 需要传入jpeg)</td>
         <td>jpeg || png || web</td>
     </tr>
+    <tr>
+        <td>info</td>
+        <td>裁剪框的大小信息</td>
+        <td>true</td>
+        <td>true || false</td>
+    </tr>
   </tbody>
 </table>
 
