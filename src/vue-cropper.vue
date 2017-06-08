@@ -55,7 +55,7 @@
 					@mousedown="cropMove"
 		      @touchstart="cropMove"
 				></span>
-				<span class="crop-info" :style="{'top': cropInfo}">{{  this.cropW }} × {{ this.cropH }}</span>
+				<span class="crop-info" v-if="info" :style="{'top': cropInfo}">{{  this.cropW }} × {{ this.cropH }}</span>
 				<span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)"></span>
 				<span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)"></span>
 				<span class="crop-line line-s" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchstart="changeCropSize($event, false, true, 0, 2)"></span>
@@ -136,11 +136,15 @@ export default {
 		outputType: {
 			type: String,
 			default: 'jpeg'
+		},
+		info: {
+			type: Boolean,
+			default: true
 		}
 	},
 	computed: {
 		cropInfo () {
-			return this.cropOffsertY > 20 ? '-21px' : '1px'
+			return this.cropOffsertY > 20 ? '-20px' : '0px'
 		}
 	},
 	watch: {
@@ -273,21 +277,41 @@ export default {
 				var fh = ~~(nowY - this.cropY)
 				if (this.canChangeX) {
 					if (this.changeCropTypeX === 1) {
-						this.cropW = this.cropOldW - fw > 0 ? this.cropOldW - fw : Math.abs(fw) - this.cropOldW
-						this.cropOffsertX = this.cropOldW - fw > 0 ? this.cropChangeX + fw : this.cropChangeX + this.cropOldW
+						if (this.cropOldW - fw > 0) {
+							this.cropW = this.w - this.cropChangeX - fw <= this.w ? this.cropOldW - fw : this.cropOldW + this.cropChangeX
+							this.cropOffsertX = this.w - this.cropChangeX - fw <= this.w ? this.cropChangeX + fw : 0
+						} else {
+							this.cropW = Math.abs(fw) + this.cropChangeX <= this.w ? Math.abs(fw) - this.cropOldW : this.w - this.cropOldW - this.cropChangeX
+							this.cropOffsertX = this.cropChangeX + this.cropOldW
+						}
 					} else if (this.changeCropTypeX === 2) {
-						this.cropW = this.cropOldW + fw > 0 ? this.cropOldW + fw : Math.abs(fw + this.cropOldW)
-						this.cropOffsertX = this.cropOldW + fw > 0 ? this.cropChangeX : this.cropChangeX - Math.abs(fw + this.cropOldW)
+						if (this.cropOldW + fw > 0) {
+							this.cropW = this.cropOldW + fw + this.cropOffsertX <= this.w ? this.cropOldW + fw : this.w - this.cropOffsertX
+							this.cropOffsertX = this.cropChangeX
+						} else {
+							this.cropW = (this.w - this.cropChangeX + Math.abs(fw + this.cropOldW)) <= this.w ? Math.abs(fw + this.cropOldW) : this.cropChangeX
+							this.cropOffsertX = (this.w - this.cropChangeX + Math.abs(fw + this.cropOldW)) <= this.w ? this.cropChangeX - Math.abs(fw + this.cropOldW) : 0
+						}
 					}
 				}
 
 				if (this.canChangeY) {
 					if (this.changeCropTypeY === 1) {
-						this.cropH = this.cropOldH - fh > 0 ? this.cropOldH - fh : Math.abs(fh) - this.cropOldH
-						this.cropOffsertY = this.cropOldH - fh > 0 ? this.cropChangeY + fh : this.cropChangeY + this.cropOldH
+						if (this.cropOldH - fh > 0) {
+							this.cropH = this.h - this.cropChangeY - fh <= this.h ? this.cropOldH - fh : this.cropOldH + this.cropChangeY
+							this.cropOffsertY = this.h - this.cropChangeY - fh <= this.h ? this.cropChangeY + fh : 0
+						} else {
+							this.cropH = Math.abs(fh) + this.cropChangeY <= this.h ? Math.abs(fh) - this.cropOldH : this.h - this.cropOldH - this.cropChangeY
+							this.cropOffsertY = this.cropChangeY + this.cropOldH
+						}
 					} else if (this.changeCropTypeY === 2) {
-						this.cropH = this.cropOldH + fh > 0 ? this.cropOldH + fh : Math.abs(fh + this.cropOldH)
-						this.cropOffsertY = this.cropOldH + fh > 0 ? this.cropChangeY : this.cropChangeY - Math.abs(fh + this.cropOldH)
+						if (this.cropOldH + fh > 0) {
+							this.cropH = this.cropOldH + fh + this.cropOffsertY <= this.h ? this.cropOldH + fh : this.h - this.cropOffsertY
+							this.cropOffsertY = this.cropChangeY
+						} else {
+							this.cropH = (this.h - this.cropChangeY + Math.abs(fh + this.cropOldH)) <= this.h ? Math.abs(fh + this.cropOldH) : this.cropChangeY
+							this.cropOffsertY = (this.h - this.cropChangeY + Math.abs(fh + this.cropOldH)) <= this.h ? this.cropChangeY - Math.abs(fh + this.cropOldH) : 0
+						}
 					}
 				}
 			})
@@ -314,19 +338,19 @@ export default {
 		// 开始截图
 		startCrop () {
 			this.crop = true
-			console.log('开始截图')
+			// console.log('开始截图')
 		},
 		// 停止截图
 		stopCrop () {
 			this.crop = false
-			console.log('停止截图')
+			// console.log('停止截图')
 		},
 		// 清除截图
 		clearCrop () {
 			this.cropping = false
 			this.cropW = 0
 			this.cropH = 0
-			console.log('清除截图')
+			// console.log('清除截图')
 		},
 		// 截图移动
 		cropMove (e) {
@@ -430,12 +454,12 @@ export default {
 				this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (this.w - this.trueWidth * this.scale) / 2
 				this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (this.h - this.trueHeight * this.scale) / 2
 				this.loading = false
-				console.log('reload')
+				// console.log('reload')
 			})
 		},
 		// 重置函数， 恢复组件置初始状态
 		refresh () {
-			console.log('refresh')
+			// console.log('refresh')
 		}
 	},
 	mounted () {
@@ -459,7 +483,6 @@ export default {
 		-ms-user-select: none;
 		direction: ltr;
 		touch-action: none;
-		overflow: hidden;
   	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
 	}
 
@@ -478,8 +501,8 @@ export default {
 		transform: none;
 	}
 
-	.crapper-drag-box {
-		/*z-index: 2*/
+	.cropper-box {
+		overflow: hidden;
 	}
 
 	.cropper-move {
@@ -521,7 +544,7 @@ export default {
 
 	.crop-info {
 		position: absolute;
-		left: 5px;
+		left: 0px;
 		min-width: 65px;
 		text-align: center;
 		color: white;

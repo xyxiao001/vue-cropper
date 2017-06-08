@@ -278,30 +278,40 @@ export default {
 				if (this.canChangeX) {
 					if (this.changeCropTypeX === 1) {
 						if (this.cropOldW - fw > 0) {
-							this.cropW = this.cropOldW - fw
-							this.cropOffsertX = this.cropChangeX + fw
+							this.cropW = this.w - this.cropChangeX - fw <= this.w ? this.cropOldW - fw : this.cropOldW + this.cropChangeX
+							this.cropOffsertX = this.w - this.cropChangeX - fw <= this.w ? this.cropChangeX + fw : 0
 						} else {
-							this.cropW = Math.abs(fw) - this.cropOldW
+							this.cropW = Math.abs(fw) + this.cropChangeX <= this.w ? Math.abs(fw) - this.cropOldW : this.w - this.cropOldW - this.cropChangeX
 							this.cropOffsertX = this.cropChangeX + this.cropOldW
 						}
 					} else if (this.changeCropTypeX === 2) {
 						if (this.cropOldW + fw > 0) {
-							this.cropW = this.cropOldW + fw
+							this.cropW = this.cropOldW + fw + this.cropOffsertX <= this.w ? this.cropOldW + fw : this.w - this.cropOffsertX
 							this.cropOffsertX = this.cropChangeX
 						} else {
-							this.cropW = Math.abs(fw + this.cropOldW)
-							this.cropOffsertX = this.cropChangeX - Math.abs(fw + this.cropOldW)
+							this.cropW = (this.w - this.cropChangeX + Math.abs(fw + this.cropOldW)) <= this.w ? Math.abs(fw + this.cropOldW) : this.cropChangeX
+							this.cropOffsertX = (this.w - this.cropChangeX + Math.abs(fw + this.cropOldW)) <= this.w ? this.cropChangeX - Math.abs(fw + this.cropOldW) : 0
 						}
 					}
 				}
 
 				if (this.canChangeY) {
 					if (this.changeCropTypeY === 1) {
-						this.cropH = this.cropOldH - fh > 0 ? this.cropOldH - fh : Math.abs(fh) - this.cropOldH
-						this.cropOffsertY = this.cropOldH - fh > 0 ? this.cropChangeY + fh : this.cropChangeY + this.cropOldH
+						if (this.cropOldH - fh > 0) {
+							this.cropH = this.h - this.cropChangeY - fh <= this.h ? this.cropOldH - fh : this.cropOldH + this.cropChangeY
+							this.cropOffsertY = this.h - this.cropChangeY - fh <= this.h ? this.cropChangeY + fh : 0
+						} else {
+							this.cropH = Math.abs(fh) + this.cropChangeY <= this.h ? Math.abs(fh) - this.cropOldH : this.h - this.cropOldH - this.cropChangeY
+							this.cropOffsertY = this.cropChangeY + this.cropOldH
+						}
 					} else if (this.changeCropTypeY === 2) {
-						this.cropH = this.cropOldH + fh > 0 ? this.cropOldH + fh : Math.abs(fh + this.cropOldH)
-						this.cropOffsertY = this.cropOldH + fh > 0 ? this.cropChangeY : this.cropChangeY - Math.abs(fh + this.cropOldH)
+						if (this.cropOldH + fh > 0) {
+							this.cropH = this.cropOldH + fh + this.cropOffsertY <= this.h ? this.cropOldH + fh : this.h - this.cropOffsertY
+							this.cropOffsertY = this.cropChangeY
+						} else {
+							this.cropH = (this.h - this.cropChangeY + Math.abs(fh + this.cropOldH)) <= this.h ? Math.abs(fh + this.cropOldH) : this.cropChangeY
+							this.cropOffsertY = (this.h - this.cropChangeY + Math.abs(fh + this.cropOldH)) <= this.h ? this.cropChangeY - Math.abs(fh + this.cropOldH) : 0
+						}
 					}
 				}
 			})
@@ -473,7 +483,6 @@ export default {
 		-ms-user-select: none;
 		direction: ltr;
 		touch-action: none;
-		overflow: hidden;
   	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
 	}
 
@@ -492,8 +501,8 @@ export default {
 		transform: none;
 	}
 
-	.crapper-drag-box {
-		/*z-index: 2*/
+	.cropper-box {
+		overflow: hidden;
 	}
 
 	.cropper-move {

@@ -163,7 +163,7 @@ export default {
 			option: {
 				img: '',
 				size: 0.8,
-				outputType: 'jpeg'
+				outputType: 'png'
 			},
 			downImg: '#'
     }
