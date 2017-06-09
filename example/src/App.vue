@@ -222,7 +222,8 @@ export default {
 	mounted () {
 		this.changeImg()
 		// hljs.configure({useBR: true})
-		document.querySelectorAll('pre code').forEach((val, index) => {
+		var list = [].slice.call(document.querySelectorAll('pre code'))
+		list.forEach((val, index) => {
 		  hljs.highlightBlock(val)
 		})
 	}

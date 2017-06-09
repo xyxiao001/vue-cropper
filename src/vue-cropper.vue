@@ -120,7 +120,9 @@ export default {
 			cropChangeX: 0,
 			cropChangeY: 0,
 			cropOffsertX: 0,
-			cropOffsertY: 0
+			cropOffsertY: 0,
+			// 支持的滚动事件
+			support: ''
     }
   },
 	props: {
@@ -207,14 +209,15 @@ export default {
 		},
 		// 缩放图片
 		scaleImg () {
+			this.support = "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll"
 			if (this.canScale) {
-				window.addEventListener('mousewheel', this.changeSize)
+				window.addEventListener(this.support, this.changeSize)
 			}
 		},
 		// 移出框
 		cancleScale () {
 			if (this.canScale) {
-				window.removeEventListener('mousewheel', this.changeSize)
+				window.removeEventListener(this.support, this.changeSize)
 			}
 		},
 		// 改变大小函数
