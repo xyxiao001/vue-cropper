@@ -28,8 +28,9 @@
 				<a @click="down('base64')" class="btn" :href="downImg" download="demo">下载图片(base64)</a>
 				<a @click="down('blob')" class="btn" :href="downImg" download="demo">下载图片(blob)</a>
 			</div>
-			<code class="language-html">
-	&lt;template>
+			<codes>
+<div slot="body">
+&lt;template>
 	&lt;div class="wrapper">
 	&lt;vueCropper
 		ref="cropper"
@@ -52,86 +53,88 @@
 	&lt;a @click="down('base64')" class="btn" :href="downImg" download="demo">下载图片(base64)&lt;/a>
 	&lt;a @click="down('blob')" class="btn" :href="downImg" download="demo">下载图片(blob)&lt;/a>
 	&lt;/div>
-	&lt;/template>
-	&lt;script>
-	import vueCropper from 'vue-cropper'
+&lt;/template>
+&lt;script>
+import vueCropper from 'vue-cropper'
 
-	export default {
-		data: function () {
-	    return {
-			  crap: false,
-				lists: [
-					{
-						img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
-					},
-					{
-						img: 'http://ofyaji162.bkt.clouddn.com/touxiang.jpg'
-					}
-				],
-				option: {
-					img: '',
-					size: 0.8,
-					outputType: 'jpeg'
+export default {
+	data: function () {
+		return {
+			crap: false,
+			lists: [
+				{
+					img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
 				},
-				downImg: '#'
-	    }
-	  },
-		methods: {
-			changeImg () {
-				this.option.img = this.lists[~~(Math.random() * this.lists.length)].img
-			},
-			startCrop () {
-				// 开始截图
-				this.crap = true
-				this.$refs.cropper.startCrop()
-			},
-			stopCrop () {
-				//  停止截图
-				this.crap = false
-				this.$refs.cropper.stopCrop()
-			},
-			clearCrop () {
-				// 清除截图
-				this.$refs.cropper.clearCrop()
-			},
-			finish (type) {
-				// 输出
-				window.open(type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate())
-			},
-
-			down (type) {
-				// e.preventDefault()
-				// 输出
-				this.downImg = type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate()
-			},
-
-			uploadImg (e) {
-				//上传图片
-				// this.option.img
-				var file = e.target.files[0]
-				if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
-					 alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
-					 return false
-				 }
-				var reader = new FileReader()
-				reader.onload = (e) => {
-					this.option.img = e.target.result
+				{
+					img: 'http://ofyaji162.bkt.clouddn.com/touxiang.jpg'
 				}
-				reader.readAsDataURL(file)
+			],
+			option: {
+				img: '',
+				size: 0.8,
+				outputType: 'jpeg'
+			},
+			downImg: '#'
+		}
+	},
+	methods: {
+		changeImg () {
+			this.option.img = this.lists[~~(Math.random() * this.lists.length)].img
+		},
+		startCrop () {
+			// 开始截图
+			this.crap = true
+			this.$refs.cropper.startCrop()
+		},
+		stopCrop () {
+			//  停止截图
+			this.crap = false
+			this.$refs.cropper.stopCrop()
+		},
+		clearCrop () {
+			// 清除截图
+			this.$refs.cropper.clearCrop()
+		},
+		finish (type) {
+			// 输出
+			window.open(type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate())
+		},
+
+		down (type) {
+			// e.preventDefault()
+			// 输出
+			this.downImg = type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate()
+		},
+
+		uploadImg (e) {
+			//上传图片
+			// this.option.img
+			var file = e.target.files[0]
+			if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+				 alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+				 return false
+			 }
+			var reader = new FileReader()
+			reader.onload = (e) => {
+				this.option.img = e.target.result
 			}
-		},
-		components: {
-			vueCropper
-		},
-	}
-	&lt;/script>
-			</code>
+			reader.readAsDataURL(file)
+		}
+	},
+	components: {
+		vueCropper
+	},
+}
+&lt;/script>
+</div>
+			</codes>
 		</div>
 	</div>
 </template>
 
 <script>
 import vueCropper from './vue-cropper'
+import codes from './code'
 
 export default {
   data: function () {
@@ -213,7 +216,8 @@ export default {
 		}
 	},
 	components: {
-		vueCropper
+		vueCropper,
+		codes
 	},
 	mounted () {
 		this.changeImg()
@@ -234,7 +238,7 @@ export default {
 	.content {
 		margin: auto;
 		max-width: 1200px;
-		height: 500px;
+		margin-bottom: 100px;
 	}
 
 	.test-button {
