@@ -6,7 +6,7 @@
 			<code class="language-html">npm install vue-cropper</code>
 		</div>
 		<div class="show-info">
-			<h2>example1</h2>
+			<h2>example1 (纯手工, 不限制)</h2>
 			<div class="test">
 				<vueCropper
 					ref="cropper"
@@ -129,6 +129,55 @@ export default {
 </div>
 			</codes>
 		</div>
+		<div class="show-info">
+			<h2>example2 (开启自动截图,隐藏信息)</h2>
+			<div class="test">
+				<vueCropper
+					ref="cropper2"
+					:img="example2.img"
+					:outputSize="example2.size"
+					:outputType="example2.outputType"
+					:info="example2.info"
+					:canScale="example2.canScale"
+					:autoCrop="example2.autoCrop"
+					:autoCropWidth="example2.width"
+					:autoCropHeight="example2.height"
+				></vueCropper>
+				<button @click="finish2('base64')" class="btn">预览图片(base64)</button>
+				<codes>
+<div slot="body">
+&lt;vueCropper
+	ref="cropper2"
+	:img="example2.img"
+	:outputSize="example2.size"
+	:outputType="example2.outputType"
+	:info="example2.info"
+	:canScale="example2.canScale"
+	:autoCrop="example2.autoCrop"
+	:autoCropWidth="example2.width"
+	:autoCropHeight="example2.height"
+>&lt;/vueCropper>
+&lt;script>
+export default {
+  data: function () {
+    return {
+			example2: {
+				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
+				info: false,
+				size: 1,
+				outputType: 'jpeg',
+				canScale: false,
+				autoCrop: true,
+				// 只有自动截图开启 宽度高度才生效
+				autoCropWidth: 100,
+				autoCropHeight: 100,
+			}
+		}
+&lt;/script>
+</div>
+				</codes>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -168,6 +217,17 @@ export default {
 				size: 0.8,
 				outputType: 'png'
 			},
+			example2: {
+				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
+				info: false,
+				size: 1,
+				outputType: 'jpeg',
+				canScale: false,
+				autoCrop: true,
+				// 只有自动截图开启 宽度高度才生效
+				width: 300,
+				height: 150,
+			},
 			downImg: '#'
     }
   },
@@ -193,7 +253,9 @@ export default {
 			// 输出
 			window.open(type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate())
 		},
-
+		finish2 (type) {
+			window.open(type === 'blob' ? this.$refs.cropper2.getCropBlob() : this.$refs.cropper2.getCropDate())
+		},
 		down (type) {
 			// e.preventDefault()
 			// 输出
@@ -284,6 +346,10 @@ export default {
 		font-family: Consolas, Monaco, Droid, Sans, Mono, Source, Code, Pro, Menlo, Lucida, Sans, Type, Writer, Ubuntu, Mono;
 		border-radius: 5px;
 		white-space: pre;
+	}
+
+	.show-info {
+		margin-bottom: 50px;
 	}
 
 	.show-info h2 {

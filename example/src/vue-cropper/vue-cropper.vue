@@ -97,8 +97,6 @@ export default {
 			moveX: 0,
 			// 移动的y
 			moveY: 0,
-			// 是否开启滚轮放大缩小
-			canScale: true,
 			// 开启截图
 			crop: false,
 			// 正在截图
@@ -142,6 +140,24 @@ export default {
 		info: {
 			type: Boolean,
 			default: true
+		},
+		// 是否开启滚轮放大缩小
+		canScale: {
+			type: Boolean,
+			default: true
+		},
+		// 是否自成截图框
+		autoCrop: {
+			type: Boolean,
+			default: false
+		},
+		autoCropWidth: {
+			type: Number,
+			default: 0
+		},
+		autoCropHeight: {
+			type: Number,
+			default: 0
 		}
 	},
 	computed: {
@@ -436,8 +452,8 @@ export default {
 		// reload 图片布局函数
 		reload () {
 			// 得到外层容器的宽度高度
-			this.w =  window.getComputedStyle(this.$refs.cropper).width.replace('px', '')
-			this.h =  window.getComputedStyle(this.$refs.cropper).height.replace('px', '')
+			this.w =  ~~(window.getComputedStyle(this.$refs.cropper).width.replace('px', ''))
+			this.h =  ~~(window.getComputedStyle(this.$refs.cropper).height.replace('px', ''))
 
 			// 存入图片真实高度
 			this.trueWidth = this.$refs.cropperImg.width
@@ -453,12 +469,37 @@ export default {
 			}
 
 			this.$nextTick(() => {
-				// this.x = this.trueWidth * (this.scale - 1)
 				this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (this.w - this.trueWidth * this.scale) / 2
 				this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (this.h - this.trueHeight * this.scale) / 2
 				this.loading = false
-				// console.log('reload')
+				// 获取是否开启了自动截图
+				if (this.autoCrop) {
+					this.goAutoCrop()
+				}
 			})
+		},
+		// 自动截图函数
+		goAutoCrop () {
+			this.cropping = true
+			// 截图框默认大小
+			// 如果为0 那么计算容器大小 默认为80%
+			var w = this.autoCropWidth
+			var h = this.autoCropHeight
+			if (w === 0 || h === 0) {
+				w = this.w * 0.8
+				h = this.h * 0.8
+			}
+			w = w > this.w ? this.w : w
+			h = h > this.h ? this.h : h
+			this.changeCrop(w, h)
+		},
+		// 手动改变截图框大小函数
+		changeCrop (w, h ) {
+			this.cropW = w
+			this.cropH = h
+			// 居中走一走
+			this.cropOffsertX = (this.w - w) / 2
+			this.cropOffsertY = (this.h - h) / 2
 		},
 		// 重置函数， 恢复组件置初始状态
 		refresh () {

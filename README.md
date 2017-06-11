@@ -46,6 +46,30 @@
         <td>true</td>
         <td>true || false</td>
     </tr>
+    <tr>
+        <td>canScale</td>
+        <td>图片是否允许滚轮缩放</td>
+        <td>true</td>
+        <td>true || false</td>
+    </tr>
+    <tr>
+        <td>autoCrop</td>
+        <td>是否默认生成截图框</td>
+        <td>false</td>
+        <td>true || false</td>
+    </tr>
+    <tr>
+        <td>autoCropWidth</td>
+        <td>默认生成截图框宽度</td>
+        <td>容器的80%</td>
+        <td>0~max</td>
+    </tr>
+    <tr>
+        <td>autoCropHeight</td>
+        <td>默认生成截图框高度</td>
+        <td>容器的80%</td>
+        <td>0~max</td>
+    </tr>
   </tbody>
 </table>
 
