@@ -1,5 +1,6 @@
 ## vue-crpopper
  [preview](http://xyxiao.cn/vue-cropper/example/)
+ <br />
  [中文](https://github.com/xyxiao001/vue-cropper/chinese.md)
 # vue-cropper
 ####   install
@@ -44,7 +45,7 @@ import VueCropper from vue-cropper
     <tr>
         <td>outputType</td>
         <td>crop img output type</td>
-        <td>jpg (jpg 需要传入jpeg)</td>
+        <td>jpg (jpg need jpeg)</td>
         <td>jpeg || png || web</td>
     </tr>
     <tr>
@@ -82,7 +83,19 @@ import VueCropper from vue-cropper
 
 
 ### function  adopt this.$refs.cropper to use
-##### this.$refs.cropper.startCrop()  start cropper
-##### this.$refs.cropper.stopCrop()  stop cropper
-##### this.$refs.cropper.clearCrop()  clear cropper
-##### this.$refs.cropper.getCropDate()  get output img base64
+##### start cropper
+```
+this.$refs.cropper.startCrop()
+```
+##### stop cropper
+```
+this.$refs.cropper.stopCrop()
+```
+##### clear cropper
+```
+this.$refs.cropper.clearCrop()
+```
+##### get output img base64
+```
+this.$refs.cropper.getCropDate()
+```
