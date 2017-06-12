@@ -46,7 +46,7 @@ import VueCropper from vue-cropper
         <td>outputType</td>
         <td>crop img output type</td>
         <td>jpg (jpg need jpeg)</td>
-        <td>jpeg || png || web</td>
+        <td>jpeg || png || webp</td>
     </tr>
     <tr>
         <td>info</td>

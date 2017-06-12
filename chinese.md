@@ -38,7 +38,7 @@
         <td>outputType</td>
         <td>裁剪生成图片的格式</td>
         <td>jpg (jpg 需要传入jpeg)</td>
-        <td>jpeg || png || web</td>
+        <td>jpeg || png || webp</td>
     </tr>
     <tr>
         <td>info</td>
