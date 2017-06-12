@@ -19,7 +19,7 @@
 			<div class="test-button">
 				<button @click="changeImg" class="btn">替换图片</button>
 				<label class="btn" for="uploads">我要上传</label>
-				<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg">
+				<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
 				<button @click="startCrop" v-if="!crap" class="btn">开始截图</button>
 				<button @click="stopCrop" v-else class="btn">停止截图</button>
 				<button @click="clearCrop" class="btn">清除截图</button>
@@ -143,8 +143,11 @@ export default {
 					:autoCropWidth="example2.width"
 					:autoCropHeight="example2.height"
 				></vueCropper>
-				<button @click="finish2('base64')" class="btn">预览图片(base64)</button>
-				<codes>
+			</div>
+			<label class="btn" for="upload2">我要上传</label>
+			<input type="file" id="upload2" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 2)">
+			<button @click="finish2('base64')" class="btn">预览图片(base64)</button>
+			<codes>
 <div slot="body">
 &lt;vueCropper
 	ref="cropper2"
@@ -169,14 +172,13 @@ export default {
 				canScale: false,
 				autoCrop: true,
 				// 只有自动截图开启 宽度高度才生效
-				autoCropWidth: 100,
-				autoCropHeight: 100,
+				autoCropWidth: 300,
+				autoCropHeight: 250,
 			}
 		}
 &lt;/script>
 </div>
-				</codes>
-			</div>
+			</codes>
 		</div>
 	</div>
 </template>
@@ -226,7 +228,7 @@ export default {
 				autoCrop: true,
 				// 只有自动截图开启 宽度高度才生效
 				width: 300,
-				height: 150,
+				height: 250,
 			},
 			downImg: '#'
     }
@@ -262,7 +264,7 @@ export default {
 			this.downImg = type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate()
 		},
 
-		uploadImg (e) {
+		uploadImg (e, num) {
 			//上传图片
 			// this.option.img
 			var file = e.target.files[0]
@@ -272,7 +274,11 @@ export default {
 			 }
 			var reader = new FileReader()
 			reader.onload = (e) => {
-				this.option.img = e.target.result
+				if (num === 1) {
+					this.option.img = e.target.result
+				} else if (num === 2) {
+					this.example2.img = e.target.result
+				}
 			}
 			reader.readAsDataURL(file)
 		}
