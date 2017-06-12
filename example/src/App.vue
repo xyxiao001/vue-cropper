@@ -6,7 +6,7 @@
 			<code class="language-html">npm install vue-cropper</code>
 		</div>
 		<div class="show-info">
-			<h2>example1 (纯手工, 不限制)</h2>
+			<h2>example1 (normal)</h2>
 			<div class="test">
 				<vueCropper
 					ref="cropper"
@@ -17,16 +17,16 @@
 				></vueCropper>
 			</div>
 			<div class="test-button">
-				<button @click="changeImg" class="btn">替换图片</button>
-				<label class="btn" for="uploads">我要上传</label>
+				<button @click="changeImg" class="btn">changeImg</button>
+				<label class="btn" for="uploads">upload</label>
 				<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
-				<button @click="startCrop" v-if="!crap" class="btn">开始截图</button>
-				<button @click="stopCrop" v-else class="btn">停止截图</button>
-				<button @click="clearCrop" class="btn">清除截图</button>
-				<button @click="finish('base64')" class="btn">预览图片(base64)</button>
-				<button @click="finish('blob')" class="btn">预览图片(blob)</button>
-				<a @click="down('base64')" class="btn" :href="downImg" download="demo">下载图片(base64)</a>
-				<a @click="down('blob')" class="btn" :href="downImg" download="demo">下载图片(blob)</a>
+				<button @click="startCrop" v-if="!crap" class="btn">start</button>
+				<button @click="stopCrop" v-else class="btn">stop</button>
+				<button @click="clearCrop" class="btn">clear</button>
+				<button @click="finish('base64')" class="btn">preview(base64)</button>
+				<button @click="finish('blob')" class="btn">preview(blob)</button>
+				<a @click="down('base64')" class="btn" :href="downImg" download="demo">download(base64)</a>
+				<a @click="down('blob')" class="btn" :href="downImg" download="demo">download(blob)</a>
 			</div>
 			<codes>
 <div slot="body">
@@ -41,17 +41,17 @@
 	>&lt;/vueCropper>
 	&lt;/div>
 	&lt;div class="test-button">
-	&lt;button @click="changeImg" class="btn">替换图片&lt;/button>
-	&lt;label class="btn" for="uploads">我要上传&lt;/label>
+	&lt;button @click="changeImg" class="btn">changeImg&lt;/button>
+	&lt;label class="btn" for="uploads">upload&lt;/label>
 	&lt;input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);"
 	 accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg">
-	&lt;button @click="startCrop" v-if="!crap" class="btn">开始截图&lt;/button>
-	&lt;button @click="stopCrop" v-else class="btn">停止截图&lt;/button>
-	&lt;button @click="clearCrop" class="btn">清除截图&lt;/button>
-	&lt;button @click="finish('base64')" class="btn">预览图片(base64)&lt;/button>
-	&lt;button @click="finish('blob')" class="btn">预览图片(blob)&lt;/button>
-	&lt;a @click="down('base64')" class="btn" :href="downImg" download="demo">下载图片(base64)&lt;/a>
-	&lt;a @click="down('blob')" class="btn" :href="downImg" download="demo">下载图片(blob)&lt;/a>
+	&lt;button @click="startCrop" v-if="!crap" class="btn">start&lt;/button>
+	&lt;button @click="stopCrop" v-else class="btn">stop&lt;/button>
+	&lt;button @click="clearCrop" class="btn">clear&lt;/button>
+	&lt;button @click="finish('base64')" class="btn">preview(base64)&lt;/button>
+	&lt;button @click="finish('blob')" class="btn">preview(blob)&lt;/button>
+	&lt;a @click="down('base64')" class="btn" :href="downImg" download="demo">download(base64)&lt;/a>
+	&lt;a @click="down('blob')" class="btn" :href="downImg" download="demo">download(blob)&lt;/a>
 	&lt;/div>
 &lt;/template>
 &lt;script>
@@ -82,17 +82,17 @@ export default {
 			this.option.img = this.lists[~~(Math.random() * this.lists.length)].img
 		},
 		startCrop () {
-			// 开始截图
+			// start
 			this.crap = true
 			this.$refs.cropper.startCrop()
 		},
 		stopCrop () {
-			//  停止截图
+			//  stop
 			this.crap = false
 			this.$refs.cropper.stopCrop()
 		},
 		clearCrop () {
-			// 清除截图
+			// clear
 			this.$refs.cropper.clearCrop()
 		},
 		finish (type) {
@@ -130,7 +130,7 @@ export default {
 			</codes>
 		</div>
 		<div class="show-info">
-			<h2>example2 (开启自动截图,隐藏信息)</h2>
+			<h2>example2 (auto crop, hide crop box info)</h2>
 			<div class="test">
 				<vueCropper
 					ref="cropper2"
@@ -144,9 +144,9 @@ export default {
 					:autoCropHeight="example2.height"
 				></vueCropper>
 			</div>
-			<label class="btn" for="upload2">我要上传</label>
+			<label class="btn" for="upload2">upload</label>
 			<input type="file" id="upload2" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 2)">
-			<button @click="finish2('base64')" class="btn">预览图片(base64)</button>
+			<button @click="finish2('base64')" class="btn">preview(base64)</button>
 			<codes>
 <div slot="body">
 &lt;vueCropper
@@ -238,17 +238,17 @@ export default {
 			this.option.img = this.lists[~~(Math.random() * this.lists.length)].img
 		},
 		startCrop () {
-			// 开始截图
+			// start
 			this.crap = true
 			this.$refs.cropper.startCrop()
 		},
 		stopCrop () {
-			//  停止截图
+			//  stop
 			this.crap = false
 			this.$refs.cropper.stopCrop()
 		},
 		clearCrop () {
-			// 清除截图
+			// clear
 			this.$refs.cropper.clearCrop()
 		},
 		finish (type) {

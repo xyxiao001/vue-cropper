@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     msg () {
-      return !this.all ? '点击展开全部' : '点击收起全部'
+      return !this.all ? 'unfold' : 'fold'
     }
   }
 }
