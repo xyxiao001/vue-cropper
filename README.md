@@ -1,7 +1,7 @@
 ## vue-crpopper
  [preview](http://xyxiao.cn/vue-cropper/example/)
  <br />
- [中文](https://github.com/xyxiao001/vue-cropper/chinese.md)
+ [中文](https://github.com/xyxiao001/vue-cropper/blob/master/chinese.md)
 # vue-cropper
 ####   install
 ```
