@@ -97,13 +97,16 @@ export default {
 		},
 		finish (type) {
 			// 输出
+			var test = window.open('about:blank')
+			test.document.body.innerHTML = '图片生成中..'
 			if (type === 'blob') {
 				this.$refs.cropper.getCropBlob((data) => {
-					window.open(data)
+					var test = window.open('')
+					test.location.href = data
 				})
 			} else {
 				this.$refs.cropper.getCropDate((data) => {
-					window.open(data)
+					test.location.href = data
 				})
 			}
 		},
@@ -275,19 +278,24 @@ export default {
 		},
 		finish (type) {
 			// 输出
+			var test = window.open('about:blank')
+			test.document.body.innerHTML = '图片生成中..'
 			if (type === 'blob') {
 				this.$refs.cropper.getCropBlob((data) => {
-					window.open(data)
+					var test = window.open('')
+					test.location.href = data
 				})
 			} else {
 				this.$refs.cropper.getCropDate((data) => {
-					window.open(data)
+					test.location.href = data
 				})
 			}
 		},
 		finish2 (type) {
+			var test = window.open('about:blank')
+			test.document.body.innerHTML = '图片生成中..'
 			this.$refs.cropper2.getCropDate((data) => {
-				window.open(data)
+				test.location.href = data
 			})
 		},
 		down (type) {
