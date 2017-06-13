@@ -111,8 +111,6 @@ export default {
 		down (type) {
 			// event.preventDefault()
 			var aLink = document.createElement('a')
-			var evt = document.createEvent('HTMLEvents')
-			evt.initEvent('click', false, false)
 			aLink.download = 'demo'
 			// 输出
 			if (type === 'blob') {
@@ -295,8 +293,6 @@ export default {
 		down (type) {
 			// event.preventDefault()
 			var aLink = document.createElement('a')
-			var evt = document.createEvent('HTMLEvents')
-			evt.initEvent('click', false, false)
 			aLink.download = 'demo'
 			// 输出
 			if (type === 'blob') {
