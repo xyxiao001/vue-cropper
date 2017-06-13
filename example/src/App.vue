@@ -25,8 +25,8 @@
 				<button @click="clearCrop" class="btn">clear</button>
 				<button @click="finish('base64')" class="btn">preview(base64)</button>
 				<button @click="finish('blob')" class="btn">preview(blob)</button>
-				<a @click="down('base64')" class="btn" :href="downImg" download="demo">download(base64)</a>
-				<a @click="down('blob')" class="btn" :href="downImg" download="demo">download(blob)</a>
+				<a @click="down('base64')" class="btn">download(base64)</a>
+				<a @click="down('blob')" class="btn">download(blob)</a>
 			</div>
 			<codes>
 <div slot="body">
@@ -109,9 +109,25 @@ export default {
 		},
 
 		down (type) {
-			// e.preventDefault()
+			// event.preventDefault()
+			var aLink = document.createElement('a')
+			var evt = document.createEvent('HTMLEvents')
+			evt.initEvent('click', false, false)
+			aLink.download = 'demo'
 			// 输出
-			this.downImg = type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate()
+			if (type === 'blob') {
+				this.$refs.cropper.getCropBlob((data) => {
+					this.downImg = data
+					aLink.href = data
+					aLink.click()
+				})
+			} else {
+				this.$refs.cropper.getCropDate((data) => {
+					this.downImg = data
+					aLink.href = data
+					aLink.click()
+				})
+			}
 		},
 
 		uploadImg (e) {
@@ -277,14 +293,23 @@ export default {
 			})
 		},
 		down (type) {
+			// event.preventDefault()
+			var aLink = document.createElement('a')
+			var evt = document.createEvent('HTMLEvents')
+			evt.initEvent('click', false, false)
+			aLink.download = 'demo'
 			// 输出
 			if (type === 'blob') {
 				this.$refs.cropper.getCropBlob((data) => {
 					this.downImg = data
+					aLink.href = data
+					aLink.click()
 				})
 			} else {
 				this.$refs.cropper.getCropDate((data) => {
 					this.downImg = data
+					aLink.href = data
+					aLink.click()
 				})
 			}
 		},
