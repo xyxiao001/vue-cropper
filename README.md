@@ -97,5 +97,16 @@ this.$refs.cropper.clearCrop()
 ```
 ##### get output img base64
 ```
-this.$refs.cropper.getCropDate()
+this.$refs.cropper.getCropDate((data) => {
+  // do something
+  console.log(data)  
+})
+```
+
+### get output img blob
+```
+this.$refs.cropper.getCropBlob((data) => {
+  // do something
+  console.log(data)  
+})
 ```

@@ -97,7 +97,15 @@ export default {
 		},
 		finish (type) {
 			// 输出
-			window.open(type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate())
+			if (type === 'blob') {
+				this.$refs.cropper.getCropBlob((data) => {
+					window.open(data)
+				})
+			} else {
+				this.$refs.cropper.getCropDate((data) => {
+					window.open(data)
+				})
+			}
 		},
 
 		down (type) {
@@ -253,15 +261,32 @@ export default {
 		},
 		finish (type) {
 			// 输出
-			window.open(type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate())
+			if (type === 'blob') {
+				this.$refs.cropper.getCropBlob((data) => {
+					window.open(data)
+				})
+			} else {
+				this.$refs.cropper.getCropDate((data) => {
+					window.open(data)
+				})
+			}
 		},
 		finish2 (type) {
-			window.open(type === 'blob' ? this.$refs.cropper2.getCropBlob() : this.$refs.cropper2.getCropDate())
+			this.$refs.cropper2.getCropDate((data) => {
+				window.open(data)
+			})
 		},
 		down (type) {
-			// e.preventDefault()
 			// 输出
-			this.downImg = type === 'blob' ? this.$refs.cropper.getCropBlob() : this.$refs.cropper.getCropDate()
+			if (type === 'blob') {
+				this.$refs.cropper.getCropBlob((data) => {
+					this.downImg = data
+				})
+			} else {
+				this.$refs.cropper.getCropDate((data) => {
+					this.downImg = data
+				})
+			}
 		},
 
 		uploadImg (e, num) {

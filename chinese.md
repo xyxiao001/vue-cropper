@@ -78,4 +78,10 @@
 ##### this.$refs.cropper.startCrop()  开始截图
 ##### this.$refs.cropper.stopCrop()  停止截图
 ##### this.$refs.cropper.clearCrop()  清除截图
-##### this.$refs.cropper.getCropDate()  获取截图信息
+#####  获取截图信息
+```
+this.$refs.cropper.getCropDate((data) => {
+  // do something
+  console.log(data)  
+})
+```

@@ -1,11 +1,5 @@
 <template>
 	<div class="vue-cropper" ref="cropper">
-		<img
-			:src="img"
-		  ref="cropperOutput"
-			style="display: none"
-			crossOrigin = "*"
-		/>
 		<div class="cropper-box">
 			<div class="cropper-box-canvas"
 			 	v-show="!loading"
@@ -411,42 +405,50 @@ export default {
 			window.removeEventListener('touchmove', this.moveCrop)
 			window.removeEventListener('touchend', this.leaveCrop)
 		},
-
 		// 获取转换成base64 的图片信息
-		getCropDate () {
+		getCropDate (cb) {
 			let canvas = document.createElement('canvas')
-      canvas.width = this.cropW
-      canvas.height = this.cropH
-			if (~~(canvas.width) !== 0) {
-				let ctx = canvas.getContext('2d')
-				// 图片x轴偏移
-				let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
-				// 图片y轴偏移
-				let dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
-				// console.log(dx, dy)
-				ctx.drawImage(this.$refs.cropperOutput, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
-			} else {
-				canvas.width = this.trueWidth * this.scale
-				canvas.height = this.trueHeight * this.scale
-				let ctx = canvas.getContext('2d')
-				ctx.drawImage(this.$refs.cropperOutput, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
+			canvas.width = this.cropW
+			canvas.height = this.cropH
+			let img = new Image
+			img.onload = () => {
+				if (~~(canvas.width) !== 0) {
+					let ctx = canvas.getContext('2d')
+					// 图片x轴偏移
+					let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
+					// 图片y轴偏移
+					let dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
+					// console.log(dx, dy)
+					ctx.drawImage(img, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
+				} else {
+					canvas.width = this.trueWidth * this.scale
+					canvas.height = this.trueHeight * this.scale
+					let ctx = canvas.getContext('2d')
+					ctx.drawImage(img, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
+				}
+				let data = canvas.toDataURL('image/' + this.outputType, this.outputSize)
+				cb(data)
 			}
-      let data = canvas.toDataURL('image/' + this.outputType, this.outputSize)
-			return data
+			img.crossOrigin = 'anonymous'
+			img.src = this.img
 		},
 		//转化base64 为blob对象
-		getCropBlob() {
-		  var arr = this.getCropDate().split(',')
-		  var mime = arr[0].match(/:(.*?);/)[1]
-		  var bstr = atob(arr[1])
-		  var n = bstr.length
-		  var u8arr = new Uint8Array(n)
-			while (n--) {
-		    u8arr[n] = bstr.charCodeAt(n)
-		  }
-		  return window.URL.createObjectURL(new Blob([u8arr], {
-		    type: mime
-		  }))
+		getCropBlob(cb) {
+			this.getCropDate((data) => {
+				var arr = data.split(',')
+			  var mime = arr[0].match(/:(.*?);/)[1]
+			  var bstr = atob(arr[1])
+			  var n = bstr.length
+			  var u8arr = new Uint8Array(n)
+				while (n--) {
+			    u8arr[n] = bstr.charCodeAt(n)
+			  }
+				cb(
+					window.URL.createObjectURL(new Blob([u8arr], {
+			    	type: mime
+			  	})
+				))
+			})
 		},
 
 		// reload 图片布局函数
