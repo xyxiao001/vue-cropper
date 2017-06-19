@@ -105,7 +105,7 @@ export default {
 					test.location.href = data
 				})
 			} else {
-				this.$refs.cropper.getCropDate((data) => {
+				this.$refs.cropper.getCropData((data) => {
 					test.location.href = data
 				})
 			}
@@ -123,7 +123,7 @@ export default {
 					aLink.click()
 				})
 			} else {
-				this.$refs.cropper.getCropDate((data) => {
+				this.$refs.cropper.getCropData((data) => {
 					this.downImg = data
 					aLink.href = data
 					aLink.click()
@@ -155,7 +155,7 @@ export default {
 			</codes>
 		</div>
 		<div class="show-info">
-			<h2>example2 (auto crop, hide crop box info)</h2>
+			<h2>example2 (auto crop, fixed,  w : h => 4 : 3)</h2>
 			<div class="test">
 				<vueCropper
 					ref="cropper2"
@@ -167,6 +167,8 @@ export default {
 					:autoCrop="example2.autoCrop"
 					:autoCropWidth="example2.width"
 					:autoCropHeight="example2.height"
+					:fixed="example2.fixed"
+					:fixedNumber="example2.fixedNumber"
 				></vueCropper>
 			</div>
 			<label class="btn" for="upload2">upload</label>
@@ -191,7 +193,7 @@ export default {
     return {
 			example2: {
 				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
-				info: false,
+				info: true,
 				size: 1,
 				outputType: 'jpeg',
 				canScale: false,
@@ -199,6 +201,9 @@ export default {
 				// 只有自动截图开启 宽度高度才生效
 				autoCropWidth: 300,
 				autoCropHeight: 250,
+				// 开启宽度和高度比例
+				fixed: true,
+				fixedNumber: [4, 3]
 			}
 		}
 &lt;/script>
@@ -246,7 +251,7 @@ export default {
 			},
 			example2: {
 				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
-				info: false,
+				info: true,
 				size: 1,
 				outputType: 'jpeg',
 				canScale: false,
@@ -254,6 +259,8 @@ export default {
 				// 只有自动截图开启 宽度高度才生效
 				width: 300,
 				height: 250,
+				fixed: true,
+				fixedNumber: [4, 3]
 			},
 			downImg: '#'
     }
@@ -286,7 +293,7 @@ export default {
 					test.location.href = data
 				})
 			} else {
-				this.$refs.cropper.getCropDate((data) => {
+				this.$refs.cropper.getCropData((data) => {
 					test.location.href = data
 				})
 			}
@@ -294,7 +301,7 @@ export default {
 		finish2 (type) {
 			var test = window.open('about:blank')
 			test.document.body.innerHTML = '图片生成中..'
-			this.$refs.cropper2.getCropDate((data) => {
+			this.$refs.cropper2.getCropData((data) => {
 				test.location.href = data
 			})
 		},
@@ -310,7 +317,7 @@ export default {
 					aLink.click()
 				})
 			} else {
-				this.$refs.cropper.getCropDate((data) => {
+				this.$refs.cropper.getCropData((data) => {
 					this.downImg = data
 					aLink.href = data
 					aLink.click()

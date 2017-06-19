@@ -80,7 +80,7 @@
 ##### this.$refs.cropper.clearCrop()  清除截图
 #####  获取截图信息
 ```
-this.$refs.cropper.getCropDate((data) => {
+this.$refs.cropper.getCropData((data) => {
   // do something
   console.log(data)  
 })

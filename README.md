@@ -78,6 +78,18 @@ import VueCropper from vue-cropper
         <td>box size 80%</td>
         <td>0~max</td>
     </tr>
+    <tr>
+        <td>fixed</td>
+        <td>open crop box width height ratio</td>
+        <td>true</td>
+        <td>true | false</td>
+    </tr>
+    <tr>
+        <td>fixedNumber</td>
+        <td>crop box width height ratio</td>
+        <td>[1 : 1]</td>
+        <td>[w : h]</td>
+    </tr>
   </tbody>
 </table>
 
@@ -97,7 +109,7 @@ this.$refs.cropper.clearCrop()
 ```
 ##### get output img base64
 ```
-this.$refs.cropper.getCropDate((data) => {
+this.$refs.cropper.getCropData((data) => {
   // do something
   console.log(data)  
 })

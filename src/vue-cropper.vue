@@ -152,6 +152,18 @@ export default {
 		autoCropHeight: {
 			type: Number,
 			default: 0
+		},
+		// 是否开启固定宽高比
+		fixed: {
+			type: Boolean,
+			default: false
+		},
+		// 宽高比 w/h
+		fixedNumber: {
+			type: Array,
+			default: () => {
+				return [1, 1]
+			}
 		}
 	},
 	computed: {
@@ -253,12 +265,28 @@ export default {
 					this.cropOffsertX = this.cropChangeX  + fw > 0 ? this.cropChangeX + fw : 0
 				}
 
-				if (fh > 0) {
-					this.cropH = fh + this.cropChangeY > this.h ? this.h - this.cropChangeY : fh
-					this.cropOffsertY = this.cropChangeY
+				if (!this.fixed) {
+					if (fh > 0) {
+						this.cropH = fh + this.cropChangeY > this.h ? this.h - this.cropChangeY : fh
+						this.cropOffsertY = this.cropChangeY
+					} else {
+						this.cropH = (this.h - this.cropChangeY + Math.abs(fh)) > this.h ? this.cropChangeY : Math.abs(fh)
+						this.cropOffsertY = this.cropChangeY  + fh > 0 ? this.cropChangeY + fh : 0
+					}
 				} else {
-					this.cropH = (this.h - this.cropChangeY + Math.abs(fh)) > this.h ? this.cropChangeY : Math.abs(fh)
-					this.cropOffsertY = this.cropChangeY  + fh > 0 ? this.cropChangeY + fh : 0
+					var fixedHeight = ~~(this.cropW / this.fixedNumber[0] * this.fixedNumber[1])
+					if (fixedHeight + this.cropOffsertY > this.h) {
+						this.cropH = this.h - this.cropOffsertY
+						this.cropW = ~~(this.cropH / this.fixedNumber[1] * this.fixedNumber[0])
+						if (fw > 0) {
+							this.cropOffsertX = this.cropChangeX
+						} else {
+							this.cropOffsertX = this.cropChangeX - this.cropW
+						}
+					} else {
+						this.cropH = fixedHeight
+					}
+					this.cropOffsertY = this.cropOffsertY
 				}
 			})
 		},
@@ -279,6 +307,11 @@ export default {
 			this.cropOldH = this.cropH
 			this.cropChangeX = this.cropOffsertX
 			this.cropChangeY = this.cropOffsertY
+			if (this.fixed) {
+				if (this.canChangeX && this.canChangeY) {
+					this.canChangeY = 0
+				}
+			}
 		},
 
 		// 正在改变
@@ -325,6 +358,26 @@ export default {
 							this.cropH = (this.h - this.cropChangeY + Math.abs(fh + this.cropOldH)) <= this.h ? Math.abs(fh + this.cropOldH) : this.cropChangeY
 							this.cropOffsertY = (this.h - this.cropChangeY + Math.abs(fh + this.cropOldH)) <= this.h ? this.cropChangeY - Math.abs(fh + this.cropOldH) : 0
 						}
+					}
+				}
+
+				if (this.canChangeX && this.fixed) {
+					var fixedHeight = ~~(this.cropW / this.fixedNumber[0] * this.fixedNumber[1])
+					if (fixedHeight + this.cropOffsertY > this.h) {
+						this.cropH = this.h - this.cropOffsertY
+						this.cropW = ~~(this.cropH / this.fixedNumber[1] * this.fixedNumber[0])
+					} else {
+						this.cropH = fixedHeight
+					}
+				}
+
+				if (this.canChangeY && this.fixed) {
+					var fixedWidth = ~~(this.cropH / this.fixedNumber[1] * this.fixedNumber[0])
+					if (fixedWidth + this.cropOffsertX > this.w) {
+						this.cropW = this.w - this.cropOffsertX
+						this.cropH = ~~(this.cropW / this.fixedNumber[0] * this.fixedNumber[1])
+					} else {
+						this.cropW = fixedWidth
 					}
 				}
 			})
@@ -406,7 +459,7 @@ export default {
 			window.removeEventListener('touchend', this.leaveCrop)
 		},
 		// 获取转换成base64 的图片信息
-		getCropDate (cb) {
+		getCropData (cb) {
 			let canvas = document.createElement('canvas')
 			canvas.width = this.cropW
 			canvas.height = this.cropH
@@ -434,7 +487,7 @@ export default {
 		},
 		//转化base64 为blob对象
 		getCropBlob(cb) {
-			this.getCropDate((data) => {
+			this.getCropData((data) => {
 				var arr = data.split(',')
 			  var mime = arr[0].match(/:(.*?);/)[1]
 			  var bstr = atob(arr[1])
@@ -493,6 +546,10 @@ export default {
 			}
 			w = w > this.w ? this.w : w
 			h = h > this.h ? this.h : h
+			// 如果设置了比例
+			if (this.fixed) {
+				h = w / this.fixedNumber[0] * this.fixedNumber[1]
+			}
 			this.changeCrop(w, h)
 		},
 		// 手动改变截图框大小函数
