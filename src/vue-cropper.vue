@@ -215,6 +215,7 @@ export default {
 		},
 		// 移动图片
 		moveImg (e) {
+			e.preventDefault()
 			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
       var nowY = e.clientY ? e.clientY : e.touches[0].clientY
 			this.$nextTick(() => {
@@ -251,6 +252,7 @@ export default {
 
 		// 创建截图框
 		createCrop (e) {
+			e.preventDefault()
 			// 移动生成大小
 			var nowX = e.clientX ? e.clientX : e.touches ? e.touches[0].clientX : 0
       var nowY = e.clientY ? e.clientY : e.touches ? e.touches[0].clientY : 0
@@ -316,6 +318,7 @@ export default {
 
 		// 正在改变
 		changeCropNow (e) {
+			e.preventDefault()
 			var nowX = e.clientX ? e.clientX : e.touches ? e.touches[0].clientX : 0
       var nowY = e.clientY ? e.clientY : e.touches ? e.touches[0].clientY : 0
 			this.$nextTick(() => {
@@ -429,6 +432,7 @@ export default {
 		},
 
 		moveCrop (e) {
+			e.preventDefault()
 			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
       var nowY = e.clientY ? e.clientY : e.touches[0].clientY
 			this.$nextTick(() => {
