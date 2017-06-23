@@ -1,6 +1,7 @@
 <template>
 	<div class="content">
 		<h1><a class="title" href="https://github.com/xyxiao001/vue-cropper" target="_blank">vue-cropper</a></h1>
+		<iframe src="https://ghbtns.com/github-btn.html?user=xyxiao001&repo=vue-cropper&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
 		<div class="show-info">
 			<h2>install</h2>
 			<code class="language-html">npm install vue-cropper</code>
