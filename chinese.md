@@ -85,3 +85,19 @@ this.$refs.cropper.getCropData((data) => {
   console.log(data)  
 })
 ```
+
+## update log
+### v0.13 add Real time preview
+```
+@realTime="realTime"
+// Real time preview function
+realTime (data) {
+  this.previews = data
+}
+<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
+    'margin': '5px'}">
+  <div :style="previews.div">
+    <img :src="option.img" :style="previews.img">
+  </div>
+</div>
+```

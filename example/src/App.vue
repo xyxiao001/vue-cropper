@@ -30,7 +30,7 @@
 				<a @click="down('base64')" class="btn">download(base64)</a>
 				<a @click="down('blob')" class="btn">download(blob)</a>
 			</div>
-			<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden'}">
+			<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
 				<div :style="previews.div">
 					<img :src="option.img" :style="previews.img">
 				</div>
@@ -45,6 +45,7 @@
 		:outputSize="option.size"
 		:outputType="option.outputType"
 		:info="true"
+		@realTime="realTime"
 	>&lt;/vueCropper>
 	&lt;/div>
 	&lt;div class="test-button">
@@ -60,6 +61,11 @@
 	&lt;a @click="down('base64')" class="btn" :href="downImg" download="demo">download(base64)&lt;/a>
 	&lt;a @click="down('blob')" class="btn" :href="downImg" download="demo">download(blob)&lt;/a>
 	&lt;/div>
+	&lt;div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
+		&lt;div :style="previews.div">
+			&lt;img :src="option.img" :style="previews.img">
+		&lt;/div>
+	&lt;/div>
 &lt;/template>
 &lt;script>
 import vueCropper from 'vue-cropper'
@@ -68,6 +74,7 @@ export default {
 	data: function () {
 		return {
 			crap: false,
+			previews: {},
 			lists: [
 				{
 					img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
@@ -101,6 +108,10 @@ export default {
 		clearCrop () {
 			// clear
 			this.$refs.cropper.clearCrop()
+		},
+		// 实时预览函数
+		realTime (data) {
+			this.previews = data
 		},
 		finish (type) {
 			// 输出
