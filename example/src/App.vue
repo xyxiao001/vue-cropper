@@ -8,13 +8,14 @@
 		</div>
 		<div class="show-info">
 			<h2>example1 (normal)</h2>
-			<div class="test">
+			<div class="test test1">
 				<vueCropper
 					ref="cropper"
 					:img="option.img"
 					:outputSize="option.size"
 					:outputType="option.outputType"
 					:info="true"
+					@realTime="realTime"
 				></vueCropper>
 			</div>
 			<div class="test-button">
@@ -28,6 +29,11 @@
 				<button @click="finish('blob')" class="btn">preview(blob)</button>
 				<a @click="down('base64')" class="btn">download(base64)</a>
 				<a @click="down('blob')" class="btn">download(blob)</a>
+			</div>
+			<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden'}">
+				<div :style="previews.div">
+					<img :src="option.img" :style="previews.img">
+				</div>
 			</div>
 			<codes>
 <div slot="body">
@@ -222,6 +228,7 @@ export default {
   data: function () {
     return {
 		  crap: false,
+			previews: {},
 			lists: [
 				{
 					img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
@@ -299,6 +306,11 @@ export default {
 				})
 			}
 		},
+		// 实时预览函数
+		realTime (data) {
+			this.previews = data
+		},
+
 		finish2 (type) {
 			var test = window.open('about:blank')
 			test.document.body.innerHTML = '图片生成中..'

@@ -181,6 +181,19 @@ export default {
         // 图片加载成功后布局
 				this.reload()
       }
+		},
+
+		cropW () {
+			this.showPreview()
+		},
+		cropH () {
+			this.showPreview()
+		},
+		cropOffsertX () {
+			this.showPreview()
+		},
+		cropOffsertY () {
+			this.showPreview()
 		}
 	},
 	methods: {
@@ -508,6 +521,22 @@ export default {
 			})
 		},
 
+		// 自动预览函数
+		showPreview() {
+			var obj = {}
+			obj.div = {
+				'width': this.cropW + 'px',
+				'height': this.cropH + 'px'
+			}
+			obj.img = {
+				'width': this.trueWidth + 'px',
+				'height': this.trueHeight + 'px',
+				'transform': 'scale(' + this.scale + ',' + this.scale + ') ' + 'translate3d('+ (this.x - this.cropOffsertX) / this.scale  + 'px,' + (this.y - this.cropOffsertY) / this.scale + 'px,' + '0)'
+			}
+			obj.w = this.cropW
+			obj.h = this.cropH
+			this.$emit('realTime',  obj)
+		},
 		// reload 图片布局函数
 		reload () {
 			// 得到外层容器的宽度高度
@@ -570,6 +599,7 @@ export default {
 		}
 	},
 	mounted () {
+		this.showPreview()
 		this.$refs.cropperImg.onload = () => {
 			// 图片加载成功后布局
 			this.reload()
