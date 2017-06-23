@@ -194,6 +194,15 @@ export default {
 		},
 		cropOffsertY () {
 			this.showPreview()
+		},
+		scale () {
+			this.showPreview()
+		},
+		x () {
+			this.showPreview()
+		},
+		y () {
+			this.showPreview()
 		}
 	},
 	methods: {
