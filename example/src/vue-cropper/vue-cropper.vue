@@ -509,7 +509,11 @@ export default {
 				let data = canvas.toDataURL('image/' + this.outputType, this.outputSize)
 				cb(data)
 			}
-			img.crossOrigin = 'anonymous'
+			// 判断图片是否是base64
+			var s = this.img.substr(0, 4)
+			if (s !== 'data') {
+				img.crossOrigin = 'anonymous'
+			}
 			img.src = this.img
 		},
 		//转化base64 为blob对象
