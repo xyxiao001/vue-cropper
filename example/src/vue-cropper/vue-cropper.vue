@@ -12,7 +12,6 @@
 					:src="img"
 					alt="cropper-img"
 					ref="cropperImg"
-					crossOrigin = "*"
 					/>
 			</div>
 		</div>
