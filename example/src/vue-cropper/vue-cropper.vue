@@ -177,10 +177,12 @@ export default {
 			this.loading = true
 			this.scale = 1
 			this.clearCrop()
-			this.$refs.cropperImg.onload = () => {
+			let img = new Image
+			img.onload = () => {
         // 图片加载成功后布局
 				this.reload()
       }
+			img.src = this.img
 		},
 
 		cropW () {
