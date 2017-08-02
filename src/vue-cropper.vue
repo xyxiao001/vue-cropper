@@ -212,6 +212,7 @@ export default {
 	methods: {
 		// 当按下鼠标键
 		startMove (e) {
+			e.preventDefault()
 			// 如果move 为true 表示当前可以拖动
 			if (this.move && !this.crop) {
 				// 开始移动
@@ -251,6 +252,7 @@ export default {
 
 		// 移动端缩放
 		touchScale (e) {
+			e.preventDefault()
 			// 记录变化量
 			// 第一根手指
 			var oldTouch1 = {
@@ -380,6 +382,7 @@ export default {
 
 		// 改变截图框大小
 		changeCropSize (e, w, h, typeW, typeH) {
+			e.preventDefault()
 			window.addEventListener('mousemove', this.changeCropNow)
 			window.addEventListener('mouseup', this.changeCropEnd)
 			window.addEventListener('touchmove', this.changeCropNow)
@@ -508,6 +511,7 @@ export default {
 		},
 		// 截图移动
 		cropMove (e) {
+			e.preventDefault()
 			window.addEventListener('mousemove', this.moveCrop)
 			window.addEventListener('mouseup', this.leaveCrop)
 			window.addEventListener('touchmove', this.moveCrop)
