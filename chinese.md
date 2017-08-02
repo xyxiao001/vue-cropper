@@ -2,6 +2,27 @@
 ### 一个优雅的图片裁剪插件
  [预览](http://xyxiao.cn/vue-cropper/example/)
 # vue-cropper
+
+## 更新日志
+### v0.13 添加手机端手势缩放
+```
+canScale: true
+```
+
+### v0.13 添加预览
+```
+@realTime="realTime"
+// Real time preview function
+realTime (data) {
+  this.previews = data
+}
+<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
+    'margin': '5px'}">
+  <div :style="previews.div">
+    <img :src="option.img" :style="previews.img">
+  </div>
+</div>
+```
 ####   安装 npm install vue-cropper
 ####   使用  import VueCropper from vue-cropper
 ```
@@ -84,20 +105,4 @@ this.$refs.cropper.getCropData((data) => {
   // do something
   console.log(data)  
 })
-```
-
-## update log
-### v0.13 add Real time preview
-```
-@realTime="realTime"
-// Real time preview function
-realTime (data) {
-  this.previews = data
-}
-<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
-    'margin': '5px'}">
-  <div :style="previews.div">
-    <img :src="option.img" :style="previews.img">
-  </div>
-</div>
 ```

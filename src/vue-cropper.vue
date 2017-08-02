@@ -113,7 +113,10 @@ export default {
 			cropOffsertX: 0,
 			cropOffsertY: 0,
 			// 支持的滚动事件
-			support: ''
+			support: '',
+			// 移动端手指缩放
+			touches: [],
+			touchNow: false
     }
   },
 	props: {
@@ -212,12 +215,21 @@ export default {
 			// 如果move 为true 表示当前可以拖动
 			if (this.move && !this.crop) {
 				// 开始移动
-				window.addEventListener('mousemove', this.moveImg)
-      	window.addEventListener('mouseup', this.leaveImg)
-				window.addEventListener('touchmove', this.moveImg)
-      	window.addEventListener('touchend', this.leaveImg)
 				this.moveX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.x
 	      this.moveY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.y
+				if (e.touches) {
+					window.addEventListener('touchmove', this.moveImg)
+	      	window.addEventListener('touchend', this.leaveImg)
+					if (e.touches.length == 2) {
+					  // 记录手指刚刚放上去
+						this.touches = e.touches
+						window.addEventListener('touchmove', this.touchScale)
+		      	window.addEventListener('touchend', this.cancleTouchScale)
+					}
+				} else {
+					window.addEventListener('mousemove', this.moveImg)
+	      	window.addEventListener('mouseup', this.leaveImg)
+				}
 			} else {
 				// 截图ing
 				this.cropping = true
@@ -236,9 +248,59 @@ export default {
 				this.cropH = 0
 			}
 		},
+
+		// 移动端缩放
+		touchScale (e) {
+			// 记录变化量
+			// 第一根手指
+			var oldTouch1 = {
+				x: this.touches[0].clientX,
+				y: this.touches[0].clientY
+			}
+			var newTouch1 = {
+				x: e.touches[0].clientX,
+				y: e.touches[0].clientY
+			}
+			// 第二根手指
+			var oldTouch2 = {
+				x: this.touches[1].clientX,
+				y: this.touches[1].clientY
+			}
+			var newTouch2 = {
+				x: e.touches[1].clientX,
+				y: e.touches[1].clientY
+			}
+			var oldL = Math.sqrt(Math.pow(oldTouch1.x - oldTouch2.x, 2) + Math.pow(oldTouch1.y - oldTouch2.y, 2))
+			var newL = Math.sqrt(Math.pow(newTouch1.x - newTouch2.x, 2) + Math.pow(newTouch1.y - newTouch2.y, 2))
+			var cha = ~~(newL - oldL)
+			if (!this.touchNow) {
+				this.touchNow = true
+				if (cha > 0) {
+					this.scale += 0.003 * cha
+				} else if (cha < 0) {
+					this.scale = (this.scale - 0.003 * -(cha) > 0) ?  this.scale -= 0.003 * -(cha) : 0.05
+				}
+				this.touches = e.touches
+				setTimeout(() => {
+					this.touchNow = false
+				}, 50)
+			}
+		},
+
+		cancleTouchScale (e) {
+		  window.removeEventListener('touchmove', this.touchScale)
+		},
+
 		// 移动图片
 		moveImg (e) {
 			e.preventDefault()
+			if (e.touches && e.touches.length === 2) {
+				this.touches = e.touches
+				window.addEventListener('touchmove', this.touchScale)
+				window.addEventListener('touchend', this.cancleTouchScale)
+				window.removeEventListener('touchmove', this.moveImg)
+				return false
+			}
 			var nowX = e.clientX ? e.clientX : e.touches[0].clientX
       var nowY = e.clientY ? e.clientY : e.touches[0].clientY
 			this.$nextTick(() => {

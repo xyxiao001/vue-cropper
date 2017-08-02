@@ -3,6 +3,27 @@
  <br />
  [中文](https://github.com/xyxiao001/vue-cropper/blob/master/chinese.md)
 # vue-cropper
+
+## update log
+### v0.15 add touchscale
+```
+canScale: true
+```
+### v0.13 add Real time preview
+```
+@realTime="realTime"
+// Real time preview function
+realTime (data) {
+  this.previews = data
+}
+<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
+    'margin': '5px'}">
+  <div :style="previews.div">
+    <img :src="option.img" :style="previews.img">
+  </div>
+</div>
+```
+
 ####   install
 ```
 npm install vue-cropper
@@ -121,19 +142,4 @@ this.$refs.cropper.getCropBlob((data) => {
   // do something
   console.log(data)  
 })
-```
-## update log
-### v0.13 add Real time preview
-```
-@realTime="realTime"
-// Real time preview function
-realTime (data) {
-  this.previews = data
-}
-<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
-    'margin': '5px'}">
-  <div :style="previews.div">
-    <img :src="option.img" :style="previews.img">
-  </div>
-</div>
 ```

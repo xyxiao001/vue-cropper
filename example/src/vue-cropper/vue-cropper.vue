@@ -276,9 +276,9 @@ export default {
 			if (!this.touchNow) {
 				this.touchNow = true
 				if (cha > 0) {
-					this.scale += 0.005 * cha
+					this.scale += 0.003 * cha
 				} else if (cha < 0) {
-					this.scale = (this.scale - 0.005 * -(cha) > 0) ?  this.scale -= 0.005 * -(cha) : 0.05
+					this.scale = (this.scale - 0.003 * -(cha) > 0) ?  this.scale -= 0.003 * -(cha) : 0.05
 				}
 				this.touches = e.touches
 				setTimeout(() => {
