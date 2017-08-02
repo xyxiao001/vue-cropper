@@ -273,7 +273,7 @@ export default {
 				info: true,
 				size: 1,
 				outputType: 'jpeg',
-				canScale: false,
+				canScale: true,
 				autoCrop: true,
 				// 只有自动截图开启 宽度高度才生效
 				width: 300,
