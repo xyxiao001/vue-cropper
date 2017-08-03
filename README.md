@@ -1,15 +1,16 @@
 ## vue-crpopper
- [preview](http://xyxiao.cn/vue-cropper/example/)
- <br />
- [中文](https://github.com/xyxiao001/vue-cropper/blob/master/chinese.md)
+### 一个优雅的图片裁剪插件
+ [预览](http://xyxiao.cn/vue-cropper/example/)
+ [english](https://github.com/xyxiao001/vue-cropper/blob/master/english.md)
 # vue-cropper
 
-## update log
-### v0.15 add touchscale
+## 更新日志
+### v0.15 添加手机端手势缩放
 ```
 canScale: true
 ```
-### v0.13 add Real time preview
+
+### v0.13 添加预览
 ```
 @realTime="realTime"
 // Real time preview function
@@ -23,16 +24,8 @@ realTime (data) {
   </div>
 </div>
 ```
-
-####   install
-```
-npm install vue-cropper
-```
-####   use  
-```
-import VueCropper from vue-cropper
-```
-
+####   安装 npm install vue-cropper
+####   使用  import VueCropper from vue-cropper
 ```
 <vueCropper
   ref="cropper"
@@ -44,101 +37,74 @@ import VueCropper from vue-cropper
 <table style="text-align: center">
   <thead>
     <tr>
-        <td>name</td>
-        <td>toDo</td>
-        <td>default</td>
-        <td>optional</td>
+        <td>名称</td>
+        <td>功能</td>
+        <td>默认值</td>
+        <td>可选值</td>
     </tr>
   </thead>
   <tbody>
     <tr>
         <td>img</td>
-        <td>img url</td>
-        <td>null</td>
-        <td>url || base64 || blob</td>
+        <td>裁剪图片的地址</td>
+        <td>空</td>
+        <td>url 地址 || base64 || blob</td>
     </tr>
     <tr>
         <td>outputSize</td>
-        <td>crop produces quality of pictures</td>
+        <td>裁剪生成图片的质量</td>
         <td>1</td>
         <td>0.1 - 1</td>
     </tr>
     <tr>
         <td>outputType</td>
-        <td>crop img output type</td>
-        <td>jpg (jpg need jpeg)</td>
+        <td>裁剪生成图片的格式</td>
+        <td>jpg (jpg 需要传入jpeg)</td>
         <td>jpeg || png || webp</td>
     </tr>
     <tr>
         <td>info</td>
-        <td>crop box size show</td>
+        <td>裁剪框的大小信息</td>
         <td>true</td>
         <td>true || false</td>
     </tr>
     <tr>
         <td>canScale</td>
-        <td>the scroll to scale</td>
+        <td>图片是否允许滚轮缩放</td>
         <td>true</td>
         <td>true || false</td>
     </tr>
     <tr>
         <td>autoCrop</td>
-        <td>auto create crop box</td>
+        <td>是否默认生成截图框</td>
         <td>false</td>
         <td>true || false</td>
     </tr>
     <tr>
         <td>autoCropWidth</td>
-        <td>auto crop box width</td>
-        <td>box size 80%</td>
+        <td>默认生成截图框宽度</td>
+        <td>容器的80%</td>
         <td>0~max</td>
     </tr>
     <tr>
         <td>autoCropHeight</td>
-        <td>auto create crop box height</td>
-        <td>box size 80%</td>
+        <td>默认生成截图框高度</td>
+        <td>容器的80%</td>
         <td>0~max</td>
-    </tr>
-    <tr>
-        <td>fixed</td>
-        <td>open crop box width height ratio</td>
-        <td>true</td>
-        <td>true | false</td>
-    </tr>
-    <tr>
-        <td>fixedNumber</td>
-        <td>crop box width height ratio</td>
-        <td>[1 : 1]</td>
-        <td>[w : h]</td>
     </tr>
   </tbody>
 </table>
 
 
-### function  adopt this.$refs.cropper to use
-##### start cropper
-```
-this.$refs.cropper.startCrop()
-```
-##### stop cropper
-```
-this.$refs.cropper.stopCrop()
-```
-##### clear cropper
-```
-this.$refs.cropper.clearCrop()
-```
-##### get output img base64
+### 内置方法  通过this.$refs.cropper 调用
+##### this.$refs.cropper.startCrop()  开始截图
+##### this.$refs.cropper.stopCrop()  停止截图
+##### this.$refs.cropper.clearCrop()  清除截图
+#####  获取截图信息
+this.$refs.cropW  截图框宽度
+this.$refs.cropH 截图框高度
 ```
 this.$refs.cropper.getCropData((data) => {
-  // do something
-  console.log(data)  
-})
-```
-
-### get output img blob
-```
-this.$refs.cropper.getCropBlob((data) => {
   // do something
   console.log(data)  
 })
