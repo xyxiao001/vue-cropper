@@ -4,26 +4,6 @@
  [english](https://github.com/xyxiao001/vue-cropper/blob/master/english.md)
 # vue-cropper
 
-## 更新日志
-### v0.15 添加手机端手势缩放
-```
-canScale: true
-```
-
-### v0.13 添加预览
-```
-@realTime="realTime"
-// Real time preview function
-realTime (data) {
-  this.previews = data
-}
-<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
-    'margin': '5px'}">
-  <div :style="previews.div">
-    <img :src="option.img" :style="previews.img">
-  </div>
-</div>
-```
 ####   安装 npm install vue-cropper
 ####   使用  import VueCropper from vue-cropper
 ```
@@ -109,4 +89,25 @@ this.$refs.cropper.getCropData((data) => {
   // do something
   console.log(data)  
 })
+```
+
+## 更新日志
+### v0.15 添加手机端手势缩放
+```
+canScale: true
+```
+
+### v0.13 添加预览
+```
+@realTime="realTime"
+// Real time preview function
+realTime (data) {
+  this.previews = data
+}
+<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
+    'margin': '5px'}">
+  <div :style="previews.div">
+    <img :src="option.img" :style="previews.img">
+  </div>
+</div>
 ```
