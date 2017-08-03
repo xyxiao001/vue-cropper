@@ -101,8 +101,9 @@ realTime (data) {
 ##### this.$refs.cropper.stopCrop()  停止截图
 ##### this.$refs.cropper.clearCrop()  清除截图
 #####  获取截图信息
-this.$refs.cropW  截图框宽度
-this.$refs.cropH 截图框高度
+this.$refs.cropper.cropW  截图框宽度
+
+this.$refs.cropper.cropH 截图框高度
 ```
 this.$refs.cropper.getCropData((data) => {
   // do something
