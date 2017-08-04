@@ -594,9 +594,9 @@ export default {
 			    u8arr[n] = bstr.charCodeAt(n)
 			  }
 				cb(
-					window.URL.createObjectURL(new Blob([u8arr], {
+					new Blob([u8arr], {
 			    	type: mime
-			  	})
+			  	}
 				))
 			})
 		},

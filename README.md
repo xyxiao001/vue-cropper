@@ -99,6 +99,7 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.17 修复blob数据获取错误
 ### v0.15 添加手机端手势缩放
 ```
 canScale: true

@@ -120,7 +120,7 @@ export default {
 			if (type === 'blob') {
 				this.$refs.cropper.getCropBlob((data) => {
 					var test = window.open('')
-					test.location.href = data
+					test.location.href = window.URL.createObjectURL(data)
 				})
 			} else {
 				this.$refs.cropper.getCropData((data) => {
@@ -309,7 +309,7 @@ export default {
 			if (type === 'blob') {
 				this.$refs.cropper.getCropBlob((data) => {
 					var test = window.open('')
-					test.location.href = data
+					test.location.href = window.URL.createObjectURL(data)
 				})
 			} else {
 				this.$refs.cropper.getCropData((data) => {
@@ -336,8 +336,8 @@ export default {
 			// 输出
 			if (type === 'blob') {
 				this.$refs.cropper.getCropBlob((data) => {
-					this.downImg = data
-					aLink.href = data
+					this.downImg = window.URL.createObjectURL(data)
+					aLink.href = window.URL.createObjectURL(data)
 					aLink.click()
 				})
 			} else {
