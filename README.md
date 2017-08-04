@@ -85,7 +85,14 @@ this.$refs.cropper.cropW  截图框宽度
 
 this.$refs.cropper.cropH 截图框高度
 ```
+获取截图的base64 数据
 this.$refs.cropper.getCropData((data) => {
+  // do something
+  console.log(data)  
+})
+
+获取截图的blob数据
+this.$refs.cropper.getCropBlob((data) => {
   // do something
   console.log(data)  
 })
