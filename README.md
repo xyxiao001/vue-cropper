@@ -72,6 +72,18 @@
         <td>容器的80%</td>
         <td>0~max</td>
     </tr>
+    <tr>
+        <td>fixed</td>
+        <td>是否开启截图框宽高固定比例</td>
+        <td>true</td>
+        <td>true | false</td>
+    </tr>
+    <tr>
+        <td>fixedNumber</td>
+        <td>截图框的宽高比例</td>
+        <td>[1 : 1]</td>
+        <td>[宽度 : 高度]</td>
+    </tr>
   </tbody>
 </table>
 
