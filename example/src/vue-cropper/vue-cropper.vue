@@ -7,6 +7,7 @@
 					'width': trueWidth + 'px',
 					'height': trueHeight + 'px',
 					'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ x / scale + 'px,' + y / scale + 'px,' + '0)'
+					+ 'rotateZ('+ rotate * 90 +'deg)'
 					}">
 				<img
 					:src="img"
@@ -38,6 +39,7 @@
 						'width': trueWidth + 'px',
 						'height': trueHeight + 'px',
 						'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ (x - cropOffsertX) / scale  + 'px,' + (y - cropOffsertY) / scale + 'px,' + '0)'
+						+ 'rotateZ('+ rotate * 90 +'deg)'
 						}"
 						:src="img"
 						alt="cropper-img"
@@ -116,7 +118,9 @@ export default {
 			support: '',
 			// 移动端手指缩放
 			touches: [],
-			touchNow: false
+			touchNow: false,
+			// 图片旋转
+			rotate: 0
     }
   },
 	props: {
@@ -208,6 +212,9 @@ export default {
 			this.showPreview()
 		},
 		y () {
+			this.showPreview()
+		},
+		rotate () {
 			this.showPreview()
 		}
 	},
@@ -556,23 +563,87 @@ export default {
 		// 获取转换成base64 的图片信息
 		getCropData (cb) {
 			let canvas = document.createElement('canvas')
+			let img = new Image
 			canvas.width = this.cropW
 			canvas.height = this.cropH
-			let img = new Image
 			img.onload = () => {
 				if (~~(canvas.width) !== 0) {
+					let width = this.cropW
+					let height = this.cropH
 					let ctx = canvas.getContext('2d')
 					// 图片x轴偏移
 					let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
 					// 图片y轴偏移
 					let dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
 					// console.log(dx, dy)
-					ctx.drawImage(img, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
+					//保存状态
+					ctx.save()
+					switch (this.rotate) {
+    				case 0:
+							canvas.width = width
+							canvas.height = height
+							ctx.drawImage(img, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
+    				break
+						case 1:
+						case -3:
+							dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
+							console.log(dx, dy)
+							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, dy, dx - width, this.trueHeight * this.scale, this.trueWidth * this.scale)
+							break
+						case 2:
+						case -2:
+							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, -width, -height, width, height)
+						break
+						case 3:
+						case -1:
+							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, -width, 0, width, height)
+							break
+    				default:
+							ctx.drawImage(img, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
+    			}
+					ctx.restore()
 				} else {
-					canvas.width = this.trueWidth * this.scale
-					canvas.height = this.trueHeight * this.scale
+					let width = this.trueWidth * this.scale
+					let height = this.trueHeight * this.scale
 					let ctx = canvas.getContext('2d')
-					ctx.drawImage(img, 0, 0, this.trueWidth * this.scale, this.trueHeight * this.scale)
+					ctx.save()
+    			switch (this.rotate) {
+    				case 0:
+							canvas.width = width
+							canvas.height = height
+							ctx.drawImage(img, 0, 0, width, height)
+    				break
+						case 1:
+						case -3:
+							// 旋转90度 或者-270度 宽度和高度对调
+							canvas.width = height
+							canvas.height = width
+							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, 0, -height, width, height)
+							break
+						case 2:
+						case -2:
+							canvas.width = width
+							canvas.height = height
+							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, -width, -height, width, height)
+						break
+						case 3:
+						case -1:
+							canvas.width = height
+							canvas.height = width
+							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, -width, 0, width, height)
+							break
+    				default:
+							canvas.width = width
+							canvas.height = height
+							ctx.drawImage(img, 0, 0, width, height)
+    			}
+					ctx.restore()
 				}
 				let data = canvas.toDataURL('image/' + this.outputType, this.outputSize)
 				cb(data)
@@ -614,6 +685,7 @@ export default {
 				'width': this.trueWidth + 'px',
 				'height': this.trueHeight + 'px',
 				'transform': 'scale(' + this.scale + ',' + this.scale + ') ' + 'translate3d('+ (this.x - this.cropOffsertX) / this.scale  + 'px,' + (this.y - this.cropOffsertY) / this.scale + 'px,' + '0)'
+				+ 'rotateZ('+ this.rotate * 90 + 'deg)'
 			}
 			obj.w = this.cropW
 			obj.h = this.cropH
@@ -628,6 +700,7 @@ export default {
 			// 存入图片真实高度
 			this.trueWidth = this.$refs.cropperImg.width
 			this.trueHeight = this.$refs.cropperImg.height
+			this.rotate = 0
 
 			if (this.trueWidth > this.w) {
 				// 如果图片宽度大于容器宽度
@@ -683,6 +756,21 @@ export default {
 		// 重置函数， 恢复组件置初始状态
 		refresh () {
 			// console.log('refresh')
+		},
+
+		// 向左边旋转
+		rotateLeft () {
+			this.rotate = this.rotate <= -3 ? 0 : this.rotate - 1
+		},
+
+		// 向右边旋转
+		rotateRight () {
+			this.rotate = this.rotate >= 3 ? 0 : this.rotate + 1
+		},
+
+		// 清除旋转
+		rotateClear () {
+			this.rotate = 0
 		}
 	},
 	mounted () {

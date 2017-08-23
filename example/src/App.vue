@@ -25,6 +25,8 @@
 				<button @click="startCrop" v-if="!crap" class="btn">start</button>
 				<button @click="stopCrop" v-else class="btn">stop</button>
 				<button @click="clearCrop" class="btn">clear</button>
+				<button @click="rotateLeft" class="btn">rotateLeft</button>
+				<button @click="rotateRight" class="btn">rotateRight</button>
 				<button @click="finish('base64')" class="btn">preview(base64)</button>
 				<button @click="finish('blob')" class="btn">preview(blob)</button>
 				<a @click="down('base64')" class="btn">download(base64)</a>
@@ -241,9 +243,9 @@ export default {
 		  crap: false,
 			previews: {},
 			lists: [
-				{
-					img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
-				},
+				// {
+				// 	img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
+				// },
 				{
 					img: 'http://ofyaji162.bkt.clouddn.com/touxiang.jpg'
 				},
@@ -301,6 +303,12 @@ export default {
 		clearCrop () {
 			// clear
 			this.$refs.cropper.clearCrop()
+		},
+		rotateLeft () {
+			this.$refs.cropper.rotateLeft()
+		},
+		rotateRight () {
+			this.$refs.cropper.rotateRight()
 		},
 		finish (type) {
 			// 输出
