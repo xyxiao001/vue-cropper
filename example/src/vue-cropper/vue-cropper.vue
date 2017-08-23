@@ -564,32 +564,30 @@ export default {
 		getCropData (cb) {
 			let canvas = document.createElement('canvas')
 			let img = new Image
-			canvas.width = this.cropW
-			canvas.height = this.cropH
 			img.onload = () => {
-				if (~~(canvas.width) !== 0) {
+				if (~~(this.cropW) !== 0) {
+					let ctx = canvas.getContext('2d')
 					let width = this.cropW
 					let height = this.cropH
-					let ctx = canvas.getContext('2d')
 					// 图片x轴偏移
 					let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
 					// 图片y轴偏移
 					let dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
 					// console.log(dx, dy)
 					//保存状态
+					canvas.width = width
+					canvas.height = height
 					ctx.save()
 					switch (this.rotate) {
     				case 0:
-							canvas.width = width
-							canvas.height = height
 							ctx.drawImage(img, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
-    				break
+    					break
 						case 1:
 						case -3:
 							dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
-							console.log(dx, dy)
+							dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
 							ctx.rotate(this.rotate * 90  * Math.PI / 180)
-							ctx.drawImage(img, dy, dx - width, this.trueHeight * this.scale, this.trueWidth * this.scale)
+							ctx.drawImage(img, dy, - this.trueWidth * this.scale, this.trueWidth * this.scale, this.trueHeight * this.scale)
 							break
 						case 2:
 						case -2:
@@ -700,7 +698,7 @@ export default {
 			// 存入图片真实高度
 			this.trueWidth = this.$refs.cropperImg.width
 			this.trueHeight = this.$refs.cropperImg.height
-			this.rotate = 0
+			this.rotate = 1
 
 			if (this.trueWidth > this.w) {
 				// 如果图片宽度大于容器宽度

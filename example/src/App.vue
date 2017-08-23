@@ -1,234 +1,241 @@
 <template>
-	<div class="content">
-		<h1><a class="title" href="https://github.com/xyxiao001/vue-cropper" target="_blank">vue-cropper</a></h1>
-		<iframe src="https://ghbtns.com/github-btn.html?user=xyxiao001&repo=vue-cropper&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
-		<div class="show-info">
-			<h2>install</h2>
-			<code class="language-html">npm install vue-cropper</code>
+	<div class="wrapper">
+		<div class="model" v-show="model" @click="model = false">
+			<div class="model-show">
+				<img :src="modelSrc" alt="">
+			</div>
 		</div>
-		<div class="show-info">
-			<h2>example1 (normal)</h2>
-			<div class="test test1">
-				<vueCropper
-					ref="cropper"
-					:img="option.img"
-					:outputSize="option.size"
-					:outputType="option.outputType"
-					:info="true"
-					@realTime="realTime"
-				></vueCropper>
+		<div class="content">
+			<h1><a class="title" href="https://github.com/xyxiao001/vue-cropper" target="_blank">vue-cropper</a></h1>
+			<iframe src="https://ghbtns.com/github-btn.html?user=xyxiao001&repo=vue-cropper&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+			<div class="show-info">
+				<h2>install</h2>
+				<code class="language-html">npm install vue-cropper</code>
 			</div>
-			<div class="test-button">
-				<button @click="changeImg" class="btn">changeImg</button>
-				<label class="btn" for="uploads">upload</label>
-				<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
-				<button @click="startCrop" v-if="!crap" class="btn">start</button>
-				<button @click="stopCrop" v-else class="btn">stop</button>
-				<button @click="clearCrop" class="btn">clear</button>
-				<button @click="rotateLeft" class="btn">rotateLeft</button>
-				<button @click="rotateRight" class="btn">rotateRight</button>
-				<button @click="finish('base64')" class="btn">preview(base64)</button>
-				<button @click="finish('blob')" class="btn">preview(blob)</button>
-				<a @click="down('base64')" class="btn">download(base64)</a>
-				<a @click="down('blob')" class="btn">download(blob)</a>
-			</div>
-			<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
-				<div :style="previews.div">
-					<img :src="option.img" :style="previews.img">
+			<div class="show-info">
+				<h2>example1 (normal)</h2>
+				<div class="test test1">
+					<vueCropper
+						ref="cropper"
+						:img="option.img"
+						:outputSize="option.size"
+						:outputType="option.outputType"
+						:info="true"
+						@realTime="realTime"
+					></vueCropper>
 				</div>
-			</div>
-			<codes>
-<div slot="body">
-&lt;template>
-	&lt;div class="wrapper">
-	&lt;vueCropper
-		ref="cropper"
-		:img="option.img"
-		:outputSize="option.size"
-		:outputType="option.outputType"
-		:info="true"
-		@realTime="realTime"
-	>&lt;/vueCropper>
-	&lt;/div>
-	&lt;div class="test-button">
-	&lt;button @click="changeImg" class="btn">changeImg&lt;/button>
-	&lt;label class="btn" for="uploads">upload&lt;/label>
-	&lt;input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);"
-	 accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg">
-	&lt;button @click="startCrop" v-if="!crap" class="btn">start&lt;/button>
-	&lt;button @click="stopCrop" v-else class="btn">stop&lt;/button>
-	&lt;button @click="clearCrop" class="btn">clear&lt;/button>
-	&lt;button @click="finish('base64')" class="btn">preview(base64)&lt;/button>
-	&lt;button @click="finish('blob')" class="btn">preview(blob)&lt;/button>
-	&lt;a @click="down('base64')" class="btn" :href="downImg" download="demo">download(base64)&lt;/a>
-	&lt;a @click="down('blob')" class="btn" :href="downImg" download="demo">download(blob)&lt;/a>
-	&lt;/div>
-	&lt;div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
-		&lt;div :style="previews.div">
-			&lt;img :src="option.img" :style="previews.img">
+				<div class="test-button">
+					<button @click="changeImg" class="btn">changeImg</button>
+					<label class="btn" for="uploads">upload</label>
+					<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
+					<button @click="startCrop" v-if="!crap" class="btn">start</button>
+					<button @click="stopCrop" v-else class="btn">stop</button>
+					<button @click="clearCrop" class="btn">clear</button>
+					<button @click="rotateLeft" class="btn">rotateLeft</button>
+					<button @click="rotateRight" class="btn">rotateRight</button>
+					<button @click="finish('base64')" class="btn">preview(base64)</button>
+					<button @click="finish('blob')" class="btn">preview(blob)</button>
+					<a @click="down('base64')" class="btn">download(base64)</a>
+					<a @click="down('blob')" class="btn">download(blob)</a>
+				</div>
+				<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
+					<div :style="previews.div">
+						<img :src="option.img" :style="previews.img">
+					</div>
+				</div>
+				<codes>
+	<div slot="body">
+	&lt;template>
+		&lt;div class="wrapper">
+		&lt;vueCropper
+			ref="cropper"
+			:img="option.img"
+			:outputSize="option.size"
+			:outputType="option.outputType"
+			:info="true"
+			@realTime="realTime"
+		>&lt;/vueCropper>
 		&lt;/div>
-	&lt;/div>
-&lt;/template>
-&lt;script>
-import vueCropper from 'vue-cropper'
+		&lt;div class="test-button">
+		&lt;button @click="changeImg" class="btn">changeImg&lt;/button>
+		&lt;label class="btn" for="uploads">upload&lt;/label>
+		&lt;input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);"
+		 accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg">
+		&lt;button @click="startCrop" v-if="!crap" class="btn">start&lt;/button>
+		&lt;button @click="stopCrop" v-else class="btn">stop&lt;/button>
+		&lt;button @click="clearCrop" class="btn">clear&lt;/button>
+		&lt;button @click="finish('base64')" class="btn">preview(base64)&lt;/button>
+		&lt;button @click="finish('blob')" class="btn">preview(blob)&lt;/button>
+		&lt;a @click="down('base64')" class="btn" :href="downImg" download="demo">download(base64)&lt;/a>
+		&lt;a @click="down('blob')" class="btn" :href="downImg" download="demo">download(blob)&lt;/a>
+		&lt;/div>
+		&lt;div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
+			&lt;div :style="previews.div">
+				&lt;img :src="option.img" :style="previews.img">
+			&lt;/div>
+		&lt;/div>
+	&lt;/template>
+	&lt;script>
+	import vueCropper from 'vue-cropper'
 
-export default {
-	data: function () {
-		return {
-			crap: false,
-			previews: {},
-			lists: [
-				{
-					img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
+	export default {
+		data: function () {
+			return {
+				crap: false,
+				previews: {},
+				lists: [
+					{
+						img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
+					},
+					{
+						img: 'http://ofyaji162.bkt.clouddn.com/touxiang.jpg'
+					}
+				],
+				option: {
+					img: '',
+					size: 0.8,
+					outputType: 'jpeg'
 				},
-				{
-					img: 'http://ofyaji162.bkt.clouddn.com/touxiang.jpg'
-				}
-			],
-			option: {
-				img: '',
-				size: 0.8,
-				outputType: 'jpeg'
+				downImg: '#'
+			}
+		},
+		methods: {
+			changeImg () {
+				this.option.img = this.lists[~~(Math.random() * this.lists.length)].img
 			},
-			downImg: '#'
-		}
-	},
-	methods: {
-		changeImg () {
-			this.option.img = this.lists[~~(Math.random() * this.lists.length)].img
-		},
-		startCrop () {
-			// start
-			this.crap = true
-			this.$refs.cropper.startCrop()
-		},
-		stopCrop () {
-			//  stop
-			this.crap = false
-			this.$refs.cropper.stopCrop()
-		},
-		clearCrop () {
-			// clear
-			this.$refs.cropper.clearCrop()
-		},
-		// 实时预览函数
-		realTime (data) {
-			this.previews = data
-		},
-		finish (type) {
-			// 输出
-			var test = window.open('about:blank')
-			test.document.body.innerHTML = '图片生成中..'
-			if (type === 'blob') {
-				this.$refs.cropper.getCropBlob((data) => {
-					var test = window.open('')
-					test.location.href = window.URL.createObjectURL(data)
-				})
-			} else {
-				this.$refs.cropper.getCropData((data) => {
-					test.location.href = data
-				})
-			}
-		},
+			startCrop () {
+				// start
+				this.crap = true
+				this.$refs.cropper.startCrop()
+			},
+			stopCrop () {
+				//  stop
+				this.crap = false
+				this.$refs.cropper.stopCrop()
+			},
+			clearCrop () {
+				// clear
+				this.$refs.cropper.clearCrop()
+			},
+			// 实时预览函数
+			realTime (data) {
+				this.previews = data
+			},
+			finish (type) {
+				// 输出
+				var test = window.open('about:blank')
+				test.document.body.innerHTML = '图片生成中..'
+				if (type === 'blob') {
+					this.$refs.cropper.getCropBlob((data) => {
+						var test = window.open('')
+						test.location.href = window.URL.createObjectURL(data)
+					})
+				} else {
+					this.$refs.cropper.getCropData((data) => {
+						test.location.href = data
+					})
+				}
+			},
 
-		down (type) {
-			// event.preventDefault()
-			var aLink = document.createElement('a')
-			aLink.download = 'demo'
-			// 输出
-			if (type === 'blob') {
-				this.$refs.cropper.getCropBlob((data) => {
-					this.downImg = data
-					aLink.href = data
-					aLink.click()
-				})
-			} else {
-				this.$refs.cropper.getCropData((data) => {
-					this.downImg = data
-					aLink.href = data
-					aLink.click()
-				})
+			down (type) {
+				// event.preventDefault()
+				var aLink = document.createElement('a')
+				aLink.download = 'demo'
+				// 输出
+				if (type === 'blob') {
+					this.$refs.cropper.getCropBlob((data) => {
+						this.downImg = data
+						aLink.href = data
+						aLink.click()
+					})
+				} else {
+					this.$refs.cropper.getCropData((data) => {
+						this.downImg = data
+						aLink.href = data
+						aLink.click()
+					})
+				}
+			},
+
+			uploadImg (e) {
+				//上传图片
+				// this.option.img
+				var file = e.target.files[0]
+				if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+					 alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+					 return false
+				 }
+				var reader = new FileReader()
+				reader.onload = (e) => {
+					this.option.img = e.target.result
+				}
+				reader.readAsDataURL(file)
 			}
 		},
-
-		uploadImg (e) {
-			//上传图片
-			// this.option.img
-			var file = e.target.files[0]
-			if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
-				 alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
-				 return false
-			 }
-			var reader = new FileReader()
-			reader.onload = (e) => {
-				this.option.img = e.target.result
-			}
-			reader.readAsDataURL(file)
-		}
-	},
-	components: {
-		vueCropper
-	},
-}
-&lt;/script>
-</div>
-			</codes>
-		</div>
-		<div class="show-info">
-			<h2>example2 (auto crop, fixed,  w : h => 4 : 3)</h2>
-			<div class="test">
-				<vueCropper
-					ref="cropper2"
-					:img="example2.img"
-					:outputSize="example2.size"
-					:outputType="example2.outputType"
-					:info="example2.info"
-					:canScale="example2.canScale"
-					:autoCrop="example2.autoCrop"
-					:autoCropWidth="example2.width"
-					:autoCropHeight="example2.height"
-					:fixed="example2.fixed"
-					:fixedNumber="example2.fixedNumber"
-				></vueCropper>
+		components: {
+			vueCropper
+		},
+	}
+	&lt;/script>
+	</div>
+				</codes>
 			</div>
-			<label class="btn" for="upload2">upload</label>
-			<input type="file" id="upload2" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 2)">
-			<button @click="finish2('base64')" class="btn">preview(base64)</button>
-			<codes>
-<div slot="body">
-&lt;vueCropper
-	ref="cropper2"
-	:img="example2.img"
-	:outputSize="example2.size"
-	:outputType="example2.outputType"
-	:info="example2.info"
-	:canScale="example2.canScale"
-	:autoCrop="example2.autoCrop"
-	:autoCropWidth="example2.width"
-	:autoCropHeight="example2.height"
->&lt;/vueCropper>
-&lt;script>
-export default {
-  data: function () {
-    return {
-			example2: {
-				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
-				info: true,
-				size: 1,
-				outputType: 'jpeg',
-				canScale: false,
-				autoCrop: true,
-				// 只有自动截图开启 宽度高度才生效
-				autoCropWidth: 300,
-				autoCropHeight: 250,
-				// 开启宽度和高度比例
-				fixed: true,
-				fixedNumber: [4, 3]
+			<div class="show-info">
+				<h2>example2 (auto crop, fixed,  w : h => 4 : 3)</h2>
+				<div class="test">
+					<vueCropper
+						ref="cropper2"
+						:img="example2.img"
+						:outputSize="example2.size"
+						:outputType="example2.outputType"
+						:info="example2.info"
+						:canScale="example2.canScale"
+						:autoCrop="example2.autoCrop"
+						:autoCropWidth="example2.width"
+						:autoCropHeight="example2.height"
+						:fixed="example2.fixed"
+						:fixedNumber="example2.fixedNumber"
+					></vueCropper>
+				</div>
+				<label class="btn" for="upload2">upload</label>
+				<input type="file" id="upload2" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 2)">
+				<button @click="finish2('base64')" class="btn">preview(base64)</button>
+				<codes>
+	<div slot="body">
+	&lt;vueCropper
+		ref="cropper2"
+		:img="example2.img"
+		:outputSize="example2.size"
+		:outputType="example2.outputType"
+		:info="example2.info"
+		:canScale="example2.canScale"
+		:autoCrop="example2.autoCrop"
+		:autoCropWidth="example2.width"
+		:autoCropHeight="example2.height"
+	>&lt;/vueCropper>
+	&lt;script>
+	export default {
+	  data: function () {
+	    return {
+				example2: {
+					img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
+					info: true,
+					size: 1,
+					outputType: 'jpeg',
+					canScale: false,
+					autoCrop: true,
+					// 只有自动截图开启 宽度高度才生效
+					autoCropWidth: 300,
+					autoCropHeight: 250,
+					// 开启宽度和高度比例
+					fixed: true,
+					fixedNumber: [4, 3]
+				}
 			}
-		}
-&lt;/script>
-</div>
-			</codes>
+	&lt;/script>
+	</div>
+				</codes>
+			</div>
 		</div>
 	</div>
 </template>
@@ -240,6 +247,8 @@ import codes from './code'
 export default {
   data: function () {
     return {
+			model: false,
+			modelSrc: '',
 		  crap: false,
 			previews: {},
 			lists: [
@@ -312,16 +321,18 @@ export default {
 		},
 		finish (type) {
 			// 输出
-			var test = window.open('about:blank')
-			test.document.body.innerHTML = '图片生成中..'
+			// var test = window.open('about:blank')
+			// test.document.body.innerHTML = '图片生成中..'
 			if (type === 'blob') {
 				this.$refs.cropper.getCropBlob((data) => {
-					var test = window.open('')
-					test.location.href = window.URL.createObjectURL(data)
+					var img = window.URL.createObjectURL(data)
+					this.model = true
+					this.modelSrc = img
 				})
 			} else {
 				this.$refs.cropper.getCropData((data) => {
-					test.location.href = data
+					this.model = true
+					this.modelSrc = data
 				})
 			}
 		},
@@ -331,10 +342,9 @@ export default {
 		},
 
 		finish2 (type) {
-			var test = window.open('about:blank')
-			test.document.body.innerHTML = '图片生成中..'
 			this.$refs.cropper2.getCropData((data) => {
-				test.location.href = data
+				this.model = true
+				this.modelSrc = data
 			})
 		},
 		down (type) {
@@ -391,7 +401,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   * {
 	  margin: 0;
 		padding: 0;
@@ -475,6 +485,30 @@ export default {
 
 	.test {
 	  height: 500px;
+	}
+
+	.model {
+		position: fixed;
+		z-index: 10;
+		width: 100vw;
+		height: 100vh;
+		overflow: scroll;
+		background: rgba(0, 0, 0, 0.8);
+	}
+
+	.model-show {
+		display: flex;
+    justify-content: center;
+    align-items: center;
+		width: 100vw;
+		height: 100vh;
+	}
+
+	.model img {
+		user-select: none;
+		background-position: 0px 0px, 10px 10px;
+		background-size: 20px 20px;
+    background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
 	}
 
 	@keyframes slide {
