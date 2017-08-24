@@ -111,6 +111,12 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.19 新增图片旋转 修复mac滚轮过度灵敏
+```
+this.$cropper.rotateRight() 向左边旋转90度
+this.$cropper.rotateLeft() 向左边旋转90度
+```
+
 ### v0.18 修复默认生成截图框超过容器错误
 ### v0.17 修复blob数据获取错误
 ### v0.15 添加手机端手势缩放
