@@ -190,7 +190,6 @@ export default {
       }
 			img.src = this.img
 		},
-
 		cropW () {
 			this.cropW = ~~(this.cropW)
 			this.showPreview()
@@ -569,6 +568,8 @@ export default {
 					let ctx = canvas.getContext('2d')
 					let width = this.cropW
 					let height = this.cropH
+					let imgW = this.trueWidth * this.scale
+					let imgH = this.trueHeight * this.scale
 					// 图片x轴偏移
 					let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
 					// 图片y轴偏移
@@ -580,27 +581,31 @@ export default {
 					ctx.save()
 					switch (this.rotate) {
     				case 0:
-							ctx.drawImage(img, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
+							ctx.drawImage(img, dx, dy, imgW, imgH)
     					break
 						case 1:
 						case -3:
-							dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
-							dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
+						  // 换算图片旋转后的坐标弥补
+							dx = dx + (imgW - imgH) / 2
+							dy = dy + (imgH - imgW) / 2
 							ctx.rotate(this.rotate * 90  * Math.PI / 180)
-							ctx.drawImage(img, dy, - this.trueWidth * this.scale, this.trueWidth * this.scale, this.trueHeight * this.scale)
+							ctx.drawImage(img, dy, -dx - imgH, imgW, imgH)
 							break
 						case 2:
 						case -2:
 							ctx.rotate(this.rotate * 90  * Math.PI / 180)
-							ctx.drawImage(img, -width, -height, width, height)
+							ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH)
 						break
 						case 3:
 						case -1:
+							// 换算图片旋转后的坐标弥补
+							dx = dx + (imgW - imgH) / 2
+							dy = dy + (imgH - imgW) / 2
 							ctx.rotate(this.rotate * 90  * Math.PI / 180)
-							ctx.drawImage(img, -width, 0, width, height)
+							ctx.drawImage(img, -dy - imgW, dx, imgW, imgH)
 							break
     				default:
-							ctx.drawImage(img, dx, dy, this.trueWidth * this.scale, this.trueHeight * this.scale)
+							ctx.drawImage(img, dx, dy, imgW, imgH)
     			}
 					ctx.restore()
 				} else {
@@ -698,7 +703,7 @@ export default {
 			// 存入图片真实高度
 			this.trueWidth = this.$refs.cropperImg.width
 			this.trueHeight = this.$refs.cropperImg.height
-			this.rotate = 1
+			this.rotate = 0
 
 			if (this.trueWidth > this.w) {
 				// 如果图片宽度大于容器宽度
