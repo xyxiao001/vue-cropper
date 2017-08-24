@@ -340,8 +340,9 @@ export default {
 		},
 		// 改变大小函数
 		changeSize (e) {
-			var change = e.deltaY
-			change < 0 ? this.scale += 0.05 : this.scale > 0.05 ? this.scale -= 0.05 : this.scale
+			var change = e.deltaY || e.wheelDelta
+			var num = 0.0003 * change
+			num < 0 ? this.scale += Math.abs(num) : this.scale > Math.abs(num) ? this.scale -= Math.abs(num) : this.scale
 			e.preventDefault()
 		},
 
