@@ -61,6 +61,8 @@
 			:outputType="option.outputType"
 			:info="true"
 			@realTime="realTime"
+			:full="option.full"
+			@realTime="realTime"
 		>&lt;/vueCropper>
 		&lt;/div>
 		&lt;div class="test-button">
@@ -219,6 +221,8 @@
 		:autoCrop="example2.autoCrop"
 		:autoCropWidth="example2.width"
 		:autoCropHeight="example2.height"
+		:fixed="example2.fixed"
+		:fixedNumber="example2.fixedNumber"
 	>&lt;/vueCropper>
 	&lt;script>
 	export default {
