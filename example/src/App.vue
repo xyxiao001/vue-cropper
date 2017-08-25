@@ -284,7 +284,7 @@ export default {
 			option: {
 				img: '',
 				size: 1,
-				full: true,
+				full: false,
 				outputType: 'png'
 			},
 			example2: {
