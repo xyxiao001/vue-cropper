@@ -84,6 +84,12 @@
         <td>[1 : 1]</td>
         <td>[宽度 : 高度]</td>
     </tr>
+    <tr>
+        <td>full</td>
+        <td>是否输出原图比例的截图</td>
+        <td>false</td>
+        <td>true | false</td>
+    </tr>
   </tbody>
 </table>
 
@@ -111,6 +117,9 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.20
+#### 新增输出原图比例截图 props名full,  修复缩放图片过大灵敏度问题
+
 ### v0.19 新增图片旋转 修复mac滚轮过度灵敏
 ```
 this.$cropper.rotateRight() 向右边旋转90度

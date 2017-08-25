@@ -21,6 +21,7 @@
 						:outputSize="option.size"
 						:outputType="option.outputType"
 						:info="true"
+						:full="option.full"
 						@realTime="realTime"
 					></vueCropper>
 				</div>
@@ -37,6 +38,12 @@
 					<button @click="finish('blob')" class="btn">preview(blob)</button>
 					<a @click="down('base64')" class="btn">download(base64)</a>
 					<a @click="down('blob')" class="btn">download(blob)</a>
+					<div>
+						<label class="c-item">
+							<span>是否输出原图比例的截图</span>
+							<input type="checkbox" v-model="option.full">
+						</label>
+					</div>
 				</div>
 				<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
 					<div :style="previews.div">
@@ -93,7 +100,7 @@
 				],
 				option: {
 					img: '',
-					size: 0.8,
+					size: 1,
 					outputType: 'jpeg'
 				},
 				downImg: '#'
@@ -276,7 +283,8 @@ export default {
 			],
 			option: {
 				img: '',
-				size: 0.8,
+				size: 1,
+				full: true,
 				outputType: 'png'
 			},
 			example2: {
@@ -511,6 +519,12 @@ export default {
 		background-position: 0px 0px, 10px 10px;
 		background-size: 20px 20px;
     background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
+	}
+
+	.c-item {
+		display: block;
+		padding: 10px 0;
+		user-select: none;
 	}
 
 	@keyframes slide {

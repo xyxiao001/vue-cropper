@@ -5,6 +5,7 @@
 # vue-cropper
 
 ## update log
+### v0.20 add props full -> Original scale output, fixes the big picture zoom sensitivity
 ### v0.19 New picture rotation fix MAC roller over sensitive
 ```
 this.$cropper.rotateRight() turn left 90°C
@@ -118,6 +119,12 @@ import VueCropper from vue-cropper
         <td>crop box width height ratio</td>
         <td>[1 : 1]</td>
         <td>[w : h]</td>
+    </tr>
+    <tr>
+        <td>full</td>
+        <td>output a screenshot of the original scale</td>
+        <td>false</td>
+        <td>true | false</td>
     </tr>
   </tbody>
 </table>

@@ -170,6 +170,11 @@ export default {
 			default: () => {
 				return [1, 1]
 			}
+		},
+		// 输出截图是否缩放
+		full: {
+			type: Boolean,
+			default: false
 		}
 	},
 	computed: {
@@ -283,17 +288,23 @@ export default {
 			var oldL = Math.sqrt(Math.pow(oldTouch1.x - oldTouch2.x, 2) + Math.pow(oldTouch1.y - oldTouch2.y, 2))
 			var newL = Math.sqrt(Math.pow(newTouch1.x - newTouch2.x, 2) + Math.pow(newTouch1.y - newTouch2.y, 2))
 			var cha = ~~(newL - oldL)
+			// 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
+			// 1px - 0.2
+			var coe = 1
+			coe = coe / this.trueWidth > coe / this.trueHeight ? coe / this.trueHeight : coe / this.trueWidth
+			coe = coe > 0.1 ? 0.1 : coe
+			var num = coe * cha
 			if (!this.touchNow) {
 				this.touchNow = true
 				if (cha > 0) {
-					this.scale += 0.003 * cha
+					this.scale += Math.abs(num)
 				} else if (cha < 0) {
-					this.scale = (this.scale - 0.003 * -(cha) > 0) ?  this.scale -= 0.003 * -(cha) : 0.05
+					this.scale > Math.abs(num) ? this.scale -= Math.abs(num) : this.scale
 				}
 				this.touches = e.touches
 				setTimeout(() => {
 					this.touchNow = false
-				}, 50)
+				}, 8)
 			}
 		},
 
@@ -341,7 +352,11 @@ export default {
 		// 改变大小函数
 		changeSize (e) {
 			var change = e.deltaY || e.wheelDelta
-			var num = 0.0003 * change
+			// 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
+			// 1px - 0.2
+			var coe = 0.2
+			coe = coe / this.trueWidth > coe / this.trueHeight ? coe / this.trueHeight : coe / this.trueWidth
+			var num = coe * change
 			num < 0 ? this.scale += Math.abs(num) : this.scale > Math.abs(num) ? this.scale -= Math.abs(num) : this.scale
 			e.preventDefault()
 		},
@@ -582,31 +597,74 @@ export default {
 					ctx.save()
 					switch (this.rotate) {
     				case 0:
-							ctx.drawImage(img, dx, dy, imgW, imgH)
+							if (!this.full) {
+								ctx.drawImage(img, dx, dy, imgW, imgH)
+							} else {
+								// 输出原图比例截图
+								canvas.width = width / this.scale
+								canvas.height = height / this.scale
+								ctx.drawImage(img, dx / this.scale, dy / this.scale, imgW / this.scale, imgH / this.scale)
+							}
     					break
 						case 1:
 						case -3:
-						  // 换算图片旋转后的坐标弥补
-							dx = dx + (imgW - imgH) / 2
-							dy = dy + (imgH - imgW) / 2
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
-							ctx.drawImage(img, dy, -dx - imgH, imgW, imgH)
+						  if (!this.full) {
+								// 换算图片旋转后的坐标弥补
+								dx = dx + (imgW - imgH) / 2
+								dy = dy + (imgH - imgW) / 2
+								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.drawImage(img, dy, -dx - imgH, imgW, imgH)
+							} else {
+								canvas.width = width / this.scale
+								canvas.height = height / this.scale
+								// 换算图片旋转后的坐标弥补
+								dx = dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2
+								dy = dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2
+								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.drawImage(img, dy, (-dx - imgH / this.scale), imgW / this.scale, imgH / this.scale)
+							}
 							break
 						case 2:
 						case -2:
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
-							ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH)
+							if (!this.full) {
+								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH)
+							} else {
+								canvas.width = width / this.scale
+								canvas.height = height / this.scale
+								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								dx = dx / this.scale
+								dy = dy / this.scale
+								ctx.drawImage(img, -dx - imgW / this.scale, -dy - imgH / this.scale, imgW / this.scale, imgH / this.scale)
+							}
 						break
 						case 3:
 						case -1:
-							// 换算图片旋转后的坐标弥补
-							dx = dx + (imgW - imgH) / 2
-							dy = dy + (imgH - imgW) / 2
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
-							ctx.drawImage(img, -dy - imgW, dx, imgW, imgH)
+							if (!this.full) {
+								// 换算图片旋转后的坐标弥补
+								dx = dx + (imgW - imgH) / 2
+								dy = dy + (imgH - imgW) / 2
+								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.drawImage(img, -dy - imgW, dx, imgW, imgH)
+							} else {
+								canvas.width = width / this.scale
+								canvas.height = height / this.scale
+								// 换算图片旋转后的坐标弥补
+								dx = dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2
+								dy = dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2
+								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.drawImage(img, -dy - imgW / this.scale, dx, imgW / this.scale, imgH / this.scale)
+							}
 							break
     				default:
-							ctx.drawImage(img, dx, dy, imgW, imgH)
+							if (!this.full) {
+								ctx.drawImage(img, dx, dy, imgW, imgH)
+							} else {
+								// 输出原图比例截图
+								canvas.width = width / this.scale
+								canvas.height = height / this.scale
+								ctx.drawImage(img, dx / this.scale, dy / this.scale, imgW / this.scale, imgH / this.scale)
+							}
     			}
 					ctx.restore()
 				} else {
