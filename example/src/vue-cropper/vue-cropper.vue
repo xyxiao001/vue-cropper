@@ -781,6 +781,8 @@ export default {
 				if (this.autoCrop) {
 					this.goAutoCrop()
 				}
+
+				// 读取图片的信息原始信息， 解析是否需要旋转
 			})
 		},
 		// 自动截图函数
