@@ -13,7 +13,7 @@
 				<code class="language-html">npm install vue-cropper</code>
 			</div>
 			<div class="show-info">
-				<h2>example1 (normal)</h2>
+				<h2>example1 基本例子 无限制</h2>
 				<div class="test test1">
 					<vueCropper
 						ref="cropper"
@@ -42,6 +42,12 @@
 						<label class="c-item">
 							<span>是否输出原图比例的截图</span>
 							<input type="checkbox" v-model="option.full">
+						</label>
+						<p>输出图片格式</p>
+						<label class="c-item">
+							jpg   <input type="radio" name="type" value="jpeg" v-model="option.outputType">
+							png   <input type="radio" name="type" value="png" v-model="option.outputType">
+							webp   <input type="radio" name="type" value="webp" v-model="option.outputType">
 						</label>
 					</div>
 				</div>
@@ -190,7 +196,7 @@
 				</codes>
 			</div>
 			<div class="show-info">
-				<h2>example2 (auto crop, fixed,  w : h => 4 : 3)</h2>
+				<h2>example2 自动生成截图框 固定比例 w : h => 4 : 3</h2>
 				<div class="test">
 					<vueCropper
 						ref="cropper2"
@@ -244,6 +250,42 @@
 				}
 			}
 	&lt;/script>
+	</div>
+				</codes>
+			</div>
+			<div class="show-info">
+				<h2>example3 自动生成截图框 固定大小 不能改变</h2>
+				<div class="test">
+					<vueCropper
+						ref="cropper3"
+						:img="example3.img"
+						:autoCrop="example3.autoCrop"
+						:autoCropWidth="example3.autoCropWidth"
+						:autoCropHeight="example3.autoCropHeight"
+						:fixedBox="example3.fixedBox"
+					></vueCropper>
+				</div>
+				<button @click="finish3('base64')" class="btn">preview(base64)</button>
+				<codes>
+	<div slot="body">
+		&ltvueCropper
+			ref="cropper3"
+			:img="example3.img"
+			:autoCrop="example3.autoCrop"
+			:autoCropWidth="example3.autoCropWidth"
+			:autoCropHeight="example3.autoCropHeight"
+			:fixedBox="example3.fixedBox"
+		>&lt/vueCropper>
+
+		&ltscript>
+				example3: {
+					img: 'https://o90cnn3g2.qnssl.com/0C3ABE8D05322EAC3120DDB11F9D1F72.png',
+					autoCrop: true,
+					autoCropWidth: 200,
+					autoCropHeight: 200,
+					fixedBox: true
+				}
+		&lt/script>
 	</div>
 				</codes>
 			</div>
@@ -304,6 +346,13 @@ export default {
 				fixed: true,
 				fixedNumber: [4, 3]
 			},
+			example3: {
+				img: 'https://o90cnn3g2.qnssl.com/0C3ABE8D05322EAC3120DDB11F9D1F72.png',
+				autoCrop: true,
+				autoCropWidth: 200,
+				autoCropHeight: 200,
+				fixedBox: true
+			},
 			downImg: '#'
     }
   },
@@ -355,6 +404,12 @@ export default {
 
 		finish2 (type) {
 			this.$refs.cropper2.getCropData((data) => {
+				this.model = true
+				this.modelSrc = data
+			})
+		},
+		finish3 (type) {
+			this.$refs.cropper3.getCropData((data) => {
 				this.model = true
 				this.modelSrc = data
 			})

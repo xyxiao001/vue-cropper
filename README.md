@@ -90,6 +90,12 @@
         <td>false</td>
         <td>true | false</td>
     </tr>
+    <tr>
+        <td>fixedBox</td>
+        <td>固定截图框大小 不允许改变</td>
+        <td>false</td>
+        <td>true | false</td>
+    </tr>
   </tbody>
 </table>
 
@@ -117,6 +123,9 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.21
+#### 新增固定截图框大小fiexdBox(注： 最好搭配自动生成截图框使用)
+
 ### v0.20
 #### 新增输出原图比例截图 props名full,  修复缩放图片过大灵敏度问题
 
