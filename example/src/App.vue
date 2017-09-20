@@ -32,22 +32,24 @@
 					<button @click="startCrop" v-if="!crap" class="btn">start</button>
 					<button @click="stopCrop" v-else class="btn">stop</button>
 					<button @click="clearCrop" class="btn">clear</button>
+					<button @click="changeScale(1)" class="btn">+</button>
+					<button @click="changeScale(-1)" class="btn">-</button>
 					<button @click="rotateLeft" class="btn">rotateLeft</button>
 					<button @click="rotateRight" class="btn">rotateRight</button>
 					<button @click="finish('base64')" class="btn">preview(base64)</button>
 					<button @click="finish('blob')" class="btn">preview(blob)</button>
 					<a @click="down('base64')" class="btn">download(base64)</a>
 					<a @click="down('blob')" class="btn">download(blob)</a>
-					<div>
+					<div style="display:block; width: 100%;">
 						<label class="c-item">
 							<span>是否输出原图比例的截图</span>
 							<input type="checkbox" v-model="option.full">
 						</label>
 						<p>输出图片格式</p>
 						<label class="c-item">
-							jpg   <input type="radio" name="type" value="jpeg" v-model="option.outputType">
-							png   <input type="radio" name="type" value="png" v-model="option.outputType">
-							webp   <input type="radio" name="type" value="webp" v-model="option.outputType">
+							<label>jpg  <input type="radio" name="type" value="jpeg" v-model="option.outputType"></label>
+							<label>png  <input type="radio" name="type" value="png" v-model="option.outputType"></label>
+							<label>webp <input type="radio" name="type" value="webp" v-model="option.outputType"></label>
 						</label>
 					</div>
 				</div>
@@ -373,6 +375,10 @@ export default {
 		clearCrop () {
 			// clear
 			this.$refs.cropper.clearCrop()
+		},
+		changeScale (num) {
+			num = num || 1
+			this.$refs.cropper.changeScale(num)
 		},
 		rotateLeft () {
 			this.$refs.cropper.rotateLeft()

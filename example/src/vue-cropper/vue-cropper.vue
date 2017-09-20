@@ -368,6 +368,14 @@ export default {
 			e.preventDefault()
 		},
 
+		// 修改图片大小函数
+		changeScale (num) {
+			num = num || 1
+			var coe = 20
+			coe = coe / this.trueWidth > coe / this.trueHeight ? coe / this.trueHeight : coe / this.trueWidth
+			num = num * coe
+			num > 0 ? this.scale += Math.abs(num) : this.scale -= Math.abs(num)
+		},
 		// 创建截图框
 		createCrop (e) {
 			e.preventDefault()

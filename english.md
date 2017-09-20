@@ -5,6 +5,8 @@
 # vue-cropper
 
 ## update log
+### v0.22
+#### Added new picture size function called by this.$refs.cropper.changeScale
 ### v0.21
 #### new fixed frame size fiexdBox screenshot (Note: the best collocation automatically generated box using the screenshot)
 ### v0.20
@@ -166,4 +168,11 @@ this.$refs.cropper.getCropBlob((data) => {
   // do something
   console.log(data)  
 })
+```
+
+### change img  scale
+```
+ this.$refs.cropper.changeScale(num)
+ num  > 0  scale ++
+ num < 0  scale --
 ```

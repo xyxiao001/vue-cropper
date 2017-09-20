@@ -104,6 +104,7 @@
 ##### this.$refs.cropper.startCrop()  开始截图
 ##### this.$refs.cropper.stopCrop()  停止截图
 ##### this.$refs.cropper.clearCrop()  清除截图
+##### this.$refs.cropper.changeScale()  修改图片大小 正数为变大 负数变小
 #####  获取截图信息
 this.$refs.cropper.cropW  截图框宽度
 
@@ -123,6 +124,9 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.22
+#### 新增修改图片大小函数 通过this.$refs.cropper.changeScale 调用
+
 ### v0.21
 #### 新增固定截图框大小fiexdBox(注： 最好搭配自动生成截图框使用)
 
