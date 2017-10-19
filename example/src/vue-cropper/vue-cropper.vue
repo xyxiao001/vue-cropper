@@ -123,7 +123,9 @@ export default {
 			touches: [],
 			touchNow: false,
 			// 图片旋转
-			rotate: 0
+			rotate: 0,
+			isIos: false,
+			orientation: 0
     }
   },
 	props: {
@@ -595,6 +597,10 @@ export default {
 		getCropData (cb) {
 			let canvas = document.createElement('canvas')
 			let img = new Image
+			let rotate = this.rotate
+			if (this.isIOS && this.orientation === 6) {
+				rotate -= 1
+			}
 			img.onload = () => {
 				if (~~(this.cropW) !== 0) {
 					let ctx = canvas.getContext('2d')
@@ -611,7 +617,7 @@ export default {
 					canvas.width = width
 					canvas.height = height
 					ctx.save()
-					switch (this.rotate) {
+					switch (rotate) {
     				case 0:
 							if (!this.full) {
 								ctx.drawImage(img, dx, dy, imgW, imgH)
@@ -628,7 +634,7 @@ export default {
 								// 换算图片旋转后的坐标弥补
 								dx = dx + (imgW - imgH) / 2
 								dy = dy + (imgH - imgW) / 2
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, dy, -dx - imgH, imgW, imgH)
 							} else {
 								canvas.width = width / this.scale
@@ -636,19 +642,19 @@ export default {
 								// 换算图片旋转后的坐标弥补
 								dx = dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2
 								dy = dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, dy, (-dx - imgH / this.scale), imgW / this.scale, imgH / this.scale)
 							}
 							break
 						case 2:
 						case -2:
 							if (!this.full) {
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH)
 							} else {
 								canvas.width = width / this.scale
 								canvas.height = height / this.scale
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								dx = dx / this.scale
 								dy = dy / this.scale
 								ctx.drawImage(img, -dx - imgW / this.scale, -dy - imgH / this.scale, imgW / this.scale, imgH / this.scale)
@@ -660,7 +666,7 @@ export default {
 								// 换算图片旋转后的坐标弥补
 								dx = dx + (imgW - imgH) / 2
 								dy = dy + (imgH - imgW) / 2
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, -dy - imgW, dx, imgW, imgH)
 							} else {
 								canvas.width = width / this.scale
@@ -668,7 +674,7 @@ export default {
 								// 换算图片旋转后的坐标弥补
 								dx = dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2
 								dy = dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, -dy - imgW / this.scale, dx, imgW / this.scale, imgH / this.scale)
 							}
 							break
@@ -688,7 +694,7 @@ export default {
 					let height = this.trueHeight * this.scale
 					let ctx = canvas.getContext('2d')
 					ctx.save()
-    			switch (this.rotate) {
+    			switch (rotate) {
     				case 0:
 							canvas.width = width
 							canvas.height = height
@@ -699,21 +705,21 @@ export default {
 							// 旋转90度 或者-270度 宽度和高度对调
 							canvas.width = height
 							canvas.height = width
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.rotate(rotate * 90  * Math.PI / 180)
 							ctx.drawImage(img, 0, -height, width, height)
 							break
 						case 2:
 						case -2:
 							canvas.width = width
 							canvas.height = height
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.rotate(rotate * 90  * Math.PI / 180)
 							ctx.drawImage(img, -width, -height, width, height)
 						break
 						case 3:
 						case -1:
 							canvas.width = height
 							canvas.height = width
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.rotate(rotate * 90  * Math.PI / 180)
 							ctx.drawImage(img, -width, 0, width, height)
 							break
     				default:
@@ -777,10 +783,14 @@ export default {
 			img.onload = () => {
 				exif.getData(img, () => {
 					exif.getAllTags(img)
-					let orientation = exif.getTag(img, 'Orientation')
-					switch (orientation) {
+					this.orientation = exif.getTag(img, 'Orientation')
+					switch (this.orientation) {
 						case 6:
-							this.rotate = 1
+							if (this.isIOS) {
+								this.rotate = 0
+							} else {
+								this.rotate = 1
+							}
 							break
 						case 8:
 							this.rotate = -1
@@ -879,6 +889,8 @@ export default {
 			// 图片加载成功后布局
 			this.reload()
 		}
+		var u = navigator.userAgent
+		this.isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
 	}
 }
 </script>
