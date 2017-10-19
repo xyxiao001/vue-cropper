@@ -88,7 +88,7 @@
 		&lt;/div>
 		&lt;div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
 			&lt;div :style="previews.div">
-				&lt;img :src="option.img" :style="previews.img">
+				&lt;img :src="previews.url" :style="previews.img">
 			&lt;/div>
 		&lt;/div>
 	&lt;/template>
