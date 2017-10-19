@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import exif from 'exif-js'
 export default {
   data: function () {
     return {
@@ -770,35 +771,55 @@ export default {
 		},
 		// reload 图片布局函数
 		reload () {
-			// 得到外层容器的宽度高度
-			this.w =  ~~(window.getComputedStyle(this.$refs.cropper).width.replace('px', ''))
-			this.h =  ~~(window.getComputedStyle(this.$refs.cropper).height.replace('px', ''))
+			// 读取图片的信息原始信息， 解析是否需要旋转
+			// 读取图片的旋转信息
+			let img = new Image
+			img.onload = () => {
+				exif.getData(img, () => {
+					exif.getAllTags(img)
+					let orientation = exif.getTag(img, 'Orientation')
+					switch (orientation) {
+						case 6:
+							this.rotate = 1
+							break
+						case 8:
+							this.rotate = -1
+							break
+						case 3:
+							this.rotate = 3
+							break
+						default:
+							this.rotate = 0
+					}
+					// 得到外层容器的宽度高度
+					this.w =  ~~(window.getComputedStyle(this.$refs.cropper).width.replace('px', ''))
+					this.h =  ~~(window.getComputedStyle(this.$refs.cropper).height.replace('px', ''))
 
-			// 存入图片真实高度
-			this.trueWidth = this.$refs.cropperImg.width
-			this.trueHeight = this.$refs.cropperImg.height
-			this.rotate = 0
+					// 存入图片真实高度
+					this.trueWidth = this.$refs.cropperImg.width
+					this.trueHeight = this.$refs.cropperImg.height
 
-			if (this.trueWidth > this.w) {
-				// 如果图片宽度大于容器宽度
-				this.scale = this.w / this.trueWidth
+					if (this.trueWidth > this.w) {
+						// 如果图片宽度大于容器宽度
+						this.scale = this.w / this.trueWidth
+					}
+
+					if (this.trueHeight * this.scale > this.h) {
+						this.scale = this.h / this.trueHeight
+					}
+
+					this.$nextTick(() => {
+						this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (this.w - this.trueWidth * this.scale) / 2
+						this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (this.h - this.trueHeight * this.scale) / 2
+						this.loading = false
+						// 获取是否开启了自动截图
+						if (this.autoCrop) {
+							this.goAutoCrop()
+						}
+					})
+				})
 			}
-
-			if (this.trueHeight * this.scale > this.h) {
-				this.scale = this.h / this.trueHeight
-			}
-
-			this.$nextTick(() => {
-				this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (this.w - this.trueWidth * this.scale) / 2
-				this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (this.h - this.trueHeight * this.scale) / 2
-				this.loading = false
-				// 获取是否开启了自动截图
-				if (this.autoCrop) {
-					this.goAutoCrop()
-				}
-
-				// 读取图片的信息原始信息， 解析是否需要旋转
-			})
+			img.src = this.img
 		},
 		// 自动截图函数
 		goAutoCrop () {

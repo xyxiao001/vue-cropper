@@ -8,6 +8,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "exif-js": "^2.3.0",
     "vue": "^2.2.6"
   },
   "devDependencies": {
