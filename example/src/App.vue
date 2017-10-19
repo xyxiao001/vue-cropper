@@ -55,7 +55,7 @@
 				</div>
 				<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
 					<div :style="previews.div">
-						<img :src="option.img" :style="previews.img">
+						<img :src="previews.url" :style="previews.img">
 					</div>
 				</div>
 				<codes>
