@@ -294,10 +294,12 @@ export default {
 							ctx.drawImage(img, 0, 0, width, height)
 					}
 					ctx.restore()
-					let data = canvas.toDataURL('image/' + this.outputType, 1)
-					this.imgs = data
-					// 图片加载成功后布局
-					this.reload()
+					canvas.toBlob((blob) => {
+						let data = URL.createObjectURL(blob)
+						this.imgs = data
+						// 图片加载成功后布局
+						this.reload()
+					}, 'image/' + this.outputType, 1)
 				})
 			}
 			img.crossOrigin = '*'
@@ -672,11 +674,6 @@ export default {
 			let trueHeight = this.trueHeight
 			let cropOffsertX = this.cropOffsertX
 			let cropOffsertY = this.cropOffsertY
-			if (this.isIOS && this.orientation === 6) {
-				rotate += 1
-				trueWidth = this.trueHeight
-				trueHeight = this.trueWidth
-			}
 			img.onload = () => {
 				if (~~(this.cropW) !== 0) {
 					let ctx = canvas.getContext('2d')
