@@ -124,6 +124,23 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.24
+#### 修复ios拍照旋转 截图问题 添加自动修复图片 截图预览代码变更, 修改默认上传图片为blob预览
+```
+realTime (data) {
+  this.previews = data
+}
+<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
+    'margin': '5px'}">
+  <div :style="previews.div">
+    <img :src="previews.url" :style="previews.img">
+  </div>
+</div>
+```
+
+
+### v0.23
+#### 小优化
 ### v0.22
 #### 新增修改图片大小函数 通过this.$refs.cropper.changeScale 调用
 

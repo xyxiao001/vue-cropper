@@ -5,6 +5,20 @@
 # vue-cropper
 
 ## update log
+### v0.24
+#### Repair IOS photos, rotate screenshot problem, add automatic repair screenshots,
+#### preview code changes, modify the default upload picture for blob Preview
+```
+realTime (data) {
+  this.previews = data
+}
+<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
+    'margin': '5px'}">
+  <div :style="previews.div">
+    <img :src="previews.url" :style="previews.img">
+  </div>
+</div>
+```
 ### v0.22
 #### Added new picture size function called by this.$refs.cropper.changeScale
 ### v0.21

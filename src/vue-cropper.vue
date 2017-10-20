@@ -10,7 +10,7 @@
 					+ 'rotateZ('+ rotate * 90 +'deg)'
 					}">
 				<img
-					:src="img"
+					:src="imgs"
 					alt="cropper-img"
 					ref="cropperImg"
 					/>
@@ -41,7 +41,7 @@
 						'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ (x - cropOffsertX) / scale  + 'px,' + (y - cropOffsertY) / scale + 'px,' + '0)'
 						+ 'rotateZ('+ rotate * 90 +'deg)'
 						}"
-						:src="img"
+						:src="imgs"
 						alt="cropper-img"
 						/>
 				</span>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import exif from 'exif-js'
 export default {
   data: function () {
     return {
@@ -122,7 +123,10 @@ export default {
 			touches: [],
 			touchNow: false,
 			// 图片旋转
-			rotate: 0
+			rotate: 0,
+			isIos: false,
+			orientation: 0,
+			imgs: ''
     }
   },
 	props: {
@@ -192,15 +196,8 @@ export default {
 	watch: {
 		// 如果图片改变， 重新布局
 		img () {
-			this.loading = true
-			this.scale = 1
-			this.clearCrop()
-			let img = new Image
-			img.onload = () => {
-        // 图片加载成功后布局
-				this.reload()
-      }
-			img.src = this.img
+			// 当传入图片时, 读取图片信息同时展示
+			this.checkedImg()
 		},
 		cropW () {
 			this.cropW = ~~(this.cropW)
@@ -230,6 +227,84 @@ export default {
 		}
 	},
 	methods: {
+		// 校验图片
+		checkedImg () {
+			this.loading = true
+			this.scale = 1
+			this.clearCrop()
+			let canvas = document.createElement('canvas')
+			let img = new Image
+			let rotate = 0
+			img.onload = () => {
+				let width = img.width
+				let height = img.height
+				let ctx = canvas.getContext('2d')
+				ctx.save()
+				exif.getData(img, () => {
+					exif.getAllTags(img)
+					this.orientation = exif.getTag(img, 'Orientation')
+					switch (this.orientation) {
+						case 6:
+							rotate = 1
+							break
+						case 8:
+							rotate = -1
+							break
+						case 3:
+							rotate = 3
+							break
+						default:
+							rotate = 0
+					}
+					if (rotate === 0) {
+						this.imgs = this.img
+						return
+					}
+					switch (rotate) {
+						case 0:
+							canvas.width = width
+							canvas.height = height
+							ctx.drawImage(img, 0, 0, width, height)
+						break
+						case 1:
+						case -3:
+							// 旋转90度 或者-270度 宽度和高度对调
+							canvas.width = height
+							canvas.height = width
+							ctx.rotate(rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, 0, -height, width, height)
+							break
+						case 2:
+						case -2:
+							canvas.width = width
+							canvas.height = height
+							ctx.rotate(rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, -width, -height, width, height)
+						break
+						case 3:
+						case -1:
+							canvas.width = height
+							canvas.height = width
+							ctx.rotate(rotate * 90  * Math.PI / 180)
+							ctx.drawImage(img, -width, 0, width, height)
+							break
+						default:
+							canvas.width = width
+							canvas.height = height
+							ctx.drawImage(img, 0, 0, width, height)
+					}
+					ctx.restore()
+					canvas.toBlob((blob) => {
+						let data = URL.createObjectURL(blob)
+						this.imgs = data
+						// 图片加载成功后布局
+						this.reload()
+					}, 'image/' + this.outputType, 1)
+				})
+			}
+			img.crossOrigin = '*'
+			img.src = this.img
+		},
 		// 当按下鼠标键
 		startMove (e) {
 			e.preventDefault()
@@ -594,23 +669,28 @@ export default {
 		getCropData (cb) {
 			let canvas = document.createElement('canvas')
 			let img = new Image
+			let rotate = this.rotate
+			let trueWidth = this.trueWidth
+			let trueHeight = this.trueHeight
+			let cropOffsertX = this.cropOffsertX
+			let cropOffsertY = this.cropOffsertY
 			img.onload = () => {
 				if (~~(this.cropW) !== 0) {
 					let ctx = canvas.getContext('2d')
 					let width = this.cropW
 					let height = this.cropH
-					let imgW = this.trueWidth * this.scale
-					let imgH = this.trueHeight * this.scale
+					let imgW = trueWidth * this.scale
+					let imgH = trueHeight * this.scale
 					// 图片x轴偏移
-					let dx = (this.x - this.cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
+					let dx = (this.x - cropOffsertX) + this.trueWidth * (1 - this.scale) / 2
 					// 图片y轴偏移
-					let dy = (this.y - this.cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
+					let dy = (this.y - cropOffsertY) + this.trueHeight * (1 - this.scale) / 2
 					// console.log(dx, dy)
 					//保存状态
 					canvas.width = width
 					canvas.height = height
 					ctx.save()
-					switch (this.rotate) {
+					switch (rotate) {
     				case 0:
 							if (!this.full) {
 								ctx.drawImage(img, dx, dy, imgW, imgH)
@@ -627,7 +707,7 @@ export default {
 								// 换算图片旋转后的坐标弥补
 								dx = dx + (imgW - imgH) / 2
 								dy = dy + (imgH - imgW) / 2
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, dy, -dx - imgH, imgW, imgH)
 							} else {
 								canvas.width = width / this.scale
@@ -635,19 +715,19 @@ export default {
 								// 换算图片旋转后的坐标弥补
 								dx = dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2
 								dy = dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, dy, (-dx - imgH / this.scale), imgW / this.scale, imgH / this.scale)
 							}
 							break
 						case 2:
 						case -2:
 							if (!this.full) {
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH)
 							} else {
 								canvas.width = width / this.scale
 								canvas.height = height / this.scale
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								dx = dx / this.scale
 								dy = dy / this.scale
 								ctx.drawImage(img, -dx - imgW / this.scale, -dy - imgH / this.scale, imgW / this.scale, imgH / this.scale)
@@ -659,7 +739,7 @@ export default {
 								// 换算图片旋转后的坐标弥补
 								dx = dx + (imgW - imgH) / 2
 								dy = dy + (imgH - imgW) / 2
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, -dy - imgW, dx, imgW, imgH)
 							} else {
 								canvas.width = width / this.scale
@@ -667,7 +747,7 @@ export default {
 								// 换算图片旋转后的坐标弥补
 								dx = dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2
 								dy = dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2
-								ctx.rotate(this.rotate * 90  * Math.PI / 180)
+								ctx.rotate(rotate * 90  * Math.PI / 180)
 								ctx.drawImage(img, -dy - imgW / this.scale, dx, imgW / this.scale, imgH / this.scale)
 							}
 							break
@@ -683,11 +763,11 @@ export default {
     			}
 					ctx.restore()
 				} else {
-					let width = this.trueWidth * this.scale
-					let height = this.trueHeight * this.scale
+					let width = trueWidth * this.scale
+					let height = trueHeight * this.scale
 					let ctx = canvas.getContext('2d')
 					ctx.save()
-    			switch (this.rotate) {
+    			switch (rotate) {
     				case 0:
 							canvas.width = width
 							canvas.height = height
@@ -698,21 +778,21 @@ export default {
 							// 旋转90度 或者-270度 宽度和高度对调
 							canvas.width = height
 							canvas.height = width
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.rotate(rotate * 90  * Math.PI / 180)
 							ctx.drawImage(img, 0, -height, width, height)
 							break
 						case 2:
 						case -2:
 							canvas.width = width
 							canvas.height = height
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.rotate(rotate * 90  * Math.PI / 180)
 							ctx.drawImage(img, -width, -height, width, height)
 						break
 						case 3:
 						case -1:
 							canvas.width = height
 							canvas.height = width
-							ctx.rotate(this.rotate * 90  * Math.PI / 180)
+							ctx.rotate(rotate * 90  * Math.PI / 180)
 							ctx.drawImage(img, -width, 0, width, height)
 							break
     				default:
@@ -730,7 +810,7 @@ export default {
 			if (s !== 'data') {
 				img.crossOrigin = 'anonymous'
 			}
-			img.src = this.img
+			img.src = this.imgs
 		},
 		//转化base64 为blob对象
 		getCropBlob(cb) {
@@ -766,39 +846,43 @@ export default {
 			}
 			obj.w = this.cropW
 			obj.h = this.cropH
+			obj.url = this.imgs
 			this.$emit('realTime',  obj)
 		},
 		// reload 图片布局函数
 		reload () {
-			// 得到外层容器的宽度高度
-			this.w =  ~~(window.getComputedStyle(this.$refs.cropper).width.replace('px', ''))
-			this.h =  ~~(window.getComputedStyle(this.$refs.cropper).height.replace('px', ''))
+			let img = new Image
+			img.onload = () => {
+				// 读取图片的信息原始信息， 解析是否需要旋转
+				// 读取图片的旋转信息
+				// 得到外层容器的宽度高度
+				this.w =  ~~(window.getComputedStyle(this.$refs.cropper).width.replace('px', ''))
+				this.h =  ~~(window.getComputedStyle(this.$refs.cropper).height.replace('px', ''))
 
-			// 存入图片真实高度
-			this.trueWidth = this.$refs.cropperImg.width
-			this.trueHeight = this.$refs.cropperImg.height
-			this.rotate = 0
+				// 存入图片真实高度
+				this.trueWidth = this.$refs.cropperImg.width
+				this.trueHeight = this.$refs.cropperImg.height
 
-			if (this.trueWidth > this.w) {
-				// 如果图片宽度大于容器宽度
-				this.scale = this.w / this.trueWidth
-			}
-
-			if (this.trueHeight * this.scale > this.h) {
-				this.scale = this.h / this.trueHeight
-			}
-
-			this.$nextTick(() => {
-				this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (this.w - this.trueWidth * this.scale) / 2
-				this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (this.h - this.trueHeight * this.scale) / 2
-				this.loading = false
-				// 获取是否开启了自动截图
-				if (this.autoCrop) {
-					this.goAutoCrop()
+				if (this.trueWidth > this.w) {
+					// 如果图片宽度大于容器宽度
+					this.scale = this.w / this.trueWidth
 				}
 
-				// 读取图片的信息原始信息， 解析是否需要旋转
-			})
+				if (this.trueHeight * this.scale > this.h) {
+					this.scale = this.h / this.trueHeight
+				}
+
+				this.$nextTick(() => {
+					this.x = -(this.trueWidth - this.trueWidth * this.scale) / 2 + (this.w - this.trueWidth * this.scale) / 2
+					this.y = -(this.trueHeight - this.trueHeight * this.scale) / 2 + (this.h - this.trueHeight * this.scale) / 2
+					this.loading = false
+					// 获取是否开启了自动截图
+					if (this.autoCrop) {
+						this.goAutoCrop()
+					}
+				})
+			}
+			img.src = this.imgs
 		},
 		// 自动截图函数
 		goAutoCrop () {
@@ -858,6 +942,8 @@ export default {
 			// 图片加载成功后布局
 			this.reload()
 		}
+		var u = navigator.userAgent
+		this.isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
 	}
 }
 </script>

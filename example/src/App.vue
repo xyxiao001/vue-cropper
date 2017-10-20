@@ -174,7 +174,7 @@
 				}
 			},
 
-			uploadImg (e) {
+			uploadImg (e, num) {
 				//上传图片
 				// this.option.img
 				var file = e.target.files[0]
@@ -184,9 +184,23 @@
 				 }
 				var reader = new FileReader()
 				reader.onload = (e) => {
-					this.option.img = e.target.result
+					let data
+					if (typeof e.target.result === 'object') {
+						// 把Array Buffer转化为blob 如果是base64不需要
+						data = window.URL.createObjectURL(new Blob([e.target.result]))
+					} else {
+						data = e.target.result
+					}
+					if (num === 1) {
+						this.option.img = data
+					} else if (num === 2) {
+						this.example2.img = data
+					}
 				}
-				reader.readAsDataURL(file)
+				// 转化为base64
+				// reader.readAsDataURL(file)
+				// 转化为blob
+				reader.readAsArrayBuffer(file)
 			}
 		},
 		components: {
