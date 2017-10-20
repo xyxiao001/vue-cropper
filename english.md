@@ -5,6 +5,8 @@
 # vue-cropper
 
 ## update log
+### v0.25
+#### fixed img show
 ### v0.24
 #### Repair IOS photos, rotate screenshot problem, add automatic repair screenshots,
 #### preview code changes, modify the default upload picture for blob Preview

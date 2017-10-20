@@ -199,6 +199,9 @@ export default {
 			// 当传入图片时, 读取图片信息同时展示
 			this.checkedImg()
 		},
+		imgs () {
+			this.reload()
+		},
 		cropW () {
 			this.cropW = ~~(this.cropW)
 			this.showPreview()
@@ -297,8 +300,6 @@ export default {
 					canvas.toBlob((blob) => {
 						let data = URL.createObjectURL(blob)
 						this.imgs = data
-						// 图片加载成功后布局
-						this.reload()
 					}, 'image/' + this.outputType, 1)
 				})
 			}
@@ -860,8 +861,8 @@ export default {
 				this.h =  ~~(window.getComputedStyle(this.$refs.cropper).height.replace('px', ''))
 
 				// 存入图片真实高度
-				this.trueWidth = this.$refs.cropperImg.width
-				this.trueHeight = this.$refs.cropperImg.height
+				this.trueWidth = img.width
+				this.trueHeight = img.height
 
 				if (this.trueWidth > this.w) {
 					// 如果图片宽度大于容器宽度
@@ -938,10 +939,7 @@ export default {
 	},
 	mounted () {
 		this.showPreview()
-		this.$refs.cropperImg.onload = () => {
-			// 图片加载成功后布局
-			this.reload()
-		}
+		this.checkedImg()
 		var u = navigator.userAgent
 		this.isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
 	}
