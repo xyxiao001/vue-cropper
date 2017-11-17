@@ -1,4 +1,4 @@
-## vue-crpopper
+## vue-cropper
 ### 一个优雅的图片裁剪插件
  [预览](http://xyxiao.cn/vue-cropper/example/)
  [english](https://github.com/xyxiao001/vue-cropper/blob/master/english.md)
