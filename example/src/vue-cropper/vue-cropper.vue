@@ -436,6 +436,8 @@ export default {
 		changeSize (e) {
 			var change = e.deltaY || e.wheelDelta
 			// 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
+      var isFirefox = navigator.userAgent.indexOf('Firefox')
+      change = isFirefox > 0 ? change * 30 : change
 			// 1px - 0.2
 			var coe = 0.2
 			coe = coe / this.trueWidth > coe / this.trueHeight ? coe / this.trueHeight : coe / this.trueWidth

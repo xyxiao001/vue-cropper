@@ -5,6 +5,8 @@
 # vue-cropper
 
 ## update log
+### v0.26
+### Fix Firefox browser mouse scaling problem
 ### v0.25
 #### fixed img show
 ### v0.24
