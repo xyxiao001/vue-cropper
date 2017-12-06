@@ -222,8 +222,8 @@
 						:info="example2.info"
 						:canScale="example2.canScale"
 						:autoCrop="example2.autoCrop"
-						:autoCropWidth="example2.width"
-						:autoCropHeight="example2.height"
+						:autoCropWidth="example2.autoCropWidth"
+						:autoCropHeight="example2.autoCropHeight"
 						:fixed="example2.fixed"
 						:fixedNumber="example2.fixedNumber"
 					></vueCropper>
@@ -241,8 +241,8 @@
 		:info="example2.info"
 		:canScale="example2.canScale"
 		:autoCrop="example2.autoCrop"
-		:autoCropWidth="example2.width"
-		:autoCropHeight="example2.height"
+		:autoCropWidth="example2.autoCropWidth"
+		:autoCropHeight="example2.autoCropHeight"
 		:fixed="example2.fixed"
 		:fixedNumber="example2.fixedNumber"
 	>&lt;/vueCropper>
@@ -357,8 +357,8 @@ export default {
 				canScale: true,
 				autoCrop: true,
 				// 只有自动截图开启 宽度高度才生效
-				width: 300,
-				height: 250,
+				autoCropWidth: 300,
+				autoCropHeight: 250,
 				fixed: true,
 				fixedNumber: [4, 3]
 			},
