@@ -158,8 +158,8 @@ realTime (data) {
 
 ### v0.19 新增图片旋转 修复mac滚轮过度灵敏
 ```
-this.$cropper.rotateRight() 向右边旋转90度
-this.$cropper.rotateLeft() 向左边旋转90度
+this.$refs.cropper.rotateRight() 向右边旋转90度
+this.$refs.cropper.rotateLeft() 向左边旋转90度
 ```
 
 ### v0.18 修复默认生成截图框超过容器错误
