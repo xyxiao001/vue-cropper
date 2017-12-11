@@ -50,7 +50,7 @@
 					@mousedown="cropMove"
 		      @touchstart="cropMove"
 				></span>
-				<span class="crop-info" v-if="info" :style="{'top': cropInfo}">{{  this.cropW }} × {{ this.cropH }}</span>
+				<span class="crop-info" v-if="info" :style="{'top': cropInfo}">{{  this.cropW > 0 ? this.cropW : 0 }} × {{ this.cropH > 0 ? this.cropH : 0 }}</span>
 				<span v-if="!fixedBox">
 					<span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)"></span>
 					<span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)"></span>
@@ -89,7 +89,6 @@ export default {
 			trueWidth: 0,
 			// 图片真实高度
 			trueHeight: 0,
-			// 是否可以拖动图片
 			move: true,
 			// 移动的x
 			moveX: 0,
@@ -126,7 +125,9 @@ export default {
 			rotate: 0,
 			isIos: false,
 			orientation: 0,
-			imgs: ''
+			imgs: '',
+			// 图片缩放系数
+			coe: 0.2
     }
   },
 	props: {
@@ -186,6 +187,21 @@ export default {
 		full: {
 			type: Boolean,
 			default: false
+		},
+		// 是否可以拖动图片
+		canMove: {
+			type: Boolean,
+			default: true
+		},
+		// 是否可以拖动截图框
+		canMoveBox: {
+			type: Boolean,
+			default: true
+		},
+		// 上传图片按照原始比例显示
+		original: {
+			type: Boolean,
+			default: false
 		}
 	},
 	computed: {
@@ -199,7 +215,10 @@ export default {
 			// 当传入图片时, 读取图片信息同时展示
 			this.checkedImg()
 		},
-		imgs () {
+		imgs (val) {
+			if (val === '') {
+				return
+			}
 			this.reload()
 		},
 		cropW () {
@@ -311,6 +330,9 @@ export default {
 			e.preventDefault()
 			// 如果move 为true 表示当前可以拖动
 			if (this.move && !this.crop) {
+				if (!this.canMove) {
+					return false
+				}
 				// 开始移动
 				this.moveX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.x
 	      this.moveY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.y
@@ -439,7 +461,7 @@ export default {
       var isFirefox = navigator.userAgent.indexOf('Firefox')
       change = isFirefox > 0 ? change * 30 : change
 			// 1px - 0.2
-			var coe = 0.2
+			var coe = this.coe
 			coe = coe / this.trueWidth > coe / this.trueHeight ? coe / this.trueHeight : coe / this.trueWidth
 			var num = coe * change
 			num < 0 ? this.scale += Math.abs(num) : this.scale > Math.abs(num) ? this.scale -= Math.abs(num) : this.scale
@@ -629,6 +651,9 @@ export default {
 		// 截图移动
 		cropMove (e) {
 			e.preventDefault()
+			if (!this.canMoveBox) {
+				return false
+			}
 			window.addEventListener('mousemove', this.moveCrop)
 			window.addEventListener('mouseup', this.leaveCrop)
 			window.addEventListener('touchmove', this.moveCrop)
@@ -866,13 +891,18 @@ export default {
 				this.trueWidth = img.width
 				this.trueHeight = img.height
 
-				if (this.trueWidth > this.w) {
-					// 如果图片宽度大于容器宽度
-					this.scale = this.w / this.trueWidth
-				}
+				// 判断是否需要压缩大图
+				if (!this.original) {
+					if (this.trueWidth > this.w) {
+						// 如果图片宽度大于容器宽度
+						this.scale = this.w / this.trueWidth
+					}
 
-				if (this.trueHeight * this.scale > this.h) {
-					this.scale = this.h / this.trueHeight
+					if (this.trueHeight * this.scale > this.h) {
+						this.scale = this.h / this.trueHeight
+					}
+				} else {
+					this.scale = 1
 				}
 
 				this.$nextTick(() => {
@@ -922,6 +952,15 @@ export default {
 		// 重置函数， 恢复组件置初始状态
 		refresh () {
 			// console.log('refresh')
+			this.imgs = ''
+			this.scale = 1
+			this.crop = false
+			this.rotate = 0
+			this.w = 0
+			this.h = 0
+			this.trueWidth = 0
+			this.trueHeight = 0
+			this.clearCrop()
 		},
 
 		// 向左边旋转
@@ -940,10 +979,25 @@ export default {
 		}
 	},
 	mounted () {
+		let that = this
 		this.showPreview()
 		this.checkedImg()
 		var u = navigator.userAgent
 		this.isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+		// 兼容blob
+		if (!HTMLCanvasElement.prototype.toBlob) {
+		 Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+		  value: function (callback, type, quality) {
+		    var binStr = atob( this.toDataURL(type, quality).split(',')[1] ),
+		        len = binStr.length,
+		        arr = new Uint8Array(len)
+		    for (var i=0; i<len; i++ ) {
+		     arr[i] = binStr.charCodeAt(i)
+		    }
+		    callback( new Blob( [arr], {type: that.type || 'image/png'} ) )
+		  }
+		 })
+		}
 	}
 }
 </script>
@@ -976,6 +1030,8 @@ export default {
 		position: relative;
 		user-select: none;
 		transform: none;
+		max-width: none;
+		max-height: none;
 	}
 
 	.cropper-box {
@@ -1010,6 +1066,8 @@ export default {
 
 	.cropper-view-box img {
 		user-select: none;
+		max-width: none;
+		max-height: none;
 	}
 
 	.cropper-face {

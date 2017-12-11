@@ -22,6 +22,10 @@
 						:outputType="option.outputType"
 						:info="true"
 						:full="option.full"
+						:canMove="option.canMove"
+						:canMoveBox="option.canMoveBox"
+						:fixedBox="option.fixedBox"
+						:original="option.original"
 						@realTime="realTime"
 					></vueCropper>
 				</div>
@@ -32,6 +36,7 @@
 					<button @click="startCrop" v-if="!crap" class="btn">start</button>
 					<button @click="stopCrop" v-else class="btn">stop</button>
 					<button @click="clearCrop" class="btn">clear</button>
+					<button @click="refreshCrop" class="btn">refresh</button>
 					<button @click="changeScale(1)" class="btn">+</button>
 					<button @click="changeScale(-1)" class="btn">-</button>
 					<button @click="rotateLeft" class="btn">rotateLeft</button>
@@ -41,6 +46,22 @@
 					<a @click="down('base64')" class="btn">download(base64)</a>
 					<a @click="down('blob')" class="btn">download(blob)</a>
 					<div style="display:block; width: 100%;">
+						<label class="c-item">
+							<span>上传图片是否显示原始宽高 (针对大图 可以铺满)</span>
+							<input type="checkbox" v-model="option.original">
+						</label>
+						<label class="c-item">
+							<span>能否拖动图片</span>
+							<input type="checkbox" v-model="option.canMove">
+						</label>
+						<label class="c-item">
+							<span>能否拖动截图框</span>
+							<input type="checkbox" v-model="option.canMoveBox">
+						</label>
+						<label class="c-item">
+							<span>截图固定大小</span>
+							<input type="checkbox" v-model="option.fixedBox">
+						</label>
 						<label class="c-item">
 							<span>是否输出原图比例的截图</span>
 							<input type="checkbox" v-model="option.full">
@@ -347,7 +368,11 @@ export default {
 				img: '',
 				size: 1,
 				full: false,
-				outputType: 'png'
+				outputType: 'png',
+				canMove: true,
+				fixedBox: false,
+				original: false,
+				canMoveBox: true
 			},
 			example2: {
 				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
@@ -389,6 +414,10 @@ export default {
 		clearCrop () {
 			// clear
 			this.$refs.cropper.clearCrop()
+		},
+		refreshCrop () {
+			// clear
+			this.$refs.cropper.refresh()
 		},
 		changeScale (num) {
 			num = num || 1
@@ -604,6 +633,9 @@ export default {
 	}
 
 	.model img {
+		display: block;
+		margin: auto;
+		max-width: 80%;
 		user-select: none;
 		background-position: 0px 0px, 10px 10px;
 		background-size: 20px 20px;
