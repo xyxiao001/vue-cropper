@@ -127,7 +127,11 @@ export default {
 			orientation: 0,
 			imgs: '',
 			// 图片缩放系数
-			coe: 0.2
+			coe: 0.2,
+			// 是否正在多次缩放
+			scaling: false,
+			scalingSet: '',
+			coeStatus: ''
     }
   },
 	props: {
@@ -456,6 +460,7 @@ export default {
 		},
 		// 改变大小函数
 		changeSize (e) {
+			e.preventDefault()
 			var change = e.deltaY || e.wheelDelta
 			// 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
       var isFirefox = navigator.userAgent.indexOf('Firefox')
@@ -465,7 +470,19 @@ export default {
 			coe = coe / this.trueWidth > coe / this.trueHeight ? coe / this.trueHeight : coe / this.trueWidth
 			var num = coe * change
 			num < 0 ? this.scale += Math.abs(num) : this.scale > Math.abs(num) ? this.scale -= Math.abs(num) : this.scale
-			e.preventDefault()
+			// 延迟0.1s 每次放大大或者缩小的范围
+			let status = num < 0 ? 'add' : 'reduce'
+      if (status !== this.coeStatus) {
+				this.coeStatus = status
+				this.coe = 0.2
+			}
+			if (!this.scaling) {
+				this.scalingSet = setTimeout(() => {
+					this.scaling = false
+					this.coe = this.coe += 0.01
+				}, 50)
+			}
+			this.scaling = true
 		},
 
 		// 修改图片大小函数

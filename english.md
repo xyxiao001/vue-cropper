@@ -5,6 +5,14 @@
 # vue-cropper
 
 ## update log
+### v0.27
+### Optimization of mouse scaling problem
+### img max-width
+### add props  
+#### canMove  can move a picture  default true
+#### canMoveBox can move crop box  default true
+#### original  img original size   default false
+
 ### v0.26
 ### Fix Firefox browser mouse scaling problem
 ### v0.25
@@ -152,6 +160,24 @@ import VueCropper from vue-cropper
     <tr>
         <td>fixedBox</td>
         <td>Fixed screenshot box sizes are not allowed to change</td>
+        <td>false</td>
+        <td>true | false</td>
+    </tr>
+    <tr>
+        <td>canMove</td>
+        <td>can move img</td>
+        <td>true</td>
+        <td>true | false</td>
+    </tr>
+    <tr>
+        <td>canMoveBox</td>
+        <td>can move crop box</td>
+        <td>true</td>
+        <td>true | false</td>
+    </tr>
+    <tr>
+        <td>original</td>
+        <td>img original size</td>
         <td>false</td>
         <td>true | false</td>
     </tr>
