@@ -84,28 +84,63 @@
 	&lt;template>
 		&lt;div class="wrapper">
 		&lt;vueCropper
-			ref="cropper"
-			:img="option.img"
-			:outputSize="option.size"
-			:outputType="option.outputType"
-			:info="true"
-			@realTime="realTime"
-			:full="option.full"
-			@realTime="realTime"
+		ref="cropper"
+		:img="option.img"
+		:outputSize="option.size"
+		:outputType="option.outputType"
+		:info="true"
+		:full="option.full"
+		:canMove="option.canMove"
+		:canMoveBox="option.canMoveBox"
+		:fixedBox="option.fixedBox"
+		:original="option.original"
+		@realTime="realTime"
 		>&lt;/vueCropper>
 		&lt;/div>
 		&lt;div class="test-button">
-		&lt;button @click="changeImg" class="btn">changeImg&lt;/button>
-		&lt;label class="btn" for="uploads">upload&lt;/label>
-		&lt;input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);"
-		 accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg">
-		&lt;button @click="startCrop" v-if="!crap" class="btn">start&lt;/button>
-		&lt;button @click="stopCrop" v-else class="btn">stop&lt;/button>
-		&lt;button @click="clearCrop" class="btn">clear&lt;/button>
-		&lt;button @click="finish('base64')" class="btn">preview(base64)&lt;/button>
-		&lt;button @click="finish('blob')" class="btn">preview(blob)&lt;/button>
-		&lt;a @click="down('base64')" class="btn" :href="downImg" download="demo">download(base64)&lt;/a>
-		&lt;a @click="down('blob')" class="btn" :href="downImg" download="demo">download(blob)&lt;/a>
+			&lt;button @click="changeImg" class="btn">changeImg&lt;/button>
+			&lt;label class="btn" for="uploads">upload&lt;/label>
+			&lt;input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
+			&lt;button @click="startCrop" v-if="!crap" class="btn">start&lt;/button>
+			&lt;button @click="stopCrop" v-else class="btn">stop&lt;/button>
+			&lt;button @click="clearCrop" class="btn">clear&lt;/button>
+			&lt;button @click="refreshCrop" class="btn">refresh&lt;/button>
+			&lt;button @click="changeScale(1)" class="btn">+&lt;/button>
+			&lt;button @click="changeScale(-1)" class="btn">-&lt;/button>
+			&lt;button @click="rotateLeft" class="btn">rotateLeft&lt;/button>
+			&lt;button @click="rotateRight" class="btn">rotateRight&lt;/button>
+			&lt;button @click="finish('base64')" class="btn">preview(base64)&lt;/button>
+			&lt;button @click="finish('blob')" class="btn">preview(blob)&lt;/button>
+			&lt;a @click="down('base64')" class="btn">download(base64)&lt;/a>
+			&lt;a @click="down('blob')" class="btn">download(blob)&lt;/a>
+			&lt;div style="display:block; width: 100%;">
+				&lt;label class="c-item">
+					&lt;span>上传图片是否显示原始宽高 (针对大图 可以铺满)&lt;/span>
+					&lt;input type="checkbox" v-model="option.original">
+				&lt;/label>
+				&lt;label class="c-item">
+					&lt;span>能否拖动图片&lt;/span>
+					&lt;input type="checkbox" v-model="option.canMove">
+				&lt;/label>
+				&lt;label class="c-item">
+					&lt;span>能否拖动截图框&lt;/span>
+					&lt;input type="checkbox" v-model="option.canMoveBox">
+				&lt;/label>
+				&lt;label class="c-item">
+					&lt;span>截图固定大小&lt;/span>
+					&lt;input type="checkbox" v-model="option.fixedBox">
+				&lt;/label>
+				&lt;label class="c-item">
+					&lt;span>是否输出原图比例的截图&lt;/span>
+					&lt;input type="checkbox" v-model="option.full">
+				&lt;/label>
+				&lt;p>输出图片格式&lt;/p>
+				&lt;label class="c-item">
+					&lt;label>jpg  &lt;input type="radio" name="type" value="jpeg" v-model="option.outputType">&lt;/label>
+					&lt;label>png  &lt;input type="radio" name="type" value="png" v-model="option.outputType">&lt;/label>
+					&lt;label>webp &lt;input type="radio" name="type" value="webp" v-model="option.outputType">&lt;/label>
+				&lt;/label>
+			&lt;/div>
 		&lt;/div>
 		&lt;div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
 			&lt;div :style="previews.div">
@@ -132,7 +167,12 @@
 				option: {
 					img: '',
 					size: 1,
-					outputType: 'jpeg'
+					full: false,
+					outputType: 'png',
+					canMove: true,
+					fixedBox: false,
+					original: false,
+					canMoveBox: true
 				},
 				downImg: '#'
 			}

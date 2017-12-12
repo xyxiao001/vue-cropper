@@ -96,6 +96,24 @@
         <td>false</td>
         <td>true | false</td>
     </tr>
+    <tr>
+        <td>canMove</td>
+        <td>上传图片是否可以移动</td>
+        <td>true</td>
+        <td>true | false</td>
+    </tr>
+    <tr>
+        <td>canMoveBox</td>
+        <td>截图框能否拖动</td>
+        <td>true</td>
+        <td>true | false</td>
+    </tr>
+    <tr>
+        <td>original</td>
+        <td>上传图片按照原始比例渲染</td>
+        <td>false</td>
+        <td>true | false</td>
+    </tr>
   </tbody>
 </table>
 
@@ -124,6 +142,15 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.27
+### 鼠标缩放问题优化
+### img max-width 样式优化
+### 新增属性  
+#### canMove  是否可以移动图片   默认为是
+#### canMoveBox 是否可以移动截图框  默认为是
+#### original  是否按图片原始比例渲染  默认为否
+
+
 ### v0.26
 #### 修复火狐浏览器 鼠标缩放问题
 
