@@ -412,7 +412,7 @@ export default {
 				canMove: true,
 				fixedBox: false,
 				original: false,
-				canMoveBox: false
+				canMoveBox: true
 			},
 			example2: {
 				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
