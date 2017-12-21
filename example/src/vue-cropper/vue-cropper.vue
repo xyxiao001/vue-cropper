@@ -1,5 +1,5 @@
 <template>
-	<div class="vue-cropper" ref="cropper">
+	<div class="vue-cropper" ref="cropper" @mouseover="scaleImg" @mouseout="cancleScale">
 		<div class="cropper-box">
 			<div class="cropper-box-canvas"
 			 	v-show="!loading"
@@ -8,7 +8,8 @@
 					'height': trueHeight + 'px',
 					'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ x / scale + 'px,' + y / scale + 'px,' + '0)'
 					+ 'rotateZ('+ rotate * 90 +'deg)'
-					}">
+					}"
+          >
 				<img
 					:src="imgs"
 					alt="cropper-img"
@@ -21,8 +22,6 @@
 		  :class="{'cropper-move': move && !crop, 'cropper-crop': crop, 'cropper-modal': cropping}"
 			@mousedown="startMove"
       @touchstart="startMove"
-			@mouseover="scaleImg"
-			@mouseout="cancleScale"
 			>
 			</div>
 			<div
@@ -669,6 +668,8 @@ export default {
 		cropMove (e) {
 			e.preventDefault()
 			if (!this.canMoveBox) {
+        this.crop = false
+        this.startMove(e)
 				return false
 			}
 			window.addEventListener('mousemove', this.moveCrop)
