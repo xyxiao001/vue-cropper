@@ -172,7 +172,7 @@
 					canMove: true,
 					fixedBox: false,
 					original: false,
-					canMoveBox: true
+					canMoveBox: false
 				},
 				downImg: '#'
 			}
