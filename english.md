@@ -5,6 +5,8 @@
 # vue-cropper
 
 ## update log
+### v0.28
+### Fixing the screenshot frame of the fix frame will affect the movement zoom of the original graph
 ### v0.27
 ### Optimization of mouse scaling problem
 ### img max-width

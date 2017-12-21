@@ -142,6 +142,8 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.28
+### 修复截图框固定 截图框会影响原图移动 缩放
 ### v0.27
 ### 鼠标缩放问题优化
 ### img max-width 样式优化
