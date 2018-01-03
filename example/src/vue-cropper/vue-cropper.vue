@@ -254,6 +254,7 @@ export default {
 	methods: {
 		// 校验图片
 		checkedImg () {
+			if (this.img === '') return
 			this.loading = true
 			this.scale = 1
 			this.clearCrop()
@@ -324,6 +325,9 @@ export default {
 						this.imgs = data
 					}, 'image/' + this.outputType, 1)
 				})
+			}
+			img.onerror = () => {
+				this.$emit('imgLoad', 'error')
 			}
 			img.crossOrigin = '*'
 			img.src = this.img
@@ -931,7 +935,12 @@ export default {
 					if (this.autoCrop) {
 						this.goAutoCrop()
 					}
+					// 图片加载成功的回调
+					this.$emit('imgLoad', 'success')
 				})
+			}
+			img.onerror = () => {
+				this.$emit('imgLoad', 'error')
 			}
 			img.src = this.imgs
 		},
