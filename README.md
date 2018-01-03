@@ -142,6 +142,8 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.29
+### 新增图片加载的回调 imgLoad  返回结果success,  error
 ### v0.28
 ### 修复截图框固定 截图框会影响原图移动 缩放
 ### v0.27

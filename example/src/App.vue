@@ -27,6 +27,7 @@
 						:fixedBox="option.fixedBox"
 						:original="option.original"
 						@realTime="realTime"
+						@imgLoad="imgLoad"
 					></vueCropper>
 				</div>
 				<div class="test-button">
@@ -59,7 +60,7 @@
 							<input type="checkbox" v-model="option.canMoveBox">
 						</label>
 						<label class="c-item">
-							<span>截图固定大小</span>
+							<span>截图框固定大小</span>
 							<input type="checkbox" v-model="option.fixedBox">
 						</label>
 						<label class="c-item">
@@ -550,6 +551,9 @@ export default {
 			// reader.readAsDataURL(file)
 			// 转化为blob
 			reader.readAsArrayBuffer(file)
+		},
+		imgLoad (msg) {
+			console.log(msg)
 		}
 	},
 	components: {
