@@ -332,6 +332,25 @@ export default {
 			img.crossOrigin = '*'
 			img.src = this.img
 		},
+		fitCropArea(){
+			let trueW = this.trueWidth;
+			let trueH = this.trueHeight;
+			let scale = this.scale;
+			let ratio = trueH / trueW;
+			let cropW = scale*trueW;
+			let cropH = scale*trueH;
+			if(ratio >= 1){
+			    this.cropH = cropH;
+			    this.cropW = cropW;
+			    this.cropOffsertX = (cropper.w - cropW)/2;
+			    this.cropOffsertY = (cropper.h - cropH)/2;
+			}else{
+			    this.cropW = cropW;
+			    this.cropH = cropH;
+			    this.cropOffsertY = (cropper.h - cropH)/2;
+			    this.cropOffsertX = (cropper.w - cropW)/2;
+			}
+		    },
 		// 当按下鼠标键
 		startMove (e) {
 			e.preventDefault()
