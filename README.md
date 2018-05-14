@@ -11,7 +11,7 @@
 
 ####   安装 npm install vue-cropper
 ####   使用  import VueCropper from vue-cropper
-```
+``` html
 <vueCropper
   ref="cropper"
   :img="option.img"
@@ -132,14 +132,14 @@
 this.$refs.cropper.cropW  截图框宽度
 
 this.$refs.cropper.cropH 截图框高度
-```
-获取截图的base64 数据
+``` js
+// 获取截图的base64 数据
 this.$refs.cropper.getCropData((data) => {
   // do something
   console.log(data)  
 })
 
-获取截图的blob数据
+// 获取截图的blob数据
 this.$refs.cropper.getCropBlob((data) => {
   // do something
   console.log(data)  
@@ -168,7 +168,7 @@ this.$refs.cropper.getCropBlob((data) => {
 
 ### v0.24
 #### 修复ios拍照旋转 截图问题 添加自动修复图片 截图预览代码变更, 修改默认上传图片为blob预览
-```
+``` html
 realTime (data) {
   this.previews = data
 }
@@ -193,9 +193,9 @@ realTime (data) {
 #### 新增输出原图比例截图 props名full,  修复缩放图片过大灵敏度问题
 
 ### v0.19 新增图片旋转 修复mac滚轮过度灵敏
-```
-this.$refs.cropper.rotateRight() 向右边旋转90度
-this.$refs.cropper.rotateLeft() 向左边旋转90度
+``` js
+this.$refs.cropper.rotateRight() // 向右边旋转90度
+this.$refs.cropper.rotateLeft() // 向左边旋转90度
 ```
 
 ### v0.18 修复默认生成截图框超过容器错误
@@ -206,7 +206,7 @@ canScale: true
 ```
 
 ### v0.13 添加预览
-```
+``` html
 @realTime="realTime"
 // Real time preview function
 realTime (data) {
