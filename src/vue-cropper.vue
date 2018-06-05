@@ -880,7 +880,10 @@ export default {
 				))
 			})
 		},
-
+    async getCropDataAsync() {
+      let data = await new Promise( resolve => this.getCropData( cropData => resolve(cropData) ) )
+      return 
+    },
 		// 自动预览函数
 		showPreview() {
 			var obj = {}
