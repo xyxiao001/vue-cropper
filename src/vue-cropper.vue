@@ -882,7 +882,7 @@ export default {
 		},
     async getCropDataAsync() {
       let data = await new Promise( resolve => this.getCropData( cropData => resolve(cropData) ) )
-      return 
+      return data
     },
 		// 自动预览函数
 		showPreview() {
