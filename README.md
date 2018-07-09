@@ -19,6 +19,11 @@
   :outputType="option.outputType"
 ></vueCropper>
 ```
+
+### 如果你没有使用npm
+[在线例子](https://codepen.io/xyxiao001/pen/wxwKGz)
+
+
 <table style="text-align: center">
   <thead>
     <tr>
