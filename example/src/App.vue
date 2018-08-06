@@ -26,6 +26,10 @@
 						:canMoveBox="option.canMoveBox"
 						:fixedBox="option.fixedBox"
 						:original="option.original"
+						:autoCrop="option.autoCrop"
+						:autoCropWidth="option.autoCropWidth"
+						:autoCropHeight="option.autoCropHeight"
+						:centerBox="option.centerBox"
 						@realTime="realTime"
 						@imgLoad="imgLoad"
 					></vueCropper>
@@ -66,6 +70,14 @@
 						<label class="c-item">
 							<span>是否输出原图比例的截图</span>
 							<input type="checkbox" v-model="option.full">
+						</label>
+						<label class="c-item">
+							<span>是否自动生成截图框</span>
+							<input type="checkbox" v-model="option.autoCrop">
+						</label>
+						<label class="c-item">
+							<span>截图框是否在图片里(只有在自动生成截图框时才能生效)</span>
+							<input type="checkbox" v-model="option.centerBox">
 						</label>
 						<p>输出图片格式</p>
 						<label class="c-item">
@@ -413,7 +425,12 @@ export default {
 				canMove: true,
 				fixedBox: false,
 				original: false,
-				canMoveBox: true
+				canMoveBox: true,
+				autoCrop: true,
+				// 只有自动截图开启 宽度高度才生效
+				autoCropWidth: 300,
+				autoCropHeight: 250,
+				centerBox: true
 			},
 			example2: {
 				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
