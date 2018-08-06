@@ -32,11 +32,11 @@
     "babel-runtime": "^6.23.0",
     "css-loader": "^0.23.1",
     "style-loader": "^0.15.0",
-    "vue": "^2.2.4",
+    "vue": "^2.5.17",
+    "vue-loader": "^14.2.2",
+    "vue-template-compiler": "^2.5.17",
     "vue-html-loader": "^1.2.4",
-    "vue-loader": "^11.1.4",
     "vue-style-loader": "^2.0.4",
-    "vue-template-compiler": "^2.2.4",
     "webpack": "^2.2.1"
   },
   "browserify": {
