@@ -130,12 +130,12 @@ export default {
       // 是否正在多次缩放
       scaling: false,
       scalingSet: "",
-      coeStatus: ""
+			coeStatus: ""
     };
   },
   props: {
     img: {
-      type: String,
+      type: [String, Blob, null, File],
       default: ""
     },
     // 输出图片压缩比
@@ -210,6 +210,11 @@ export default {
 		centerBox: {
 			type: Boolean,
       default: false
+		},
+		// 是否根据dpr输出高清图片
+		high: {
+			type: Boolean,
+			default: true
 		}
   },
   computed: {
@@ -244,10 +249,7 @@ export default {
       this.showPreview();
     },
     scale(val, oldVal) {
-			// 如果图片发生缩放 那么判断缩放 放大后是否还在截图框内  如果不在则放大图片
-			let x = this.x / val
-			let y = this. y / val
-      this.showPreview();
+			this.showPreview();
     },
     x() {
       this.showPreview();
@@ -256,7 +258,8 @@ export default {
       this.showPreview();
     },
     rotate() {
-      this.showPreview();
+			this.showPreview();
+			this.goAutoCrop(this.cropW, this.cropH)
     }
   },
   methods: {
@@ -394,7 +397,8 @@ export default {
 
     // 移动端缩放
     touchScale(e) {
-      e.preventDefault();
+			e.preventDefault();
+			let scale = this.scale
       // 记录变化量
       // 第一根手指
       var oldTouch1 = {
@@ -435,16 +439,20 @@ export default {
       if (!this.touchNow) {
         this.touchNow = true;
         if (cha > 0) {
-          this.scale += Math.abs(num);
+          scale += Math.abs(num);
         } else if (cha < 0) {
-          this.scale > Math.abs(num)
-            ? (this.scale -= Math.abs(num))
-            : this.scale;
+          scale > Math.abs(num)
+            ? (scale -= Math.abs(num))
+            : scale;
         }
         this.touches = e.touches;
         setTimeout(() => {
           this.touchNow = false;
-        }, 8);
+				}, 8);
+				if (!this.checkoutImgAxis(this.x, this.y, scale)) {
+					return false
+				}
+				this.scale = scale
       }
     },
 
@@ -462,44 +470,62 @@ export default {
         window.removeEventListener("touchmove", this.moveImg);
         return false;
       }
-      var nowX = e.clientX ? e.clientX : e.touches[0].clientX;
-      var nowY = e.clientY ? e.clientY : e.touches[0].clientY;
+			let nowX = e.clientX ? e.clientX : e.touches[0].clientX;
+			let nowY = e.clientY ? e.clientY : e.touches[0].clientY;
 			
 			let changeX, changeY
 			changeX = ~~(nowX - this.moveX);
 			changeY = ~~(nowY - this.moveY);
-			if (this.centerBox) {
-				let maxLeft = this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2;
-				let maxTop = this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2;
-				let maxRight = this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2 + this.cropW;
-				let maxBottom = this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2 + this.cropH;
 
-				// 图片左移
-				if (changeX > maxLeft) {
-					changeX = maxLeft
-				}
+			this.$nextTick(() => {
+				if (this.centerBox) {
+					let axis = this.getImgAxis(changeX, changeY, this.scale)
+					let cropAxis = this.getCropAxis()
+					let imgW = this.trueHeight * this.scale
+					let imgH = this.trueWidth * this.scale
+					let maxLeft, maxTop, maxRight, maxBottom
+					switch (this.rotate) {
+						case 1:
+						case -1:
+						case 3:
+						case -3:
+							maxLeft = this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2 + (imgW - imgH) / 2
+							maxTop = this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2 + (imgH - imgW) / 2
+							maxRight = maxLeft - imgW + this.cropW;
+							maxBottom = maxTop - imgH + this.cropH;	
+							break
+						default:
+							maxLeft = this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2
+							maxTop = this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2
+							maxRight = maxLeft - imgH + this.cropW
+							maxBottom = maxTop - imgW + this.cropH
+							break
+					}
 
-				// 图片下移
-				if (changeY > maxTop) {
-					changeY = maxTop
-				}
-				
-				let imgW, imgH
-				imgW = this.trueWidth * this.scale
-				imgH = this.trueHeight * this.scale
-				// 图片右移
-				if (changeX + imgW  < maxRight) {
-					changeX = maxRight - imgW
-				}
 
-				// 图片下移
-				if (changeY+ imgH  < maxBottom) {
-					changeY = maxBottom - imgH
-				}
+					// 图片左边 图片不能超过截图框
+					if (axis.x1 >= cropAxis.x1) {
+						changeX = maxLeft;
+					}
 
-			}
-			this.x = changeX
-			this.y = changeY
+					// 图片上边 图片不能超过截图框
+					if (axis.y1 >= cropAxis.y1) {
+						changeY = maxTop;
+					}
+
+					// 图片右边
+					if (axis.x2 <= cropAxis.x2) {
+						changeX = maxRight
+					}
+
+					// 图片下边
+					if (axis.y2 <= cropAxis.y2) {
+						changeY = maxBottom
+					}
+				}
+				this.x = changeX
+				this.y = changeY
+			})
     },
     // 移动图片结束
     leaveImg(e) {
@@ -524,11 +550,12 @@ export default {
     cancleScale() {
       if (this.canScale) {
         window.removeEventListener(this.support, this.changeSize);
-      }
+			}
     },
     // 改变大小函数
     changeSize(e) {
-      e.preventDefault();
+			e.preventDefault();
+			let scale = this.scale
       var change = e.deltaY || e.wheelDelta;
       // 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
       var isFirefox = navigator.userAgent.indexOf("Firefox");
@@ -541,10 +568,10 @@ export default {
           : coe / this.trueWidth;
       var num = coe * change;
       num < 0
-        ? (this.scale += Math.abs(num))
-        : this.scale > Math.abs(num)
-          ? (this.scale -= Math.abs(num))
-          : this.scale;
+        ? (scale += Math.abs(num))
+        : scale > Math.abs(num)
+          ? (scale -= Math.abs(num))
+          : scale;
       // 延迟0.1s 每次放大大或者缩小的范围
       let status = num < 0 ? "add" : "reduce";
       if (status !== this.coeStatus) {
@@ -557,11 +584,16 @@ export default {
           this.coe = this.coe += 0.01;
         }, 50);
       }
-      this.scaling = true;
+			this.scaling = true;
+			if (!this.checkoutImgAxis(this.x, this.y, scale)) {
+				return false
+			}
+			this.scale = scale
     },
 
     // 修改图片大小函数
     changeScale(num) {
+			let scale = this.scale
       num = num || 1;
       var coe = 20;
       coe =
@@ -570,10 +602,14 @@ export default {
           : coe / this.trueWidth;
       num = num * coe;
       num > 0
-        ? (this.scale += Math.abs(num))
-        : this.scale > Math.abs(num)
-          ? (this.scale -= Math.abs(num))
-          : this.scale;
+        ? (scale += Math.abs(num))
+        : scale > Math.abs(num)
+          ? (scale -= Math.abs(num))
+					: scale;
+			if (!this.checkoutImgAxis(this.x, this.y, scale)) {
+				return false
+			}
+			this.scale = scale
     },
     // 创建截图框
     createCrop(e) {
@@ -852,7 +888,14 @@ export default {
         this.crop = false;
         this.startMove(e);
         return false;
-      }
+			}
+
+			if (e.touches && e.touches.length === 2) {
+        this.crop = false;
+				this.startMove(e);
+				this.leaveCrop()
+        return false;
+			}
       window.addEventListener("mousemove", this.moveCrop);
       window.addEventListener("mouseup", this.leaveCrop);
       window.addEventListener("touchmove", this.moveCrop);
@@ -866,14 +909,22 @@ export default {
       this.cropY = newY
     },
 
-    moveCrop(e) {
-      e.preventDefault();
-      var nowX = e.clientX ? e.clientX : e.touches[0].clientX;
-			var nowY = e.clientY ? e.clientY : e.touches[0].clientY;
+    moveCrop(e, isMove) {
+			let nowX = 0
+			let nowY = 0
+      if (e) {
+				e.preventDefault();
+				nowX = e.clientX ? e.clientX : e.touches[0].clientX;
+				nowY = e.clientY ? e.clientY : e.touches[0].clientY;
+			}
       this.$nextTick(() => {
-        var fw = ~~(nowX - this.cropX);
-				var fh = ~~(nowY - this.cropY);
 				let cx, cy
+        let fw = ~~(nowX - this.cropX);
+				let fh = ~~(nowY - this.cropY);
+				if (isMove) {
+					fw = this.cropOffsertX
+					fh = this.cropOffsertY
+				}
 				// 不能超过外层容器
         if (fw <= 1) {
           cx = 1;
@@ -920,9 +971,10 @@ export default {
 		},
 		
 		// 算出不同场景下面 图片相对于外层容器的坐标轴
-		getImgAxis (x, y) {
-			x = x | this.x
-			y = y | this.y
+		getImgAxis (x, y, scale) {
+			x = x || this.x
+			y = y || this.y
+			scale = scale || this.scale
 			// 如果设置了截图框在图片内， 那么限制截图框不能超过图片的坐标
 			// 图片的坐标 
 			let obj = {
@@ -931,32 +983,47 @@ export default {
 				y1: 0,
 				y2: 0
 			}
-			let imgW = this.trueWidth * this.scale;
-			let imgH = this.trueHeight * this.scale;
+			let imgW = this.trueWidth * scale;
+			let imgH = this.trueHeight * scale;
 			switch (this.rotate) {
 				case 0:
-					obj.x1 = ~~((x + this.trueWidth * (1 - this.scale) / 2))
-					obj.x2 = ~~(obj.x1 + this.trueWidth * this.scale)
-					obj.y1 = ~~((y + this.trueHeight * (1 - this.scale) / 2))
-					obj.y2 = ~~(obj.y1 + this.trueHeight * this.scale)
+					obj.x1 = ~~((x + this.trueWidth * (1 - scale) / 2))
+					obj.x2 = ~~(obj.x1 + this.trueWidth * scale)
+					obj.y1 = ~~((y + this.trueHeight * (1 - scale) / 2))
+					obj.y2 = ~~(obj.y1 + this.trueHeight * scale)
 				break
 				case 1:
 				case -1:
 				case 3:
 				case -3:
-					obj.x1 = ~~((x + this.trueWidth * (1 - this.scale) / 2)) + (imgW - imgH) / 2;
-					obj.x2 = ~~(obj.x1 + this.trueHeight * this.scale)
-					obj.y1 = ~~((y + this.trueHeight * (1 - this.scale) / 2)) + (imgH - imgW) / 2;
-					obj.y2 = ~~(obj.y1 + this.trueWidth * this.scale)
+					obj.x1 = ~~((x + this.trueWidth * (1 - scale) / 2)) + (imgW - imgH) / 2;
+					obj.x2 = ~~(obj.x1 + this.trueHeight * scale)
+					obj.y1 = ~~((y + this.trueHeight * (1 - scale) / 2)) + (imgH - imgW) / 2;
+					obj.y2 = ~~(obj.y1 + this.trueWidth * scale)
 				break
 				default:
-					obj.x1 = ~~((x + this.trueWidth * (1 - this.scale) / 2))
-					obj.x2 = ~~(obj.x1 + this.trueWidth * this.scale)
-					obj.y1 = ~~((y + this.trueHeight * (1 - this.scale) / 2))
-					obj.y2 = ~~(obj.y1 + this.trueHeight * this.scale)
+					obj.x1 = ~~((x + this.trueWidth * (1 - scale) / 2))
+					obj.x2 = ~~(obj.x1 + this.trueWidth * scale)
+					obj.y1 = ~~((y + this.trueHeight * (1 - scale) / 2))
+					obj.y2 = ~~(obj.y1 + this.trueHeight * scale)
 				break
 			}
 			return obj
+		},
+
+		// 获取截图框的坐标轴
+		getCropAxis () {
+			let obj = {
+				x1: 0,
+				x2: 0,
+				y1: 0,
+				y2: 0
+			}
+			obj.x1 = this.cropOffsertX
+			obj.x2 = obj.x1 + this.cropW
+			obj.y1 = this.cropOffsertY
+			obj.y2 = obj.y1 + this.cropH
+			return obj 
 		},
 
     leaveCrop(e) {
@@ -976,17 +1043,21 @@ export default {
       let cropOffsertY = this.cropOffsertY;
       img.onload = () => {
         if (~~this.cropW !== 0) {
-          let ctx = canvas.getContext("2d");
-          let width = this.cropW;
-          let height = this.cropH;
-          let imgW = trueWidth * this.scale;
-          let imgH = trueHeight * this.scale;
+					let ctx = canvas.getContext("2d");
+					let dpr = 1
+					if (this.high) {
+						dpr =  window.devicePixelRatio
+					}
+          let width = this.cropW * dpr;
+          let height = this.cropH * dpr;
+          let imgW = trueWidth * this.scale * dpr;
+					let imgH = trueHeight * this.scale * dpr;
           // 图片x轴偏移
           let dx =
-            this.x - cropOffsertX + this.trueWidth * (1 - this.scale) / 2;
+            (this.x - cropOffsertX + this.trueWidth * (1 - this.scale) / 2) * dpr;
           // 图片y轴偏移
           let dy =
-            this.y - cropOffsertY + this.trueHeight * (1 - this.scale) / 2;
+            (this.y - cropOffsertY + this.trueHeight * (1 - this.scale) / 2) * dpr;
           // console.log(dx, dy)
           //保存状态
           canvas.width = width;
@@ -1255,18 +1326,27 @@ export default {
       img.src = this.imgs;
     },
     // 自动截图函数
-    goAutoCrop() {
-      this.cropping = true;
+    goAutoCrop(cw, ch) {
+			this.clearCrop()
+			this.cropping = true;
+			let maxWidth = this.w
+			let maxHeight = this.h
+			if (this.centerBox) {
+				let imgW = this.trueWidth * this.scale 
+				let imgH = this.trueHeight * this.scale
+				maxWidth = imgW < maxWidth ? imgW : maxWidth
+				maxHeight = imgH < maxHeight ? imgH : maxHeight
+			}
       // 截图框默认大小
       // 如果为0 那么计算容器大小 默认为80%
-      var w = this.autoCropWidth;
-      var h = this.autoCropHeight;
+      var w = cw ? cw : this.autoCropWidth;
+      var h = ch ? ch : this.autoCropHeight;
       if (w === 0 || h === 0) {
-        w = this.w * 0.8;
-        h = this.h * 0.8;
+        w = maxWidth * 0.8;
+        h = maxHeight * 0.8;
       }
-      w = w > this.w ? this.w : w;
-      h = h > this.h ? this.h : h;
+      w = w > maxWidth ? maxWidth : w;
+      h = h > maxHeight ? maxHeight : h;
       if (this.fixed) {
         h = w / this.fixedNumber[0] * this.fixedNumber[1];
       }
@@ -1274,7 +1354,7 @@ export default {
       if (h > this.h) {
         h = this.h;
         w = h / this.fixedNumber[1] * this.fixedNumber[0];
-      }
+			}
       this.changeCrop(w, h);
     },
     // 手动改变截图框大小函数
@@ -1284,11 +1364,17 @@ export default {
       this.cropH = h;
       // 居中走一走
       this.cropOffsertX = (this.w - w) / 2;
-      this.cropOffsertY = (this.h - h) / 2;
+			this.cropOffsertY = (this.h - h) / 2;
+			if (this.centerBox) {
+				this.$nextTick(() => {
+					this.moveCrop(null, true)
+				})
+			}
     },
     // 重置函数， 恢复组件置初始状态
     refresh() {
-      // console.log('refresh')
+			// console.log('refresh')
+			let img = this.img
       this.imgs = "";
       this.scale = 1;
       this.crop = false;
@@ -1297,7 +1383,10 @@ export default {
       this.h = 0;
       this.trueWidth = 0;
       this.trueHeight = 0;
-      this.clearCrop();
+			this.clearCrop();
+			this.$nextTick(() => {
+				this.imgs = img
+			})
     },
 
     // 向左边旋转
@@ -1313,7 +1402,41 @@ export default {
     // 清除旋转
     rotateClear() {
       this.rotate = 0;
-    }
+		},
+		
+		// 图片坐标点校验
+		checkoutImgAxis (x, y, scale) {
+			x = x || this.x
+			y = y || this.y
+			scale = scale || this.scale
+			let canGo = true
+			// 开始校验 如果说缩放之后的坐标在截图框外 则阻止缩放
+			if (this.centerBox) {
+				let axis = this.getImgAxis(x, y, scale)
+				let cropAxis = this.getCropAxis()
+				// 左边的横坐标 图片不能超过截图框
+				if (axis.x1 >= cropAxis.x1) {
+					canGo = false
+				}
+
+				// 右边横坐标
+				if (axis.x2 <= cropAxis.x2) {
+					canGo = false
+				}
+
+				// 纵坐标上面
+				if (axis.y1 >= cropAxis.y1) {
+					canGo = false
+				}
+
+				// 纵坐标下面
+				if (axis.y2 <= cropAxis.y2) {
+					canGo = false
+				}
+				
+			}
+			return canGo
+		},
   },
   mounted() {
     let that = this;

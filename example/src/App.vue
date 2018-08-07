@@ -30,6 +30,7 @@
 						:autoCropWidth="option.autoCropWidth"
 						:autoCropHeight="option.autoCropHeight"
 						:centerBox="option.centerBox"
+						:high="option.high"
 						@realTime="realTime"
 						@imgLoad="imgLoad"
 					></vueCropper>
@@ -54,6 +55,7 @@
 						<label class="c-item">
 							<span>上传图片是否显示原始宽高 (针对大图 可以铺满)</span>
 							<input type="checkbox" v-model="option.original">
+							<span>original: {{ option.original}}</span>
 						</label>
 						<label class="c-item">
 							<span>能否拖动图片</span>
@@ -62,22 +64,32 @@
 						<label class="c-item">
 							<span>能否拖动截图框</span>
 							<input type="checkbox" v-model="option.canMoveBox">
+							<span>canMoveBox: {{ option.canMoveBox}}</span>
 						</label>
 						<label class="c-item">
 							<span>截图框固定大小</span>
 							<input type="checkbox" v-model="option.fixedBox">
+							<span>fixedBox: {{ option.fixedBox}}</span>
 						</label>
 						<label class="c-item">
 							<span>是否输出原图比例的截图</span>
 							<input type="checkbox" v-model="option.full">
+							<span>full: {{ option.full}}</span>
 						</label>
 						<label class="c-item">
 							<span>是否自动生成截图框</span>
 							<input type="checkbox" v-model="option.autoCrop">
+							<span>autoCrop: {{ option.autoCrop}}</span>
 						</label>
 						<label class="c-item">
-							<span>截图框是否在图片里(只有在自动生成截图框时才能生效)</span>
+							<span>是否根据dpr生成适合屏幕的高清图片</span>
+							<input type="checkbox" v-model="option.high">
+							<span>high: {{ option.high}}</span>
+						</label>
+						<label class="c-item">
+							<span>截图框是否限制在图片里(只有在自动生成截图框时才能生效)</span>
 							<input type="checkbox" v-model="option.centerBox">
+							<span>centerBox: {{ option.centerBox}}</span>
 						</label>
 						<p>输出图片格式</p>
 						<label class="c-item">
@@ -428,9 +440,10 @@ export default {
 				canMoveBox: true,
 				autoCrop: true,
 				// 只有自动截图开启 宽度高度才生效
-				autoCropWidth: 300,
-				autoCropHeight: 250,
-				centerBox: true
+				autoCropWidth: 200,
+				autoCropHeight: 150,
+				centerBox: false,
+				high: true
 			},
 			example2: {
 				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',

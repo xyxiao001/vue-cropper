@@ -128,6 +128,18 @@
         <td>false</td>
         <td>true | false</td>
     </tr>
+	<tr>
+        <td>centerBox</td>
+        <td>截图框是否被限制在图片里面</td>
+        <td>false</td>
+        <td>true | false</td>
+    </tr>
+	<tr>
+        <td>high</td>
+        <td>是否按照设备的dpr 输出等比例图片</td>
+        <td>true</td>
+        <td>true | false</td>
+    </tr>
   </tbody>
 </table>
 
@@ -137,6 +149,12 @@
 ##### this.$refs.cropper.stopCrop()  停止截图
 ##### this.$refs.cropper.clearCrop()  清除截图
 ##### this.$refs.cropper.changeScale()  修改图片大小 正数为变大 负数变小
+##### this.$refs.cropper.getImgAxis() 获取图片基于容器的坐标点
+##### this.$refs.cropper.getCropAxis() 获取截图框基于容器的坐标点
+##### this.$refs.cropper.goAutoCrop 自动生成截图框函数
+
+####  图片加载的回调 imgLoad  返回结果success,  error
+
 #####  获取截图信息
 this.$refs.cropper.cropW  截图框宽度
 
@@ -156,27 +174,34 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.30
+新增获取图片坐标函数  this.$refs.cropper.getImgAxis()
+新增获取截图框坐标函数  this.$refs.cropper.getCropAxis()
+新增对高清设备的兼容  high
+新增截图框限制在图片以内的功能  centerbox
+新增自动生成截图框函数 this.$refs.cropper.goAutoCrop
+
 ### v0.29
-### 新增图片加载的回调 imgLoad  返回结果success,  error
+新增图片加载的回调 imgLoad  返回结果success,  error
 ### v0.28
-### 修复截图框固定 截图框会影响原图移动 缩放
+修复截图框固定 截图框会影响原图移动 缩放
 ### v0.27
-### 鼠标缩放问题优化
-### img max-width 样式优化
-### 新增属性  
-#### canMove  是否可以移动图片   默认为是
-#### canMoveBox 是否可以移动截图框  默认为是
-#### original  是否按图片原始比例渲染  默认为否
+鼠标缩放问题优化
+img max-width 样式优化
+新增属性  
+canMove  是否可以移动图片   默认为是
+canMoveBox 是否可以移动截图框  默认为是
+original  是否按图片原始比例渲染  默认为否
 
 
 ### v0.26
-#### 修复火狐浏览器 鼠标缩放问题
+修复火狐浏览器 鼠标缩放问题
 
 ### v0.25
-#### 修复图片有可能不展示
+修复图片有可能不展示
 
 ### v0.24
-#### 修复ios拍照旋转 截图问题 添加自动修复图片 截图预览代码变更, 修改默认上传图片为blob预览
+修复ios拍照旋转 截图问题 添加自动修复图片 截图预览代码变更, 修改默认上传图片为blob预览
 ``` html
 realTime (data) {
   this.previews = data
@@ -191,30 +216,35 @@ realTime (data) {
 
 
 ### v0.23
-#### 小优化
+小优化
 ### v0.22
-#### 新增修改图片大小函数 通过this.$refs.cropper.changeScale 调用
+ 新增修改图片大小函数 通过this.$refs.cropper.changeScale 调用
 
 ### v0.21
-#### 新增固定截图框大小fiexdBox(注： 最好搭配自动生成截图框使用)
+新增固定截图框大小fiexdBox(注： 最好搭配自动生成截图框使用)
 
 ### v0.20
-#### 新增输出原图比例截图 props名full,  修复缩放图片过大灵敏度问题
+新增输出原图比例截图 props名full,  修复缩放图片过大灵敏度问题
 
-### v0.19 新增图片旋转 修复mac滚轮过度灵敏
+### v0.19 
+新增图片旋转 修复mac滚轮过度灵敏
 ``` js
 this.$refs.cropper.rotateRight() // 向右边旋转90度
 this.$refs.cropper.rotateLeft() // 向左边旋转90度
 ```
 
-### v0.18 修复默认生成截图框超过容器错误
-### v0.17 修复blob数据获取错误
-### v0.15 添加手机端手势缩放
+### v0.18
+修复默认生成截图框超过容器错误
+### v0.17 
+修复blob数据获取错误
+### v0.15 
+添加手机端手势缩放
 ```
 canScale: true
 ```
 
-### v0.13 添加预览
+### v0.13 
+添加预览
 ``` html
 @realTime="realTime"
 // Real time preview function
