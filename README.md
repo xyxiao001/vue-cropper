@@ -152,6 +152,8 @@
 ##### this.$refs.cropper.getImgAxis() 获取图片基于容器的坐标点
 ##### this.$refs.cropper.getCropAxis() 获取截图框基于容器的坐标点
 ##### this.$refs.cropper.goAutoCrop 自动生成截图框函数
+##### this.$refs.cropper.rotateRight() 向右边旋转90度
+##### this.$refs.cropper.rotateLeft() 向左边旋转90度
 
 ####  图片加载的回调 imgLoad  返回结果success,  error
 
@@ -175,11 +177,13 @@ this.$refs.cropper.getCropBlob((data) => {
 
 ## 更新日志
 ### v0.30
+``
 新增获取图片坐标函数  this.$refs.cropper.getImgAxis()
 新增获取截图框坐标函数  this.$refs.cropper.getCropAxis()
 新增对高清设备的兼容  high
 新增截图框限制在图片以内的功能  centerbox
 新增自动生成截图框函数 this.$refs.cropper.goAutoCrop
+```
 
 ### v0.29
 新增图片加载的回调 imgLoad  返回结果success,  error
