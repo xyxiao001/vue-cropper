@@ -12,7 +12,10 @@ module.exports = {
     umdNamedDefine: true
   },
   resolve: {
-    extensions: ['.js', '.vue']
+    extensions: ['.js', '.vue'],
+    alias: {
+      'vue$': 'vue/dist/vue.common.js'
+    }
   },
   module: {
     loaders: [
