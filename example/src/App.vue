@@ -397,6 +397,7 @@
 
 <script>
 import vueCropper from './vue-cropper'
+// import vueCropper from 'vue-cropper'
 import codes from './code'
 
 export default {
@@ -597,6 +598,7 @@ export default {
 		list.forEach((val, index) => {
 		  hljs.highlightBlock(val)
 		})
+		// console.log(this.$refs.cropper)
 	}
 }
 </script>
