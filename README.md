@@ -140,6 +140,12 @@
         <td>true</td>
         <td>true | false</td>
     </tr>
+    <tr>
+        <td>infoTrue</td>
+        <td>true 为展示真实输出图片宽高  false 展示看到的截图框宽高</td>
+        <td>false</td>
+        <td>true | false</td>
+    </tr>
   </tbody>
 </table>
 
@@ -176,6 +182,12 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.32
+```
+新增截图框信息展示
+infoTrue  true 为展示真实输出图片宽高  false 展示看到的截图框宽高
+```
+
 ### v0.30
 ``
 新增获取图片坐标函数  this.$refs.cropper.getImgAxis()
