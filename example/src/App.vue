@@ -31,6 +31,7 @@
 						:autoCropHeight="option.autoCropHeight"
 						:centerBox="option.centerBox"
 						:high="option.high"
+						:infoTrue="option.infoTrue"
 						@realTime="realTime"
 						@imgLoad="imgLoad"
 					></vueCropper>
@@ -58,6 +59,20 @@
 							<span>original: {{ option.original}}</span>
 						</label>
 						<label class="c-item">
+							<span>是否根据dpr生成适合屏幕的高清图片</span>
+							<input type="checkbox" v-model="option.high">
+							<span>high: {{ option.high}}</span>
+						</label>
+						<label class="c-item">
+							<span>是否输出原图比例的截图</span>
+							<input type="checkbox" v-model="option.full">
+							<span>full: {{ option.full}}</span>
+						</label>
+						<label class="c-item">
+							<span>截图信息展示是否是真实的输出宽高</span>
+							<input type="checkbox" v-model="option.infoTrue">
+						</label>
+						<label class="c-item">
 							<span>能否拖动图片</span>
 							<input type="checkbox" v-model="option.canMove">
 						</label>
@@ -72,19 +87,9 @@
 							<span>fixedBox: {{ option.fixedBox}}</span>
 						</label>
 						<label class="c-item">
-							<span>是否输出原图比例的截图</span>
-							<input type="checkbox" v-model="option.full">
-							<span>full: {{ option.full}}</span>
-						</label>
-						<label class="c-item">
 							<span>是否自动生成截图框</span>
 							<input type="checkbox" v-model="option.autoCrop">
 							<span>autoCrop: {{ option.autoCrop}}</span>
-						</label>
-						<label class="c-item">
-							<span>是否根据dpr生成适合屏幕的高清图片</span>
-							<input type="checkbox" v-model="option.high">
-							<span>high: {{ option.high}}</span>
 						</label>
 						<label class="c-item">
 							<span>截图框是否限制在图片里(只有在自动生成截图框时才能生效)</span>
@@ -415,9 +420,6 @@ export default {
 					img: 'http://ofyaji162.bkt.clouddn.com/touxiang.jpg'
 				},
 				{
-					img: 'https://o90cnn3g2.qnssl.com/0C3ABE8D05322EAC3120DDB11F9D1F72.png'
-				},
-				{
 					img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
 				},
 				{
@@ -457,10 +459,12 @@ export default {
 				autoCropWidth: 300,
 				autoCropHeight: 250,
 				fixed: true,
+				// 真实的输出宽高
+				infoTrue: true,
 				fixedNumber: [4, 3]
 			},
 			example3: {
-				img: 'https://o90cnn3g2.qnssl.com/0C3ABE8D05322EAC3120DDB11F9D1F72.png',
+				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
 				autoCrop: true,
 				autoCropWidth: 200,
 				autoCropHeight: 200,

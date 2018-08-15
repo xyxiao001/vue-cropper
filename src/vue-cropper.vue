@@ -49,7 +49,9 @@
 					@mousedown="cropMove"
 		      @touchstart="cropMove"
 				></span>
-				<span class="crop-info" v-if="info" :style="{'top': cropInfo}">{{  this.cropW > 0 ? this.cropW : 0 }} × {{ this.cropH > 0 ? this.cropH : 0 }}</span>
+				<span class="crop-info" v-if="info" :style="{'top': cropInfo.top}">
+          {{  this.cropInfo.width }} × {{ this.cropInfo.height }}
+        </span>
 				<span v-if="!fixedBox">
 					<span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)"></span>
 					<span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)"></span>
@@ -215,12 +217,34 @@ export default {
 		high: {
 			type: Boolean,
 			default: true
-		}
+    },
+    // 截图框展示宽高类型
+    infoTrue: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     cropInfo() {
-      return this.cropOffsertY > 20 ? "-20px" : "0px";
-    }
+      let obj = {}
+      obj.top = this.cropOffsertY > 20 ? '-20px' : '0px'
+      obj.width = this.cropW > 0 ? this.cropW : 0
+      obj.height = this.cropH > 0 ? this.cropH : 0
+      if (this.infoTrue) {
+        if (this.high && !this.full) {
+          let dpr =  window.devicePixelRatio
+          obj.width = obj.width * dpr
+          obj.height = obj.height * dpr
+        }
+        if (this.full) {
+          obj.width = obj.width / this.scale
+          obj.height = obj.height / this.scale
+        }
+      }
+      obj.width = ~~obj.width
+      obj.height = ~~obj.height
+      return obj
+    },
   },
   watch: {
     // 如果图片改变， 重新布局
@@ -1045,7 +1069,7 @@ export default {
         if (~~this.cropW !== 0) {
 					let ctx = canvas.getContext("2d");
 					let dpr = 1
-					if (this.high) {
+					if (this.high & ! this.full) {
 						dpr =  window.devicePixelRatio
 					}
           let width = this.cropW * dpr;
