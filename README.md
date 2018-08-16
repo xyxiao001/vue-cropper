@@ -24,8 +24,25 @@
 ></vueCropper>
 ```
 
+
+
 ### 如果你没有使用npm
 [在线例子](https://codepen.io/xyxiao001/pen/wxwKGz)
+
+### 服务器渲染 nuxt 解决方案 设置为ssr: false
+```
+module.exports = {
+  ...
+  build: {
+    vendor: [
+      'vue-cropper
+    ...
+    plugins: [
+      { src: '~/plugins/vue-cropper', ssr: false }
+    ]
+  }
+}
+```
 
 
 <table style="text-align: center">
