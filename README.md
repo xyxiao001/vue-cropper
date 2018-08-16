@@ -188,6 +188,11 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.34
+```提供移动端崩溃的解决方案
+修改maxImgSize为2000
+```
+
 ### v0.33
 ```提供移动端崩溃的解决方案
 maxImgSize 限制图片最大宽度和高度 默认为2000px

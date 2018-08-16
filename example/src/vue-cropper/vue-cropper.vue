@@ -226,7 +226,7 @@ export default {
     // 可以压缩图片宽高  默认不超过200
     maxImgSize: {
       type: Number,
-      default: 20000
+      default: 2000
     }
   },
   computed: {
