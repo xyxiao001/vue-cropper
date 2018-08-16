@@ -222,6 +222,11 @@ export default {
     infoTrue: {
       type: Boolean,
       default: false
+    },
+    // 可以压缩图片宽高  默认不超过200
+    maxImgSize: {
+      type: Number,
+      default: 20000
     }
   },
   computed: {
@@ -289,18 +294,27 @@ export default {
   methods: {
     // 校验图片
     checkedImg() {
-			if (this.img === "") return;
+      if (this.img === "") return;
 			this.rotate = 0			
       this.loading = true;
       this.scale = 1;
       this.clearCrop();
       let canvas = document.createElement("canvas");
       let img = new Image();
-      let rotate = 0;
+      let rotate = 0
+
       img.onload = () => {
+        if (this.img === '') {
+          this.$emit("imgLoad", "error");
+          return false
+        }
         let width = img.width;
         let height = img.height;
         let ctx = canvas.getContext("2d");
+        let dw = 0 
+        let dh = 0
+        let x = 0
+        let y = 0
         ctx.save();
         exif.getData(img, () => {
           exif.getAllTags(img);
@@ -322,11 +336,23 @@ export default {
             this.imgs = this.img;
             return;
           }
+          let max = this.maxImgSize
+          if (width > max) {
+            height = height / width * max
+            width = max
+          }
+
+          if (height > max) {
+            width = width / height * max
+            height = max
+          }
+
           switch (rotate) {
             case 0:
               canvas.width = width;
               canvas.height = height;
-              ctx.drawImage(img, 0, 0, width, height);
+              dw = width
+              dh = height
               break;
             case 1:
             case -3:
@@ -334,32 +360,42 @@ export default {
               canvas.width = height;
               canvas.height = width;
               ctx.rotate(rotate * 90 * Math.PI / 180);
-              ctx.drawImage(img, 0, -height, width, height);
+              dw = width
+              dh = height
+              y = -height
               break;
             case 2:
             case -2:
               canvas.width = width;
               canvas.height = height;
               ctx.rotate(rotate * 90 * Math.PI / 180);
-              ctx.drawImage(img, -width, -height, width, height);
+              dw = width
+              dh = height
+              x = -width
+              y = -height
               break;
             case 3:
             case -1:
               canvas.width = height;
               canvas.height = width;
               ctx.rotate(rotate * 90 * Math.PI / 180);
-              ctx.drawImage(img, -width, 0, width, height);
+              dw = width
+              dh = height
+              x = -width
+              y = 0
               break;
             default:
               canvas.width = width;
               canvas.height = height;
-              ctx.drawImage(img, 0, 0, width, height);
+              dw = width
+              dh = height
           }
+          ctx.drawImage(img, x, y, dw, dh);
           ctx.restore();
           canvas.toBlob(
             blob => {
-              let data = URL.createObjectURL(blob);
-              this.imgs = data;
+              let data = URL.createObjectURL(blob)
+              this.imgs = data
             },
             "image/" + this.outputType,
             1
@@ -1336,11 +1372,11 @@ export default {
             -(this.trueHeight - this.trueHeight * this.scale) / 2 +
             (this.h - this.trueHeight * this.scale) / 2;
           this.loading = false;
-          // 获取是否开启了自动截图
+          // // 获取是否开启了自动截图
           if (this.autoCrop) {
             this.goAutoCrop();
           }
-          // 图片加载成功的回调
+          // // 图片加载成功的回调
           this.$emit("imgLoad", "success");
         });
       };
