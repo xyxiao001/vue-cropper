@@ -146,6 +146,12 @@
         <td>false</td>
         <td>true | false</td>
     </tr>
+    <tr>
+        <td>maxImgSize</td>
+        <td>限制图片最大宽度和高度</td>
+        <td>2000</td>
+        <td>0-max</td>
+    </tr>
   </tbody>
 </table>
 
@@ -182,6 +188,11 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.33
+```提供移动端崩溃的解决方案
+maxImgSize 限制图片最大宽度和高度 默认为2000px
+```
+
 ### v0.32
 ```
 新增截图框信息展示
