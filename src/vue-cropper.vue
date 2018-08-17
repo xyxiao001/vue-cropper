@@ -232,7 +232,7 @@ export default {
   computed: {
     cropInfo() {
       let obj = {}
-      obj.top = this.cropOffsertY > 20 ? '-20px' : '0px'
+      obj.top = this.cropOffsertY > 21 ? '-21px' : '0px'
       obj.width = this.cropW > 0 ? this.cropW : 0
       obj.height = this.cropH > 0 ? this.cropH : 0
       if (this.infoTrue) {
@@ -332,11 +332,11 @@ export default {
             default:
               rotate = 0;
           }
-          if (rotate === 0) {
+          let max = this.maxImgSize
+          if (rotate === 0 && width < max & height < max ) {
             this.imgs = this.img;
             return;
           }
-          let max = this.maxImgSize
           if (width > max) {
             height = height / width * max
             width = max
