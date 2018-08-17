@@ -286,9 +286,16 @@ export default {
     y() {
       this.showPreview();
     },
+    autoCrop (val) {
+      if (val) {
+        this.goAutoCrop()
+      }
+    },
     rotate() {
-			this.showPreview();
-			this.goAutoCrop(this.cropW, this.cropH)
+      this.showPreview();
+      if (this.autoCrop) {
+			  this.goAutoCrop(this.cropW, this.cropH)
+      }
     }
   },
   methods: {
