@@ -205,6 +205,11 @@ this.$refs.cropper.getCropBlob((data) => {
 ```
 
 ## 更新日志
+### v0.35
+```
+修复其他图片没有压缩的问题
+```
+
 ### v0.34
 ```提供移动端崩溃的解决方案
 修改maxImgSize为2000
@@ -222,7 +227,7 @@ infoTrue  true 为展示真实输出图片宽高  false 展示看到的截图框
 ```
 
 ### v0.30
-``
+```
 新增获取图片坐标函数  this.$refs.cropper.getImgAxis()
 新增获取截图框坐标函数  this.$refs.cropper.getCropAxis()
 新增对高清设备的兼容  high
