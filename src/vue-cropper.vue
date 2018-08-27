@@ -382,6 +382,14 @@ export default {
               y = -height
               break;
             case 3:
+              canvas.width = width
+              canvas.height = height
+              ctx.rotate(rotate * 180 * Math.PI / 180)
+              dw = width
+              dh = height
+              x = -width
+              y = -height
+              break
             case -1:
               canvas.width = height;
               canvas.height = width;
