@@ -52,6 +52,7 @@
 					<button @click="finish('blob')" class="btn">preview(blob)</button>
 					<a @click="down('base64')" class="btn">download(base64)</a>
 					<a @click="down('blob')" class="btn">download(blob)</a>
+                    <a :href="downImg" download="demo.png" ref="downloadDom"></a>
 					<div style="display:block; width: 100%;">
 						<label class="c-item">
 							<span>上传图片是否显示原始宽高 (针对大图 可以铺满)</span>
@@ -247,20 +248,30 @@
 
 			down (type) {
 				// event.preventDefault()
-				var aLink = document.createElement('a')
-				aLink.download = 'demo'
 				// 输出
 				if (type === 'blob') {
 					this.$refs.cropper.getCropBlob((data) => {
-						this.downImg = data
-						aLink.href = data
-						aLink.click()
+						this.downImg = window.URL.createObjectURL(data)
+                        if (window.navigator.msSaveBlob) {
+                            var blobObject = new Blob([data]);
+                            window.navigator.msSaveBlob(blobObject, 'demo.png');
+                        } else {
+                            this.$nextTick(()=>{
+                                this.$refs.downloadDom.click();
+                            })
+                        }
 					})
 				} else {
 					this.$refs.cropper.getCropData((data) => {
-						this.downImg = data
-						aLink.href = data
-						aLink.click()
+						this.downImg = data;
+                        if (window.navigator.msSaveBlob) {
+                            var blobObject = new Blob([data]);
+                            window.navigator.msSaveBlob(blobObject, 'demo.png');
+                        } else {
+                            this.$nextTick(()=>{
+                                this.$refs.downloadDom.click();
+                            })
+                        }
 					})
 				}
 			},
@@ -541,22 +552,32 @@ export default {
 		},
 		down (type) {
 			// event.preventDefault()
-			var aLink = document.createElement('a')
-			aLink.download = 'demo'
 			// 输出
-			if (type === 'blob') {
-				this.$refs.cropper.getCropBlob((data) => {
-					this.downImg = window.URL.createObjectURL(data)
-					aLink.href = window.URL.createObjectURL(data)
-					aLink.click()
-				})
-			} else {
-				this.$refs.cropper.getCropData((data) => {
-					this.downImg = data
-					aLink.href = data
-					aLink.click()
-				})
-			}
+				if (type === 'blob') {
+					this.$refs.cropper.getCropBlob((data) => {
+						this.downImg = window.URL.createObjectURL(data)
+                        if (window.navigator.msSaveBlob) {
+                            var blobObject = new Blob([data]);
+                            window.navigator.msSaveBlob(blobObject, 'demo.png');
+                        } else {
+                            this.$nextTick(()=>{
+                                this.$refs.downloadDom.click();
+                            })
+                        }
+					})
+				} else {
+					this.$refs.cropper.getCropData((data) => {
+						this.downImg = data;
+                        if (window.navigator.msSaveBlob) {
+                            var blobObject = new Blob([data]);
+                            window.navigator.msSaveBlob(blobObject, 'demo.png');
+                        } else {
+                            this.$nextTick(()=>{
+                                this.$refs.downloadDom.click();
+                            })
+                        }
+					})
+				}
 		},
 
 		uploadImg (e, num) {
