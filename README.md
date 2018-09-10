@@ -145,7 +145,7 @@ module.exports = {
         <td>false</td>
         <td>true | false</td>
     </tr>
-	<tr>
+    <tr>
         <td>centerBox</td>
         <td>截图框是否被限制在图片里面</td>
         <td>false</td>
@@ -186,7 +186,7 @@ module.exports = {
 
 ####  图片加载的回调 imgLoad  返回结果success,  error
 
-#####  获取截图信息
+####  获取截图信息
 this.$refs.cropper.cropW  截图框宽度
 
 this.$refs.cropper.cropH 截图框高度
@@ -202,9 +202,59 @@ this.$refs.cropper.getCropBlob((data) => {
   // do something
   console.log(data)  
 })
+### 预览
+``` html
+@realTime="realTime"
+// Real time preview function
+realTime (data) {
+  this.previews = data
+}
+<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
+    'margin': '5px'}">
+  <div :style="previews.div">
+    <img :src="option.img" :style="previews.img">
+  </div>
+</div>
+=
 ```
 
+#### 图片移动回调函数 @imgMoving
+```
+data type
+{
+   moving: true, // moving 是否在移动
+   axis: {
+    x1: 1, // 左上角
+	 x2: 1，// 右上角
+	 y1: 1，// 左下角
+	 y2: 1 // 右下角
+   }
+ }
+```
+
+#### 截图框移动回调函数 @cropMoving
+```
+data type
+{
+   moving: true, // moving 是否在移动
+   axis: {
+    x1: 1, // 左上角
+	 x2: 1，// 右上角
+	 y1: 1，// 左下角
+	 y2: 1 // 右下角
+   }
+ }
+```
+
+
 ## 更新日志
+
+### v0.37
+```
+修复centerBox 的截图超出1px问题
+添加截图  图片移动触发事件
+```
+
 ### v0.36
 ```
 修复旋转自动生成截图框的错误

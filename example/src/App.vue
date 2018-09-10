@@ -34,6 +34,7 @@
 						:infoTrue="option.infoTrue"
 						@realTime="realTime"
 						@imgLoad="imgLoad"
+						@cropMoving="cropMoving"
 					></vueCropper>
 				</div>
 				<div class="test-button">
@@ -457,7 +458,8 @@ export default {
 				autoCropWidth: 200,
 				autoCropHeight: 150,
 				centerBox: false,
-				high: true
+				high: true,
+				cropData: {}
 			},
 			example2: {
 				img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
@@ -610,6 +612,10 @@ export default {
 		},
 		imgLoad (msg) {
 			console.log(msg)
+		},
+
+		cropMoving (data) {
+			this.option.cropData = data
 		}
 	},
 	components: {
