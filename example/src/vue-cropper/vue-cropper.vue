@@ -1038,12 +1038,12 @@ export default {
 					}
 
 					if (cx + this.cropW > axis.x2) {
-          	cx = axis.x2 - this.cropW - 1
+          	cx = axis.x2 - this.cropW
 					}
 
 					// 纵坐标纵轴
 					if (cy < axis.y1) {
-						cy = axis.y1 + 1
+						cy = axis.y1
 					}
 
 					if (cy + this.cropH > axis.y2) {
