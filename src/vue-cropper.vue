@@ -439,6 +439,11 @@ export default {
           window.addEventListener("mousemove", this.moveImg);
           window.addEventListener("mouseup", this.leaveImg);
         }
+        // 触发图片移动事件
+        this.$emit('imgMoving', {
+          moving: true,
+          axis: this.getImgAxis()
+        })
       } else {
         // 截图ing
         this.cropping = true;
@@ -572,26 +577,31 @@ export default {
 
 					// 图片左边 图片不能超过截图框
 					if (axis.x1 >= cropAxis.x1) {
-						changeX = maxLeft;
+						changeX = maxLeft + 1;
 					}
 
 					// 图片上边 图片不能超过截图框
 					if (axis.y1 >= cropAxis.y1) {
-						changeY = maxTop;
+						changeY = maxTop - 1;
 					}
 
 					// 图片右边
 					if (axis.x2 <= cropAxis.x2) {
-						changeX = maxRight
+						changeX = maxRight - 1
 					}
 
 					// 图片下边
 					if (axis.y2 <= cropAxis.y2) {
-						changeY = maxBottom
+						changeY = maxBottom + 1
 					}
 				}
 				this.x = changeX
-				this.y = changeY
+        this.y = changeY
+        // 触发图片移动事件
+        this.$emit('imgMoving', {
+          moving: true,
+          axis: this.getImgAxis()
+        })
 			})
     },
     // 移动图片结束
@@ -600,6 +610,11 @@ export default {
       window.removeEventListener("touchmove", this.moveImg);
       window.removeEventListener("mouseup", this.leaveImg);
       window.removeEventListener("touchend", this.leaveImg);
+      // 触发图片移动事件
+      this.$emit('imgMoving', {
+        moving: false,
+        axis: this.getImgAxis()
+      })
     },
     // 缩放图片
     scaleImg() {
@@ -974,6 +989,11 @@ export default {
 			newY= y - this.cropOffsertY;
       this.cropX = newX
       this.cropY = newY
+      // 触发截图框移动事件
+      this.$emit('cropMoving', {
+        moving: true,
+        axis: this.getCropAxis()
+      })
     },
 
     moveCrop(e, isMove) {
@@ -1014,27 +1034,33 @@ export default {
 					let axis = this.getImgAxis()
 					// 横坐标判断
 					if (cx < axis.x1) {
-						cx = axis.x1
+						cx = axis.x1 + 1
 					}
 
 					if (cx + this.cropW > axis.x2) {
-          	cx = axis.x2 - this.cropW;
+          	cx = axis.x2 - this.cropW - 1
 					}
 
 					// 纵坐标纵轴
 					if (cy < axis.y1) {
-						cy = axis.y1
+						cy = axis.y1 + 1
 					}
 
 					if (cy + this.cropH > axis.y2) {
-          	cy = axis.y2 - this.cropH;
+          	cy = axis.y2 - this.cropH - 1
 					}
 
 				}
 
 				this.cropOffsertX = cx
-				this.cropOffsertY = cy
-      });
+        this.cropOffsertY = cy
+        
+        // 触发截图框移动事件
+        this.$emit('cropMoving', {
+          moving: true,
+          axis: this.getCropAxis()
+        })
+      })
 		},
 		
 		// 算出不同场景下面 图片相对于外层容器的坐标轴
@@ -1094,10 +1120,15 @@ export default {
 		},
 
     leaveCrop(e) {
-      window.removeEventListener("mousemove", this.moveCrop);
-      window.removeEventListener("mouseup", this.leaveCrop);
-      window.removeEventListener("touchmove", this.moveCrop);
-      window.removeEventListener("touchend", this.leaveCrop);
+      window.removeEventListener("mousemove", this.moveCrop)
+      window.removeEventListener("mouseup", this.leaveCrop)
+      window.removeEventListener("touchmove", this.moveCrop)
+      window.removeEventListener("touchend", this.leaveCrop)
+      // 触发截图框移动事件
+      this.$emit('cropMoving', {
+        moving: false,
+        axis: this.getCropAxis()
+      })
     },
     // 获取转换成base64 的图片信息
     getCropData(cb) {
