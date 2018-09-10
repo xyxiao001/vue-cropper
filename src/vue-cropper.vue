@@ -576,18 +576,18 @@ export default {
 
 
 					// 图片左边 图片不能超过截图框
-					if (axis.x1 >= cropAxis.x1) {
-						changeX = maxLeft + 1;
+					if (axis.x1 > cropAxis.x1) {
+						changeX = maxLeft - 1;
 					}
 
 					// 图片上边 图片不能超过截图框
 					if (axis.y1 >= cropAxis.y1) {
-						changeY = maxTop - 1;
+						changeY = maxTop;
 					}
 
 					// 图片右边
 					if (axis.x2 <= cropAxis.x2) {
-						changeX = maxRight - 1
+						changeX = maxRight
 					}
 
 					// 图片下边
@@ -1038,12 +1038,12 @@ export default {
 					}
 
 					if (cx + this.cropW > axis.x2) {
-          	cx = axis.x2 - this.cropW - 1
+          	cx = axis.x2 - this.cropW
 					}
 
 					// 纵坐标纵轴
 					if (cy < axis.y1) {
-						cy = axis.y1 + 1
+						cy = axis.y1
 					}
 
 					if (cy + this.cropH > axis.y2) {
