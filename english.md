@@ -255,6 +255,12 @@ data type
 
 ## Update log
 
+
+### v0.40
+fix orientation handel
+Thanks for the contribution of [Felipe Mengatto] (https://github.com/felipemengatto)
+
+
 ### v0.39
 
 Fix problems caused by different orientation values
