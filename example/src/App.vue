@@ -764,4 +764,15 @@ export default {
     }
   }
 
+	@media screen and (max-width: 1000px) {
+		.content {
+			max-width: 90%;
+			margin: auto;
+		}
+
+		.test {
+			height: 400px;
+		}
+	}
+
 </style>

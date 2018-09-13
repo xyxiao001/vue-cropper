@@ -249,6 +249,10 @@ data type
 
 ## 更新日志
 
+### v0.40
+修复orientation的处理方式
+感谢 [Felipe Mengatto](https://github.com/felipemengatto)的贡献
+
 ### v0.39
 修复orientation值不同带来的问题
 感谢 [Felipe Mengatto](https://github.com/felipemengatto)的贡献

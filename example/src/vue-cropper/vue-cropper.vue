@@ -299,44 +299,110 @@ export default {
     }
   },
   methods: {
-    // 校验图片
+    checkOrientationImage(img, orientation, width, height) {
+      let canvas = document.createElement("canvas");
+      let ctx = canvas.getContext("2d");
+      ctx.save();
+
+      switch (orientation) {
+        case 2:
+            canvas.width = width;
+            canvas.height = height;
+            // horizontal flip
+            ctx.translate(width, 0);
+            ctx.scale(-1, 1);
+            break;
+        case 3:
+            canvas.width = width;
+            canvas.height = height;
+            //180 graus
+            ctx.translate(width / 2, height / 2);
+            ctx.rotate(180 * Math.PI / 180);
+            ctx.translate(-width / 2, -height / 2);
+            break;
+        case 4:
+            canvas.width = width;
+            canvas.height = height;
+            // vertical flip
+            ctx.translate(0, height);
+            ctx.scale(1, -1);
+            break;
+        case 5:
+            // vertical flip + 90 rotate right
+            canvas.height = width;
+            canvas.width = height;
+            ctx.rotate(0.5 * Math.PI);
+            ctx.scale(1, -1);
+            break;
+        case 6:
+            canvas.width = height;
+            canvas.height = width;
+            //90 graus
+            ctx.translate(height / 2, width / 2);
+            ctx.rotate(90 * Math.PI / 180);
+            ctx.translate(-width / 2, -height / 2);
+            break;
+        case 7:
+            // horizontal flip + 90 rotate right
+            canvas.height = width;
+            canvas.width = height;
+            ctx.rotate(0.5 * Math.PI);
+            ctx.translate(width, -height);
+            ctx.scale(-1, 1);
+            break;
+        case 8:
+            canvas.height = width;
+            canvas.width = height;
+            //-90 graus
+            ctx.translate(height / 2, width / 2);
+            ctx.rotate(-90 * Math.PI / 180);
+            ctx.translate(-width / 2, -height / 2);
+            break;
+        default:
+          canvas.width = width;
+          canvas.height = height;
+      }
+
+      ctx.drawImage(img, 0, 0, width, height);
+      ctx.restore();
+      
+      canvas.toBlob(
+        blob => {
+          let data = URL.createObjectURL(blob);
+          this.imgs = data;
+        },
+        "image/" + this.outputType,
+        1
+      );
+    },
+
+    // checkout img 
     checkedImg() {
       if (this.img === "") return;
-      this.rotate = 0;
       this.loading = true;
       this.scale = 1;
       this.clearCrop();
-      let canvas = document.createElement("canvas");
       let img = new Image();
-      let rotate = 0;
 
       img.onload = () => {
         if (this.img === "") {
           this.$emit("imgLoad", "error");
           return false;
         }
+
         let width = img.width;
         let height = img.height;
-        let ctx = canvas.getContext("2d");
-        let dw = 0;
-        let dh = 0;
-        let x = 0;
-        let y = 0;
-        ctx.save();
+
         exif.getData(img, () => {
           exif.getAllTags(img);
           this.orientation = exif.getTag(img, "Orientation");
-          switch (this.orientation) {
-            case 6:
-              rotate = 1;
-              break;
-            case 8:
-              rotate = -1;
-              break;
-            default:
-              rotate = 0;
-          }
+
           let max = this.maxImgSize;
+          if (!this.orientation && width < max & height < max ) {
+            this.imgs = this.img;
+            return;
+          }
+
           if (width > max) {
             height = height / width * max;
             width = max;
@@ -346,107 +412,16 @@ export default {
             width = width / height * max;
             height = max;
           }
-          // console.log('rotate', rotate);
-          switch (rotate) {
-            case 0:
-              canvas.width = width;
-              canvas.height = height;
-              dw = width;
-              dh = height;
 
-              if (this.orientation === 2) {
-                // horizontal flip
-                ctx.translate(width, 0);
-                ctx.scale(-1, 1);
-              }
+          this.checkOrientationImage(img, this.orientation, width, height);
 
-              if (this.orientation === 4) {
-                // vertical flip
-                ctx.translate(0, height);
-                ctx.scale(1, -1);
-              }
-
-              if (this.orientation === 5) {
-                // vertical flip + 90 rotate right
-                canvas.height = width;
-                canvas.width = height;
-
-                ctx.rotate(0.5 * Math.PI);
-                ctx.scale(1, -1);
-              }
-
-              if (this.orientation === 7) {
-                // horizontal flip + 90 rotate right
-                canvas.height = width;
-                canvas.width = height;
-
-                ctx.rotate(0.5 * Math.PI);
-                ctx.translate(width, -height);
-                ctx.scale(-1, 1);
-              }
-
-              if (this.orientation === 3) {
-                canvas.height = height;
-                canvas.width = width;
-
-                //180 graus
-                ctx.translate(width / 2, height / 2);
-                ctx.rotate(180 * Math.PI / 180);
-                ctx.translate(-width / 2, -height / 2);
-              }
-
-              break;
-            case 1:
-            case -3:
-              // 旋转90度 或者-270度 宽度和高度对调
-              canvas.width = height;
-              canvas.height = width;
-              ctx.rotate(rotate * 90 * Math.PI / 180);
-              dw = width;
-              dh = height;
-              y = -height;
-              break;
-            case 2:
-            case -2:
-              canvas.width = width;
-              canvas.height = height;
-              ctx.rotate(rotate * 90 * Math.PI / 180);
-              dw = width;
-              dh = height;
-              x = -width;
-              y = -height;
-              break;
-            case 3:
-            case -1:
-              canvas.width = height;
-              canvas.height = width;
-              ctx.rotate(rotate * 90 * Math.PI / 180);
-              dw = width;
-              dh = height;
-              x = -width;
-              y = 0;
-              break;
-            default:
-              canvas.width = width;
-              canvas.height = height;
-              dw = width;
-              dh = height;
-          }
-          ctx.drawImage(img, x, y, dw, dh);
-          ctx.restore();
-          canvas.toBlob(
-            blob => {
-              let data = URL.createObjectURL(blob);
-              this.imgs = data;
-            },
-            "image/" + this.outputType,
-            1
-          );
         });
       };
+
       img.onerror = () => {
         this.$emit("imgLoad", "error");
       };
+
       img.crossOrigin = "*";
       img.src = this.img;
     },
