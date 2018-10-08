@@ -1764,7 +1764,7 @@ export default {
 .point8 {
   bottom: -5px;
   right: -4px;
-  cursor: nw-resize;
+  cursor: se-resize;
 }
 
 @media screen and (max-width: 500px) {
