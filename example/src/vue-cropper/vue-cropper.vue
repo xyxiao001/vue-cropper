@@ -249,7 +249,13 @@ export default {
       obj.width = ~~obj.width;
       obj.height = ~~obj.height;
       return obj;
-    }
+    },
+
+    isIE () {
+      var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
+      var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE浏览器  
+      return isIE
+    },
   },
   watch: {
     // 如果图片改变， 重新布局
@@ -306,58 +312,58 @@ export default {
 
       switch (orientation) {
         case 2:
-            canvas.width = width;
-            canvas.height = height;
-            // horizontal flip
-            ctx.translate(width, 0);
-            ctx.scale(-1, 1);
-            break;
+          canvas.width = width;
+          canvas.height = height;
+          // horizontal flip
+          ctx.translate(width, 0);
+          ctx.scale(-1, 1);
+          break;
         case 3:
-            canvas.width = width;
-            canvas.height = height;
-            //180 graus
-            ctx.translate(width / 2, height / 2);
-            ctx.rotate(180 * Math.PI / 180);
-            ctx.translate(-width / 2, -height / 2);
-            break;
+          canvas.width = width;
+          canvas.height = height;
+          //180 graus
+          ctx.translate(width / 2, height / 2);
+          ctx.rotate((180 * Math.PI) / 180);
+          ctx.translate(-width / 2, -height / 2);
+          break;
         case 4:
-            canvas.width = width;
-            canvas.height = height;
-            // vertical flip
-            ctx.translate(0, height);
-            ctx.scale(1, -1);
-            break;
+          canvas.width = width;
+          canvas.height = height;
+          // vertical flip
+          ctx.translate(0, height);
+          ctx.scale(1, -1);
+          break;
         case 5:
-            // vertical flip + 90 rotate right
-            canvas.height = width;
-            canvas.width = height;
-            ctx.rotate(0.5 * Math.PI);
-            ctx.scale(1, -1);
-            break;
+          // vertical flip + 90 rotate right
+          canvas.height = width;
+          canvas.width = height;
+          ctx.rotate(0.5 * Math.PI);
+          ctx.scale(1, -1);
+          break;
         case 6:
-            canvas.width = height;
-            canvas.height = width;
-            //90 graus
-            ctx.translate(height / 2, width / 2);
-            ctx.rotate(90 * Math.PI / 180);
-            ctx.translate(-width / 2, -height / 2);
-            break;
+          canvas.width = height;
+          canvas.height = width;
+          //90 graus
+          ctx.translate(height / 2, width / 2);
+          ctx.rotate((90 * Math.PI) / 180);
+          ctx.translate(-width / 2, -height / 2);
+          break;
         case 7:
-            // horizontal flip + 90 rotate right
-            canvas.height = width;
-            canvas.width = height;
-            ctx.rotate(0.5 * Math.PI);
-            ctx.translate(width, -height);
-            ctx.scale(-1, 1);
-            break;
+          // horizontal flip + 90 rotate right
+          canvas.height = width;
+          canvas.width = height;
+          ctx.rotate(0.5 * Math.PI);
+          ctx.translate(width, -height);
+          ctx.scale(-1, 1);
+          break;
         case 8:
-            canvas.height = width;
-            canvas.width = height;
-            //-90 graus
-            ctx.translate(height / 2, width / 2);
-            ctx.rotate(-90 * Math.PI / 180);
-            ctx.translate(-width / 2, -height / 2);
-            break;
+          canvas.height = width;
+          canvas.width = height;
+          //-90 graus
+          ctx.translate(height / 2, width / 2);
+          ctx.rotate((-90 * Math.PI) / 180);
+          ctx.translate(-width / 2, -height / 2);
+          break;
         default:
           canvas.width = width;
           canvas.height = height;
@@ -365,7 +371,6 @@ export default {
 
       ctx.drawImage(img, 0, 0, width, height);
       ctx.restore();
-      
       canvas.toBlob(
         blob => {
           let data = URL.createObjectURL(blob);
@@ -376,14 +381,13 @@ export default {
       );
     },
 
-    // checkout img 
+    // checkout img
     checkedImg() {
       if (this.img === "") return;
       this.loading = true;
       this.scale = 1;
       this.clearCrop();
       let img = new Image();
-
       img.onload = () => {
         if (this.img === "") {
           this.$emit("imgLoad", "error");
@@ -398,23 +402,22 @@ export default {
           this.orientation = exif.getTag(img, "Orientation");
 
           let max = this.maxImgSize;
-          if (!this.orientation && width < max & height < max ) {
+          if (!this.orientation && (width < max) & (height < max)) {
             this.imgs = this.img;
             return;
           }
 
           if (width > max) {
-            height = height / width * max;
+            height = (height / width) * max;
             width = max;
           }
 
           if (height > max) {
-            width = width / height * max;
+            width = (width / height) * max;
             height = max;
           }
 
           this.checkOrientationImage(img, this.orientation, width, height);
-
         });
       };
 
@@ -422,8 +425,19 @@ export default {
         this.$emit("imgLoad", "error");
       };
 
-      img.crossOrigin = "*";
-      img.src = this.img;
+      img.crossOrigin = "";
+      if (this.isIE) {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+          var url = URL.createObjectURL(this.response);
+          img.src = url;
+        };
+        xhr.open("GET", this.img, true);
+        xhr.responseType = "blob";
+        xhr.send();
+      } else {
+        img.src = this.img;
+      }
     },
     // 当按下鼠标键
     startMove(e) {
@@ -571,20 +585,20 @@ export default {
             case -3:
               maxLeft =
                 this.cropOffsertX -
-                this.trueWidth * (1 - this.scale) / 2 +
+                (this.trueWidth * (1 - this.scale)) / 2 +
                 (imgW - imgH) / 2;
               maxTop =
                 this.cropOffsertY -
-                this.trueHeight * (1 - this.scale) / 2 +
+                (this.trueHeight * (1 - this.scale)) / 2 +
                 (imgH - imgW) / 2;
               maxRight = maxLeft - imgW + this.cropW;
               maxBottom = maxTop - imgH + this.cropH;
               break;
             default:
               maxLeft =
-                this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2;
+                this.cropOffsertX - (this.trueWidth * (1 - this.scale)) / 2;
               maxTop =
-                this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2;
+                this.cropOffsertY - (this.trueHeight * (1 - this.scale)) / 2;
               maxRight = maxLeft - imgH + this.cropW;
               maxBottom = maxTop - imgW + this.cropH;
               break;
@@ -592,7 +606,7 @@ export default {
 
           // 图片左边 图片不能超过截图框
           if (axis.x1 > cropAxis.x1) {
-            changeX = maxLeft - 1;
+            changeX = maxLeft;
           }
 
           // 图片上边 图片不能超过截图框
@@ -607,7 +621,7 @@ export default {
 
           // 图片下边
           if (axis.y2 <= cropAxis.y2) {
-            changeY = maxBottom + 1;
+            changeY = maxBottom;
           }
         }
         this.x = changeX;
@@ -633,12 +647,6 @@ export default {
     },
     // 缩放图片
     scaleImg() {
-      this.support =
-        "onwheel" in document.createElement("div")
-          ? "wheel"
-          : document.onmousewheel !== undefined
-            ? "mousewheel"
-            : "DOMMouseScroll";
       if (this.canScale) {
         window.addEventListener(this.support, this.changeSize);
       }
@@ -657,6 +665,10 @@ export default {
       // 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
       var isFirefox = navigator.userAgent.indexOf("Firefox");
       change = isFirefox > 0 ? change * 30 : change;
+      // 修复ie的滚动缩放
+      if (this.isIE) {
+        change = -change;
+      }
       // 1px - 0.2
       var coe = this.coe;
       coe =
@@ -666,7 +678,9 @@ export default {
       var num = coe * change;
       num < 0
         ? (scale += Math.abs(num))
-        : scale > Math.abs(num) ? (scale -= Math.abs(num)) : scale;
+        : scale > Math.abs(num)
+          ? (scale -= Math.abs(num))
+          : scale;
       // 延迟0.1s 每次放大大或者缩小的范围
       let status = num < 0 ? "add" : "reduce";
       if (status !== this.coeStatus) {
@@ -698,7 +712,9 @@ export default {
       num = num * coe;
       num > 0
         ? (scale += Math.abs(num))
-        : scale > Math.abs(num) ? (scale -= Math.abs(num)) : scale;
+        : scale > Math.abs(num)
+          ? (scale -= Math.abs(num))
+          : scale;
       if (!this.checkoutImgAxis(this.x, this.y, scale)) {
         return false;
       }
@@ -741,15 +757,13 @@ export default {
           }
         } else {
           var fixedHeight = ~~(
-            this.cropW /
-            this.fixedNumber[0] *
+            (this.cropW / this.fixedNumber[0]) *
             this.fixedNumber[1]
           );
           if (fixedHeight + this.cropOffsertY > this.h) {
             this.cropH = this.h - this.cropOffsertY;
             this.cropW = ~~(
-              this.cropH /
-              this.fixedNumber[1] *
+              (this.cropH / this.fixedNumber[1]) *
               this.fixedNumber[0]
             );
             if (fw > 0) {
@@ -903,15 +917,13 @@ export default {
 
         if (this.canChangeX && this.fixed) {
           var fixedHeight = ~~(
-            this.cropW /
-            this.fixedNumber[0] *
+            (this.cropW / this.fixedNumber[0]) *
             this.fixedNumber[1]
           );
           if (fixedHeight + this.cropOffsertY > wrapperH) {
             this.cropH = wrapperH - this.cropOffsertY;
             this.cropW = ~~(
-              this.cropH /
-              this.fixedNumber[1] *
+              (this.cropH / this.fixedNumber[1]) *
               this.fixedNumber[0]
             );
           } else {
@@ -921,15 +933,13 @@ export default {
 
         if (this.canChangeY && this.fixed) {
           var fixedWidth = ~~(
-            this.cropH /
-            this.fixedNumber[1] *
+            (this.cropH / this.fixedNumber[1]) *
             this.fixedNumber[0]
           );
           if (fixedWidth + this.cropOffsertX > wrapperW) {
             this.cropW = wrapperW - this.cropOffsertX;
             this.cropH = ~~(
-              this.cropW /
-              this.fixedNumber[0] *
+              (this.cropW / this.fixedNumber[0]) *
               this.fixedNumber[1]
             );
           } else {
@@ -1024,18 +1034,18 @@ export default {
           fh = this.cropOffsertY;
         }
         // 不能超过外层容器
-        if (fw <= 1) {
+        if (fw <= 0) {
           cx = 1;
         } else if (~~(fw + this.cropW) > this.w) {
-          cx = this.w - this.cropW - 1;
+          cx = this.w - this.cropW;
         } else {
           cx = fw;
         }
 
-        if (fh <= 1) {
-          cy = 1;
+        if (fh <= 0) {
+          cy = 0;
         } else if (~~(fh + this.cropH) > this.h) {
-          cy = this.h - this.cropH - 1;
+          cy = this.h - this.cropH;
         } else {
           cy = fh;
         }
@@ -1045,7 +1055,7 @@ export default {
           let axis = this.getImgAxis();
           // 横坐标判断
           if (cx < axis.x1) {
-            cx = axis.x1 + 1;
+            cx = axis.x1;
           }
 
           if (cx + this.cropW > axis.x2) {
@@ -1058,7 +1068,7 @@ export default {
           }
 
           if (cy + this.cropH > axis.y2) {
-            cy = axis.y2 - this.cropH - 1;
+            cy = axis.y2 - this.cropH;
           }
         }
 
@@ -1090,25 +1100,26 @@ export default {
       let imgH = this.trueHeight * scale;
       switch (this.rotate) {
         case 0:
-          obj.x1 = ~~(x + this.trueWidth * (1 - scale) / 2);
+          obj.x1 = ~~(x + (this.trueWidth * (1 - scale)) / 2);
           obj.x2 = ~~(obj.x1 + this.trueWidth * scale);
-          obj.y1 = ~~(y + this.trueHeight * (1 - scale) / 2);
+          obj.y1 = ~~(y + (this.trueHeight * (1 - scale)) / 2);
           obj.y2 = ~~(obj.y1 + this.trueHeight * scale);
           break;
         case 1:
         case -1:
         case 3:
         case -3:
-          obj.x1 = ~~(x + this.trueWidth * (1 - scale) / 2) + (imgW - imgH) / 2;
+          obj.x1 =
+            ~~(x + (this.trueWidth * (1 - scale)) / 2) + (imgW - imgH) / 2;
           obj.x2 = ~~(obj.x1 + this.trueHeight * scale);
           obj.y1 =
-            ~~(y + this.trueHeight * (1 - scale) / 2) + (imgH - imgW) / 2;
+            ~~(y + (this.trueHeight * (1 - scale)) / 2) + (imgH - imgW) / 2;
           obj.y2 = ~~(obj.y1 + this.trueWidth * scale);
           break;
         default:
-          obj.x1 = ~~(x + this.trueWidth * (1 - scale) / 2);
+          obj.x1 = ~~(x + (this.trueWidth * (1 - scale)) / 2);
           obj.x2 = ~~(obj.x1 + this.trueWidth * scale);
-          obj.y1 = ~~(y + this.trueHeight * (1 - scale) / 2);
+          obj.y1 = ~~(y + (this.trueHeight * (1 - scale)) / 2);
           obj.y2 = ~~(obj.y1 + this.trueHeight * scale);
           break;
       }
@@ -1141,8 +1152,8 @@ export default {
         axis: this.getCropAxis()
       });
     },
-    // 获取转换成base64 的图片信息
-    getCropData(cb) {
+
+    getCropChecked(cb) {
       let canvas = document.createElement("canvas");
       let img = new Image();
       let rotate = this.rotate;
@@ -1163,11 +1174,11 @@ export default {
           let imgH = trueHeight * this.scale * dpr;
           // 图片x轴偏移
           let dx =
-            (this.x - cropOffsertX + this.trueWidth * (1 - this.scale) / 2) *
+            (this.x - cropOffsertX + (this.trueWidth * (1 - this.scale)) / 2) *
             dpr;
           // 图片y轴偏移
           let dy =
-            (this.y - cropOffsertY + this.trueHeight * (1 - this.scale) / 2) *
+            (this.y - cropOffsertY + (this.trueHeight * (1 - this.scale)) / 2) *
             dpr;
           // console.log(dx, dy)
           //保存状态
@@ -1197,7 +1208,7 @@ export default {
                 // 换算图片旋转后的坐标弥补
                 dx = dx + (imgW - imgH) / 2;
                 dy = dy + (imgH - imgW) / 2;
-                ctx.rotate(rotate * 90 * Math.PI / 180);
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, dy, -dx - imgH, imgW, imgH);
               } else {
                 canvas.width = width / this.scale;
@@ -1207,7 +1218,7 @@ export default {
                   dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
                 dy =
                   dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2;
-                ctx.rotate(rotate * 90 * Math.PI / 180);
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(
                   img,
                   dy,
@@ -1220,12 +1231,12 @@ export default {
             case 2:
             case -2:
               if (!this.full) {
-                ctx.rotate(rotate * 90 * Math.PI / 180);
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH);
               } else {
                 canvas.width = width / this.scale;
                 canvas.height = height / this.scale;
-                ctx.rotate(rotate * 90 * Math.PI / 180);
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
                 dx = dx / this.scale;
                 dy = dy / this.scale;
                 ctx.drawImage(
@@ -1243,7 +1254,7 @@ export default {
                 // 换算图片旋转后的坐标弥补
                 dx = dx + (imgW - imgH) / 2;
                 dy = dy + (imgH - imgW) / 2;
-                ctx.rotate(rotate * 90 * Math.PI / 180);
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, -dy - imgW, dx, imgW, imgH);
               } else {
                 canvas.width = width / this.scale;
@@ -1253,7 +1264,7 @@ export default {
                   dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
                 dy =
                   dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2;
-                ctx.rotate(rotate * 90 * Math.PI / 180);
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(
                   img,
                   -dy - imgW / this.scale,
@@ -1296,21 +1307,21 @@ export default {
               // 旋转90度 或者-270度 宽度和高度对调
               canvas.width = height;
               canvas.height = width;
-              ctx.rotate(rotate * 90 * Math.PI / 180);
+              ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, 0, -height, width, height);
               break;
             case 2:
             case -2:
               canvas.width = width;
               canvas.height = height;
-              ctx.rotate(rotate * 90 * Math.PI / 180);
+              ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, -width, -height, width, height);
               break;
             case 3:
             case -1:
               canvas.width = height;
               canvas.height = width;
-              ctx.rotate(rotate * 90 * Math.PI / 180);
+              ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, -width, 0, width, height);
               break;
             default:
@@ -1320,34 +1331,30 @@ export default {
           }
           ctx.restore();
         }
-        let data = canvas.toDataURL(
-          "image/" + this.outputType,
-          this.outputSize
-        );
-        cb(data);
+        cb(canvas);
       };
       // 判断图片是否是base64
       var s = this.img.substr(0, 4);
       if (s !== "data") {
-        img.crossOrigin = "anonymous";
+        img.crossOrigin = "Anonymous";
       }
-      img.src = this.imgs;
+      img.src = this.imgs;     
     },
+
+    // 获取转换成base64 的图片信息
+    getCropData(cb) {
+      this.getCropChecked(data => {
+        cb(data.toDataURL("image/" + this.outputType, this.outputSize));
+      });
+    },
+
     //转化base64 为blob对象
     getCropBlob(cb) {
-      this.getCropData(data => {
-        var arr = data.split(",");
-        var mime = arr[0].match(/:(.*?);/)[1];
-        var bstr = atob(arr[1]);
-        var n = bstr.length;
-        var u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        cb(
-          new Blob([u8arr], {
-            type: mime
-          })
+      this.getCropChecked(data => {
+        data.toBlob(
+          blob => cb(blob),
+          "image/" + this.outputType,
+          this.outputSize
         );
       });
     },
@@ -1459,12 +1466,12 @@ export default {
       w = w > maxWidth ? maxWidth : w;
       h = h > maxHeight ? maxHeight : h;
       if (this.fixed) {
-        h = w / this.fixedNumber[0] * this.fixedNumber[1];
+        h = (w / this.fixedNumber[0]) * this.fixedNumber[1];
       }
       // 如果比例之后 高度大于h
       if (h > this.h) {
         h = this.h;
-        w = h / this.fixedNumber[1] * this.fixedNumber[0];
+        w = (h / this.fixedNumber[1]) * this.fixedNumber[0];
       }
       this.changeCrop(w, h);
     },
@@ -1486,7 +1493,7 @@ export default {
     refresh() {
       // console.log('refresh')
       let img = this.img;
-      this.imgs = '';
+      this.imgs = "";
       this.scale = 1;
       this.crop = false;
       this.rotate = 0;
@@ -1496,7 +1503,7 @@ export default {
       this.trueHeight = 0;
       this.clearCrop();
       this.$nextTick(() => {
-        this.checkedImg()
+        this.checkedImg();
       });
     },
 
@@ -1549,9 +1556,13 @@ export default {
     }
   },
   mounted() {
+    this.support =
+      "onwheel" in document.createElement("div")
+        ? "wheel"
+        : document.onmousewheel !== undefined
+          ? "mousewheel"
+          : "DOMMouseScroll";
     let that = this;
-    this.showPreview();
-    this.checkedImg();
     var u = navigator.userAgent;
     this.isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
     // 兼容blob
@@ -1568,6 +1579,8 @@ export default {
         }
       });
     }
+    this.showPreview();
+    this.checkedImg();
   },
   destroyed() {
     window.removeEventListener("mousemove", this.moveCrop);
@@ -1590,6 +1603,7 @@ export default {
   -ms-user-select: none;
   direction: ltr;
   touch-action: none;
+  text-align: left;
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC");
 }
 
@@ -1764,7 +1778,7 @@ export default {
 .point8 {
   bottom: -5px;
   right: -4px;
-  cursor: nw-resize;
+  cursor: se-resize;
 }
 
 @media screen and (max-width: 500px) {
