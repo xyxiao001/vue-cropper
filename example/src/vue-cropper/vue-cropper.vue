@@ -246,8 +246,8 @@ export default {
           obj.height = obj.height / this.scale;
         }
       }
-      obj.width = ~~obj.width;
-      obj.height = ~~obj.height;
+      obj.width = obj.width.toFixed(0);
+      obj.height = obj.height.toFixed(0);
       return obj;
     },
 
@@ -270,11 +270,11 @@ export default {
       this.reload();
     },
     cropW() {
-      this.cropW = ~~this.cropW;
+      this.cropW = this.cropW;
       this.showPreview();
     },
     cropH() {
-      this.cropH = ~~this.cropH;
+      this.cropH = this.cropH;
       this.showPreview();
     },
     cropOffsertX() {
@@ -522,7 +522,7 @@ export default {
         Math.pow(newTouch1.x - newTouch2.x, 2) +
           Math.pow(newTouch1.y - newTouch2.y, 2)
       );
-      var cha = ~~(newL - oldL);
+      var cha = (newL - oldL);
       // 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
       // 1px - 0.2
       var coe = 1;
@@ -568,8 +568,8 @@ export default {
       let nowY = e.clientY ? e.clientY : e.touches[0].clientY;
 
       let changeX, changeY;
-      changeX = ~~(nowX - this.moveX);
-      changeY = ~~(nowY - this.moveY);
+      changeX = (nowX - this.moveX);
+      changeY = (nowY - this.moveY);
 
       this.$nextTick(() => {
         if (this.centerBox) {
@@ -605,7 +605,7 @@ export default {
           }
 
           // 图片左边 图片不能超过截图框
-          if (axis.x1 > cropAxis.x1) {
+          if (axis.x1 >= cropAxis.x1) {
             changeX = maxLeft;
           }
 
@@ -727,8 +727,8 @@ export default {
       var nowX = e.clientX ? e.clientX : e.touches ? e.touches[0].clientX : 0;
       var nowY = e.clientY ? e.clientY : e.touches ? e.touches[0].clientY : 0;
       this.$nextTick(() => {
-        var fw = ~~(nowX - this.cropX);
-        var fh = ~~(nowY - this.cropY);
+        var fw = (nowX - this.cropX);
+        var fh = (nowY - this.cropY);
         if (fw > 0) {
           this.cropW =
             fw + this.cropChangeX > this.w ? this.w - this.cropChangeX : fw;
@@ -756,13 +756,13 @@ export default {
               this.cropChangeY + fh > 0 ? this.cropChangeY + fh : 0;
           }
         } else {
-          var fixedHeight = ~~(
+          var fixedHeight = (
             (this.cropW / this.fixedNumber[0]) *
             this.fixedNumber[1]
           );
           if (fixedHeight + this.cropOffsertY > this.h) {
             this.cropH = this.h - this.cropOffsertY;
-            this.cropW = ~~(
+            this.cropW = (
               (this.cropH / this.fixedNumber[1]) *
               this.fixedNumber[0]
             );
@@ -832,8 +832,8 @@ export default {
       }
 
       this.$nextTick(() => {
-        var fw = ~~(nowX - this.cropX);
-        var fh = ~~(nowY - this.cropY);
+        var fw = (nowX - this.cropX);
+        var fh = (nowY - this.cropY);
         if (this.canChangeX) {
           if (this.changeCropTypeX === 1) {
             if (this.cropOldW - fw > 0) {
@@ -916,13 +916,13 @@ export default {
         }
 
         if (this.canChangeX && this.fixed) {
-          var fixedHeight = ~~(
+          var fixedHeight = (
             (this.cropW / this.fixedNumber[0]) *
             this.fixedNumber[1]
           );
           if (fixedHeight + this.cropOffsertY > wrapperH) {
             this.cropH = wrapperH - this.cropOffsertY;
-            this.cropW = ~~(
+            this.cropW = (
               (this.cropH / this.fixedNumber[1]) *
               this.fixedNumber[0]
             );
@@ -932,13 +932,13 @@ export default {
         }
 
         if (this.canChangeY && this.fixed) {
-          var fixedWidth = ~~(
+          var fixedWidth = (
             (this.cropH / this.fixedNumber[1]) *
             this.fixedNumber[0]
           );
           if (fixedWidth + this.cropOffsertX > wrapperW) {
             this.cropW = wrapperW - this.cropOffsertX;
-            this.cropH = ~~(
+            this.cropH = (
               (this.cropW / this.fixedNumber[0]) *
               this.fixedNumber[1]
             );
@@ -1027,16 +1027,16 @@ export default {
       }
       this.$nextTick(() => {
         let cx, cy;
-        let fw = ~~(nowX - this.cropX);
-        let fh = ~~(nowY - this.cropY);
+        let fw = (nowX - this.cropX);
+        let fh = (nowY - this.cropY);
         if (isMove) {
           fw = this.cropOffsertX;
           fh = this.cropOffsertY;
         }
         // 不能超过外层容器
         if (fw <= 0) {
-          cx = 1;
-        } else if (~~(fw + this.cropW) > this.w) {
+          cx = 0;
+        } else if ((fw + this.cropW) > this.w) {
           cx = this.w - this.cropW;
         } else {
           cx = fw;
@@ -1044,7 +1044,7 @@ export default {
 
         if (fh <= 0) {
           cy = 0;
-        } else if (~~(fh + this.cropH) > this.h) {
+        } else if ((fh + this.cropH) > this.h) {
           cy = this.h - this.cropH;
         } else {
           cy = fh;
@@ -1054,7 +1054,7 @@ export default {
         if (this.centerBox) {
           let axis = this.getImgAxis();
           // 横坐标判断
-          if (cx < axis.x1) {
+          if (cx <= axis.x1) {
             cx = axis.x1;
           }
 
@@ -1063,7 +1063,7 @@ export default {
           }
 
           // 纵坐标纵轴
-          if (cy < axis.y1) {
+          if (cy <= axis.y1) {
             cy = axis.y1;
           }
 
@@ -1100,27 +1100,27 @@ export default {
       let imgH = this.trueHeight * scale;
       switch (this.rotate) {
         case 0:
-          obj.x1 = ~~(x + (this.trueWidth * (1 - scale)) / 2);
-          obj.x2 = ~~(obj.x1 + this.trueWidth * scale);
-          obj.y1 = ~~(y + (this.trueHeight * (1 - scale)) / 2);
-          obj.y2 = ~~(obj.y1 + this.trueHeight * scale);
+          obj.x1 = (x + (this.trueWidth * (1 - scale)) / 2);
+          obj.x2 = (obj.x1 + this.trueWidth * scale);
+          obj.y1 = (y + (this.trueHeight * (1 - scale)) / 2);
+          obj.y2 = (obj.y1 + this.trueHeight * scale);
           break;
         case 1:
         case -1:
         case 3:
         case -3:
           obj.x1 =
-            ~~(x + (this.trueWidth * (1 - scale)) / 2) + (imgW - imgH) / 2;
-          obj.x2 = ~~(obj.x1 + this.trueHeight * scale);
+            (x + (this.trueWidth * (1 - scale)) / 2) + (imgW - imgH) / 2;
+          obj.x2 = (obj.x1 + this.trueHeight * scale);
           obj.y1 =
-            ~~(y + (this.trueHeight * (1 - scale)) / 2) + (imgH - imgW) / 2;
-          obj.y2 = ~~(obj.y1 + this.trueWidth * scale);
+            (y + (this.trueHeight * (1 - scale)) / 2) + (imgH - imgW) / 2;
+          obj.y2 = (obj.y1 + this.trueWidth * scale);
           break;
         default:
-          obj.x1 = ~~(x + (this.trueWidth * (1 - scale)) / 2);
-          obj.x2 = ~~(obj.x1 + this.trueWidth * scale);
-          obj.y1 = ~~(y + (this.trueHeight * (1 - scale)) / 2);
-          obj.y2 = ~~(obj.y1 + this.trueHeight * scale);
+          obj.x1 = (x + (this.trueWidth * (1 - scale)) / 2);
+          obj.x2 = (obj.x1 + this.trueWidth * scale);
+          obj.y1 = (y + (this.trueHeight * (1 - scale)) / 2);
+          obj.y2 = (obj.y1 + this.trueHeight * scale);
           break;
       }
       return obj;
@@ -1162,7 +1162,7 @@ export default {
       let cropOffsertX = this.cropOffsertX;
       let cropOffsertY = this.cropOffsertY;
       img.onload = () => {
-        if (~~this.cropW !== 0) {
+        if (this.cropW !== 0) {
           let ctx = canvas.getContext("2d");
           let dpr = 1;
           if (this.high & !this.full) {
@@ -1397,10 +1397,10 @@ export default {
         // 读取图片的信息原始信息， 解析是否需要旋转
         // 读取图片的旋转信息
         // 得到外层容器的宽度高度
-        this.w = ~~window
+        this.w = window
           .getComputedStyle(this.$refs.cropper)
           .width.replace("px", "");
-        this.h = ~~window
+        this.h = window
           .getComputedStyle(this.$refs.cropper)
           .height.replace("px", "");
 
