@@ -69,6 +69,8 @@ module.exports = {
 }
 ```
 
+###  目前还不知道什么原因项目里面开启mock 会导致file报错, 建议使用时 关掉mock
+
 
 <table style="text-align: center">
   <thead>
