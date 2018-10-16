@@ -413,8 +413,9 @@
 </template>
 
 <script>
-import vueCropper from "./vue-cropper/vue-cropper";
-// import vueCropper from 'vue-cropper'
+import VueCropper from "./vue-cropper/vue-cropper";
+// import { VueCropper } from '../test'
+
 import codes from "./code";
 
 export default {
@@ -619,7 +620,7 @@ export default {
     }
   },
   components: {
-    vueCropper,
+    VueCropper,
     codes
   },
   mounted() {

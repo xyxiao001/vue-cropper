@@ -14,8 +14,32 @@
 
 # vue-cropper
 
-#### 安装 npm install vue-cropper
-#### 使用  import VueCropper from vue-cropper
+#### 安装 
+```
+npm install vue-cropper
+
+yarn add vue-cropper
+```
+
+#### 使用  
+```
+组件内使用
+import { VueCropper }  from vue-cropper 
+components: {
+  VueCropper,
+},
+
+main.js里面使用
+import VueCropper from vue-cropper 
+
+Vue.use(vueCropper)
+
+cdn方式使用
+<script src="vuecropper.js"></script>
+Vue.use(window['vue-cropper'])
+
+```
+
 ``` html
 <vueCropper
   ref="cropper"
@@ -249,6 +273,24 @@ data type
 
 
 ## 更新日志
+### 0.44
+修复引入方式的问题
+```
+组件内使用
+import { VueCropper }  from vue-cropper 
+components: {
+  VueCropper,
+},
+
+main.js里面使用
+import VueCropper from vue-cropper 
+
+Vue.use(vueCropper)
+
+cdn方式使用
+<script src="vuecropper.js"></script>
+Vue.use(window['vue-cropper'])
+```
 ### v0.43
 剥离exif的依赖库, 添加exfi-min.js减小代码体积  45.9k => 37k
 build 升级webpack4 升级

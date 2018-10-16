@@ -9,6 +9,8 @@ if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue);
 }
 
+export { VueCropper }
+
 export default {
   version: '0.4.3',
   install,
