@@ -1,5 +1,5 @@
-const webpack = require('webpack')
 const path = require('path')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -18,31 +18,34 @@ module.exports = {
     }
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        include: __dirname,
-        exclude: /node_modules/
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: ['@babel/transform-runtime']
+          }
+        }
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
-        include: __dirname,
-        exclude: /node_modules/
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
       }
     ]
   },
+  mode: "production",
   plugins: [
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false,
-      comments: false,
-      compress: {
-        warnings: false
-      }
-    })
+    // 请确保引入这个插件！
+    new VueLoaderPlugin()
   ]
 }

@@ -249,6 +249,14 @@ data type
 
 
 ## 更新日志
+### v0.43
+剥离exif的依赖库, 添加exfi-min.js减小代码体积  45.9k => 37k
+build 升级webpack4 升级
+```
+添加vue install 方法  =》  npm: Vue.use(VueCropper)  web: Vue.use(window['vue-cropper'])
+```
+
+
 ### v0.42
 修复截图框因为去除小数点的引起的问题
 
