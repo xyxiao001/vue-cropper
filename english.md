@@ -15,13 +15,32 @@
 
 ####   Install
 ```
+
 npm install vue-cropper
+yarn add vue-cropper
 
 ```
+
 ####   Use 
 
 ```
-import VueCropper from vue-cropper
+views
+
+import { VueCropper }  from vue-cropper 
+components: {
+  VueCropper,
+},
+
+main.js
+
+import VueCropper from vue-cropper 
+
+Vue.use(vueCropper)
+
+cdn
+<script src="vuecropper.js"></script>
+Vue.use(window['vue-cropper'])
+
 <vueCropper
   ref="cropper"
   :img="option.img"
