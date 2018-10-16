@@ -71,7 +71,8 @@
 </template>
 
 <script>
-import exif from "exif-js";
+import exifmin from "./exif-js-min";
+
 export default {
   data: function() {
     return {
@@ -396,11 +397,8 @@ export default {
 
         let width = img.width;
         let height = img.height;
-
-        exif.getData(img, () => {
-          exif.getAllTags(img);
-          this.orientation = exif.getTag(img, "Orientation");
-
+        exifmin.getData(img).then(data => {
+          this.orientation = data.orientation || 1;
           let max = this.maxImgSize;
           if (!this.orientation && (width < max) & (height < max)) {
             this.imgs = this.img;
@@ -1591,7 +1589,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="css">
 .vue-cropper {
   position: relative;
   width: 100%;

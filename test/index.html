@@ -248,7 +248,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
   <script src="../dist/index.js"></script>
   <script>
-    // Vue.component('vue-cropper', window['vue-cropper']);
+    Vue.use(window['vue-cropper'])
     var a = new Vue({
       el: '#app',
       data: {
@@ -293,9 +293,6 @@
           high: true
         },
         show: true
-      },
-      components: {
-        'vue-cropper': window['vue-cropper'].default
       },
       methods: {
         changeImg() {
@@ -417,7 +414,7 @@
         }
       },
       mounted() {
-        console.log(this.$refs.cropper)
+        console.log(window['vue-cropper'])
       }
     })
   </script>

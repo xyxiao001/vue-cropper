@@ -1,8 +1,8 @@
 <template>
 	<div class="wrapper">
-		<div class="model" v-show="model" @click="model = false">
-			<div class="model-show">
-				<img :src="modelSrc" alt="">
+		<div class="model" v-show="model">
+			<div class="model-show" @click="model = false">
+				<img :src="modelSrc" alt="" @click="model = false">
 			</div>
 		</div>
 		<div class="content">
@@ -413,7 +413,7 @@
 </template>
 
 <script>
-import vueCropper from "./vue-cropper";
+import vueCropper from "./vue-cropper/vue-cropper";
 // import vueCropper from 'vue-cropper'
 import codes from "./code";
 
