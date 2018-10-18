@@ -1,27 +1,4 @@
-## vue-cropper
-### 一个优雅的图片裁剪插件
- [预览](http://xyxiao.cn/vue-cropper/example/)
- [english](https://github.com/xyxiao001/vue-cropper/blob/master/english.md)
-
-### vue-cropper 相关文章参考。
-#### [vue全家桶开发管理后台—裁切图片](https://blog.csdn.net/qq_30632003/article/details/79639346)   作者： 麻球科技-菅双鹏
-#### [Vue-cropper 图片裁剪的基本原理](https://www.cnblogs.com/tugenhua0707/p/8859291.html)  作者： 龙恩0707
-#### [关于昵称和头像的总结（模仿微信）](https://zhuanlan.zhihu.com/p/45746753)  作者： 秋晨光
-
-### vue-cropper 交流。
-##### 有什么意见,或者bug  或者想一起开发vue-cropper， 或者想一起开发其他插件
-![](https://qn-qn-kibey-static-cdn.app-echo.com/4C6FE9E2-3D06-402B-8F32-98B82BEBDD9F.png)
-
-# vue-cropper
-
-#### 安装 
-```
-npm install vue-cropper
-
-yarn add vue-cropper
-```
-
-#### 使用  
+## 使用  
 ```
 组件内使用
 import { VueCropper }  from vue-cropper 
@@ -48,6 +25,32 @@ Vue.use(window['vue-cropper'])
   :outputType="option.outputType"
 ></vueCropper>
 ```
+
+
+## vue-cropper
+### 一个优雅的图片裁剪插件
+ [预览](http://xyxiao.cn/vue-cropper/example/)
+ [english](https://github.com/xyxiao001/vue-cropper/blob/master/english.md)
+
+### vue-cropper 相关文章参考。
+#### [vue全家桶开发管理后台—裁切图片](https://blog.csdn.net/qq_30632003/article/details/79639346)   作者： 麻球科技-菅双鹏
+#### [Vue-cropper 图片裁剪的基本原理](https://www.cnblogs.com/tugenhua0707/p/8859291.html)  作者： 龙恩0707
+#### [关于昵称和头像的总结（模仿微信）](https://zhuanlan.zhihu.com/p/45746753)  作者： 秋晨光
+
+### vue-cropper 交流。
+##### 有什么意见,或者bug  或者想一起开发vue-cropper， 或者想一起开发其他插件
+![](https://qn-qn-kibey-static-cdn.app-echo.com/4C6FE9E2-3D06-402B-8F32-98B82BEBDD9F.png)
+
+# vue-cropper
+
+#### 安装 
+```
+npm install vue-cropper
+
+yarn add vue-cropper
+```
+
+
 
 
 
