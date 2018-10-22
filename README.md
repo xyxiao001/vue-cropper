@@ -142,8 +142,8 @@ module.exports = {
     <tr>
         <td>fixedNumber</td>
         <td>截图框的宽高比例</td>
-        <td>[1 : 1]</td>
-        <td>[宽度 : 高度]</td>
+        <td>[1, 1]</td>
+        <td>[宽度, 高度]</td>
     </tr>
     <tr>
         <td>full</td>
