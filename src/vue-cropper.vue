@@ -1269,6 +1269,124 @@ export default {
               break;
             default:
               if (!this.full) {
+getCropChecked(cb) {
+      let canvas = document.createElement("canvas");
+      let img = new Image();
+      let rotate = this.rotate;
+      let trueWidth = this.trueWidth;
+      let trueHeight = this.trueHeight;
+      let cropOffsertX = this.cropOffsertX;
+      let cropOffsertY = this.cropOffsertY;
+      img.onload = () => {
+        if (this.cropW !== 0) {
+          let ctx = canvas.getContext("2d");
+          let dpr = 1;
+          if (this.high & !this.full) {
+            dpr = window.devicePixelRatio;
+          }
+          let width = this.cropW * dpr;
+          let height = this.cropH * dpr;
+          let imgW = trueWidth * this.scale * dpr;
+          let imgH = trueHeight * this.scale * dpr;
+          // 图片x轴偏移
+          let dx =
+            (this.x - cropOffsertX + (this.trueWidth * (1 - this.scale)) / 2) *
+            dpr;
+          // 图片y轴偏移
+          let dy =
+            (this.y - cropOffsertY + (this.trueHeight * (1 - this.scale)) / 2) *
+            dpr;
+          // console.log(dx, dy)
+          //保存状态
+          setCanvasSize(width, height);
+          ctx.save();
+          switch (rotate) {
+            case 0:
+              if (!this.full) {
+                ctx.drawImage(img, dx, dy, imgW, imgH);
+              } else {
+                // 输出原图比例截图
+                setCanvasSize(width / this.scale, height / this.scale);
+                ctx.drawImage(
+                  img,
+                  dx / this.scale,
+                  dy / this.scale,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
+              }
+              break;
+            case 1:
+            case -3:
+              if (!this.full) {
+                // 换算图片旋转后的坐标弥补
+                dx = dx + (imgW - imgH) / 2;
+                dy = dy + (imgH - imgW) / 2;
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
+                ctx.drawImage(img, dy, -dx - imgH, imgW, imgH);
+              } else {
+                setCanvasSize(width / this.scale, height / this.scale);
+                // 换算图片旋转后的坐标弥补
+                dx =
+                  dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
+                dy =
+                  dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2;
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
+                ctx.drawImage(
+                  img,
+                  dy,
+                  -dx - imgH / this.scale,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
+              }
+              break;
+            case 2:
+            case -2:
+              if (!this.full) {
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
+                ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH);
+              } else {
+                setCanvasSize(width / this.scale, height / this.scale);
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
+                dx = dx / this.scale;
+                dy = dy / this.scale;
+                ctx.drawImage(
+                  img,
+                  -dx - imgW / this.scale,
+                  -dy - imgH / this.scale,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
+              }
+              break;
+            case 3:
+            case -1:
+              if (!this.full) {
+                // 换算图片旋转后的坐标弥补
+                dx = dx + (imgW - imgH) / 2;
+                dy = dy + (imgH - imgW) / 2;
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
+                ctx.drawImage(img, -dy - imgW, dx, imgW, imgH);
+              } else {
+                setCanvasSize(width / this.scale, height / this.scale);
+                // 换算图片旋转后的坐标弥补
+                dx =
+                  dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
+                dy =
+                  dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2;
+                ctx.rotate((rotate * 90 * Math.PI) / 180);
+                ctx.drawImage(
+                  img,
+                  -dy - imgW / this.scale,
+                  dx,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
+              }
+              break;
+            default:
+              if (!this.full) {
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 // 输出原图比例截图
@@ -1286,7 +1404,7 @@ export default {
         } else {
           let width = trueWidth * this.scale;
           let height = trueHeight * this.scale;
-          let ctx = canvas.getContext('2d');
+          let ctx = canvas.getContext("2d");
           ctx.save();
           switch (rotate) {
             case 0:
@@ -1322,8 +1440,8 @@ export default {
       };
       // 判断图片是否是base64
       var s = this.img.substr(0, 4);
-      if (s !== 'data') {
-        img.crossOrigin = 'Anonymous';
+      if (s !== "data") {
+        img.crossOrigin = "Anonymous";
       }
       img.src = this.imgs;
 
