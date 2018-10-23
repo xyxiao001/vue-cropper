@@ -1152,7 +1152,7 @@ export default {
     },
 
     getCropChecked(cb) {
-      let canvas = document.createElement("canvas");
+      let canvas = document.createElement('canvas');
       let img = new Image();
       let rotate = this.rotate;
       let trueWidth = this.trueWidth;
@@ -1161,7 +1161,7 @@ export default {
       let cropOffsertY = this.cropOffsertY;
       img.onload = () => {
         if (this.cropW !== 0) {
-          let ctx = canvas.getContext("2d");
+          let ctx = canvas.getContext('2d');
           let dpr = 1;
           if (this.high & !this.full) {
             dpr = window.devicePixelRatio;
@@ -1180,8 +1180,7 @@ export default {
             dpr;
           // console.log(dx, dy)
           //保存状态
-          canvas.width = width;
-          canvas.height = height;
+          setCanvasSize(width, height);
           ctx.save();
           switch (rotate) {
             case 0:
@@ -1189,8 +1188,7 @@ export default {
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 // 输出原图比例截图
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 ctx.drawImage(
                   img,
                   dx / this.scale,
@@ -1209,8 +1207,7 @@ export default {
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, dy, -dx - imgH, imgW, imgH);
               } else {
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 // 换算图片旋转后的坐标弥补
                 dx =
                   dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
@@ -1232,8 +1229,7 @@ export default {
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH);
               } else {
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 dx = dx / this.scale;
                 dy = dy / this.scale;
@@ -1255,8 +1251,7 @@ export default {
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, -dy - imgW, dx, imgW, imgH);
               } else {
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 // 换算图片旋转后的坐标弥补
                 dx =
                   dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
@@ -1277,8 +1272,7 @@ export default {
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 // 输出原图比例截图
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 ctx.drawImage(
                   img,
                   dx / this.scale,
@@ -1292,39 +1286,34 @@ export default {
         } else {
           let width = trueWidth * this.scale;
           let height = trueHeight * this.scale;
-          let ctx = canvas.getContext("2d");
+          let ctx = canvas.getContext('2d');
           ctx.save();
           switch (rotate) {
             case 0:
-              canvas.width = width;
-              canvas.height = height;
+              setCanvasSize(width, height);
               ctx.drawImage(img, 0, 0, width, height);
               break;
             case 1:
             case -3:
               // 旋转90度 或者-270度 宽度和高度对调
-              canvas.width = height;
-              canvas.height = width;
+              setCanvasSize(height, width);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, 0, -height, width, height);
               break;
             case 2:
             case -2:
-              canvas.width = width;
-              canvas.height = height;
+              setCanvasSize(width, height);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, -width, -height, width, height);
               break;
             case 3:
             case -1:
-              canvas.width = height;
-              canvas.height = width;
+              setCanvasSize(height, width);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, -width, 0, width, height);
               break;
             default:
-              canvas.width = width;
-              canvas.height = height;
+              setCanvasSize(width, height);
               ctx.drawImage(img, 0, 0, width, height);
           }
           ctx.restore();
@@ -1333,10 +1322,15 @@ export default {
       };
       // 判断图片是否是base64
       var s = this.img.substr(0, 4);
-      if (s !== "data") {
-        img.crossOrigin = "Anonymous";
+      if (s !== 'data') {
+        img.crossOrigin = 'Anonymous';
       }
-      img.src = this.imgs;     
+      img.src = this.imgs;
+
+      function setCanvasSize(width, height) {
+        canvas.width = Math.round(width);
+        canvas.height = Math.round(height);
+      }
     },
 
     // 获取转换成base64 的图片信息
