@@ -1,4 +1,4 @@
-## 使用  
+## 使用 注意： 需要关掉本地的mock服务， 不然图片转化会报错 
 ```
 组件内使用
 import { VueCropper }  from vue-cropper 
