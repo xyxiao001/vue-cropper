@@ -253,8 +253,8 @@ export default {
     },
 
     isIE () {
-      var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
-      var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE浏览器  
+      var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+      var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE浏览器
       return isIE
     },
   },
@@ -1389,12 +1389,8 @@ export default {
         // 读取图片的信息原始信息， 解析是否需要旋转
         // 读取图片的旋转信息
         // 得到外层容器的宽度高度
-        this.w = window
-          .getComputedStyle(this.$refs.cropper)
-          .width.replace("px", "");
-        this.h = window
-          .getComputedStyle(this.$refs.cropper)
-          .height.replace("px", "");
+        this.w = parseFloat(window.getComputedStyle(this.$refs.cropper).width);
+        this.h = parseFloat(window.getComputedStyle(this.$refs.cropper).height);
 
         // 存入图片真实高度
         this.trueWidth = img.width;
