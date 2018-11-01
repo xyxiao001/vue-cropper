@@ -199,6 +199,12 @@ module.exports = {
         <td>2000</td>
         <td>0-max</td>
     </tr>
+    <tr>
+        <td>enlarge</td>
+        <td>图片根据截图框输出比例倍数</td>
+        <td>1</td>
+        <td>0-max(建议不要太大不然会卡死的呢)</td>
+    </tr>
   </tbody>
 </table>
 
@@ -236,13 +242,47 @@ this.$refs.cropper.getCropBlob((data) => {
 ``` html
 @realTime="realTime"
 // Real time preview function
-realTime (data) {
-  this.previews = data
-}
+realTime(data) {
+  var previews = data;
+  var h = 100;
+  var w = 50;
+
+  this.previewStyle1 = {
+    width: previews.w + "px",
+    height: previews.h + "px",
+    overflow: "hidden",
+    margin: "0",
+    zoom: h / previews.h
+  };
+
+  this.previewStyle2 = {
+    width: previews.w + "px",
+    height: previews.h + "px",
+    overflow: "hidden",
+    margin: "0",
+    zoom: w / previews.w
+  };
+  this.previews = data;
+},
+
+
 <div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
     'margin': '5px'}">
   <div :style="previews.div">
     <img :src="option.img" :style="previews.img">
+  </div>
+</div>
+<p>中等大小</p>
+<div :style="previewStyle1"> 
+  <div :style="previews.div">
+    <img :src="previews.url" :style="previews.img">
+  </div>
+</div>
+
+<p>迷你大小</p>
+<div :style="previewStyle2"> 
+  <div :style="previews.div">
+    <img :src="previews.url" :style="previews.img">
   </div>
 </div>
 =
@@ -278,6 +318,13 @@ data type
 
 
 ## 更新日志
+### 0.45 
+添加倍数使用 enlarge
+可以输出裁剪框等比例图片；
+
+感谢来自于 [](https://github.com/hzsrc)的贡献
+添加预览框各种比例, 和修复图片截图小数问题
+
 ### 0.44
 修复引入方式的问题
 ```

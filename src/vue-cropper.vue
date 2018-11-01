@@ -228,6 +228,11 @@ export default {
     maxImgSize: {
       type: Number,
       default: 2000
+    },
+    // 倍数  可渲染当前截图框的n倍 0 - 1000;
+    enlarge: {
+      type: [Number, String],
+      default: 1
     }
   },
   computed: {
@@ -237,11 +242,15 @@ export default {
       obj.width = this.cropW > 0 ? this.cropW : 0;
       obj.height = this.cropH > 0 ? this.cropH : 0;
       if (this.infoTrue) {
+        let dpr = 1;
         if (this.high && !this.full) {
-          let dpr = window.devicePixelRatio;
-          obj.width = obj.width * dpr;
-          obj.height = obj.height * dpr;
+           dpr = window.devicePixelRatio;
         }
+        if (this.enlarge !== 1 & !this.full) {
+          dpr = Math.abs(Number(this.enlarge))          
+        }
+        obj.width = obj.width * dpr;
+        obj.height = obj.height * dpr;
         if (this.full) {
           obj.width = obj.width / this.scale;
           obj.height = obj.height / this.scale;
@@ -1165,6 +1174,10 @@ export default {
           let dpr = 1;
           if (this.high & !this.full) {
             dpr = window.devicePixelRatio;
+          }
+          if (this.enlarge !== 1 & !this.full) {
+            dpr = Math.abs(Number(this.enlarge))
+            console.log(dpr)
           }
           let width = this.cropW * dpr;
           let height = this.cropH * dpr;
