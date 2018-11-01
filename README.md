@@ -244,15 +244,15 @@ this.$refs.cropper.getCropBlob((data) => {
 // Real time preview function
 realTime(data) {
   var previews = data;
-  var h = 100;
-  var w = 50;
+  var h = 0.5;
+  var w = 0.2;
 
   this.previewStyle1 = {
     width: previews.w + "px",
     height: previews.h + "px",
     overflow: "hidden",
     margin: "0",
-    zoom: h / previews.h
+    zoom: h
   };
 
   this.previewStyle2 = {
@@ -260,7 +260,7 @@ realTime(data) {
     height: previews.h + "px",
     overflow: "hidden",
     margin: "0",
-    zoom: w / previews.w
+    zoom: w
   };
   this.previews = data;
 },
