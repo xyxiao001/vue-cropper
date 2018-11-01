@@ -35,6 +35,7 @@
 						@realTime="realTime"
 						@imgLoad="imgLoad"
 						@cropMoving="cropMoving"
+						:enlarge="option.enlarge"
 					></vueCropper>
 				</div>
 				<div class="test-button">
@@ -53,7 +54,31 @@
 					<button @click="finish('blob')" class="btn">preview(blob)</button>
 					<a @click="down('base64')" class="btn">download(base64)</a>
 					<a @click="down('blob')" class="btn">download(blob)</a>
-                    <a :href="downImg" download="demo.png" ref="downloadDom"></a>
+					<a :href="downImg" download="demo.png" ref="downloadDom"></a>
+				</div>
+
+					<p>截图框大小</p>
+					<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
+							'margin': '5px'}">
+						<div :style="previews.div">
+							<img :src="option.img" :style="previews.img">
+						</div>
+					</div>
+					<p>中等大小</p>
+					<div :style="previewStyle1"> 
+						<div :style="previews.div">
+							<img :src="previews.url" :style="previews.img">
+						</div>
+					</div>
+
+					<p>迷你大小</p>
+					<div :style="previewStyle2"> 
+						<div :style="previews.div">
+							<img :src="previews.url" :style="previews.img">
+						</div>
+					</div>
+
+
 					<div style="display:block; width: 100%;">
 						<label class="c-item">
 							<span>上传图片是否显示原始宽高 (针对大图 可以铺满)</span>
@@ -73,10 +98,12 @@
 						<label class="c-item">
 							<span>截图信息展示是否是真实的输出宽高</span>
 							<input type="checkbox" v-model="option.infoTrue">
+							<span>infoTrue: {{ option.infoTrue}}</span>							
 						</label>
 						<label class="c-item">
 							<span>能否拖动图片</span>
 							<input type="checkbox" v-model="option.canMove">
+							<span>canMove: {{ option.canMove}}</span>
 						</label>
 						<label class="c-item">
 							<span>能否拖动截图框</span>
@@ -98,6 +125,10 @@
 							<input type="checkbox" v-model="option.centerBox">
 							<span>centerBox: {{ option.centerBox}}</span>
 						</label>
+						<label class="c-item">
+							<span>是否按照截图框比例输出 默认为1 </span>
+							<input type="number" v-model="option.enlarge">
+						</label>
 						<p>输出图片格式</p>
 						<label class="c-item">
 							<label>jpg  <input type="radio" name="type" value="jpeg" v-model="option.outputType"></label>
@@ -106,11 +137,7 @@
 						</label>
 					</div>
 				</div>
-				<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
-					<div :style="previews.div">
-						<img :src="previews.url" :style="previews.img">
-					</div>
-				</div>
+				
 				<codes>
 	<div slot="body">
 	&lt;template>
@@ -181,7 +208,7 @@
 		&lt;/div>
 	&lt;/template>
 	&lt;script>
-	import vueCropper from 'vue-cropper'
+	import { vueCropper } from 'vue-cropper'
 
 	export default {
 		data: function () {
@@ -460,7 +487,8 @@ export default {
         autoCropHeight: 150,
         centerBox: false,
         high: true,
-        cropData: {}
+        cropData: {},
+        enlarge: 1
       },
       example2: {
         img: "http://ofyaji162.bkt.clouddn.com/bg1.jpg",
@@ -484,7 +512,9 @@ export default {
         autoCropHeight: 200,
         fixedBox: true
       },
-      downImg: "#"
+      downImg: "#",
+      previewStyle1: {},
+      previewStyle2: {}
     };
   },
   methods: {
@@ -538,6 +568,25 @@ export default {
     },
     // 实时预览函数
     realTime(data) {
+      var previews = data;
+      var h = 0.5;
+      var w = 0.2;
+
+      this.previewStyle1 = {
+        width: previews.w + "px",
+        height: previews.h + "px",
+        overflow: "hidden",
+        margin: "0",
+        zoom: h
+      };
+
+      this.previewStyle2 = {
+        width: previews.w + "px",
+        height: previews.h + "px",
+        overflow: "hidden",
+        margin: "0",
+        zoom: w
+      };
       this.previews = data;
     },
 

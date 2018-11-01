@@ -194,6 +194,12 @@ module.exports = {
         <td>2000</td>
         <td>0-max</td>
     </tr>
+    <tr>
+        <td>enlarge</td>
+        <td>Picture output ratio multiplier based on screenshots</td>
+        <td>1</td>
+        <td>0-max(Don't be too big.)</td>
+    </tr>
   </tbody>
 </table>
 
@@ -273,7 +279,71 @@ data type
 
 
 ## Update log
+### 0.45
 
+Add multiples using enlarge
+
+You can output clipping boxes and other proportional images.
+
+
+
+Thank you for your contribution from [https://github.com/hzsrc].
+
+Add preview box to various proportions, and restore image screenshots decimal problem.
+
+### 0.44
+修复引入方式的问题
+```
+Repairing the way of introduction
+import { VueCropper }  from vue-cropper 
+components: {
+  VueCropper,
+},
+
+main.js
+import VueCropper from vue-cropper 
+
+Vue.use(vueCropper)
+
+cdn
+<script src="vuecropper.js"></script>
+Vue.use(window['vue-cropper'])
+```
+
+
+### V0.43
+
+Peel off EXIF's dependency library, add exfi-min.js to reduce code size 45.9k = 37k
+
+Build upgrade webpack4 upgrade
+
+` ` ` ` ` ` ` ` ` '.
+
+Add Vue install method = "npm: Vue.use (VueCropper) web: Vue.use (window['vue-cropper'])"
+
+` ` ` ` ` ` ` ` ` '.
+
+
+
+
+### V0.42
+
+Repair screenshots because of the problem of removing decimal points.
+
+
+
+### V0.41
+
+Repair boundary problem of screenshots
+
+
+
+
+### V0.40
+
+The way to repair orientation
+
+Thanks for the contribution of [Felipe Mengatto] (https://github.com/felipemengatto).
 
 ### v0.40
 fix orientation handel

@@ -228,6 +228,11 @@ export default {
     maxImgSize: {
       type: Number,
       default: 2000
+    },
+    // 倍数  可渲染当前截图框的n倍 0 - 1000;
+    enlarge: {
+      type: [Number, String],
+      default: 1
     }
   },
   computed: {
@@ -237,11 +242,15 @@ export default {
       obj.width = this.cropW > 0 ? this.cropW : 0;
       obj.height = this.cropH > 0 ? this.cropH : 0;
       if (this.infoTrue) {
+        let dpr = 1;
         if (this.high && !this.full) {
-          let dpr = window.devicePixelRatio;
-          obj.width = obj.width * dpr;
-          obj.height = obj.height * dpr;
+           dpr = window.devicePixelRatio;
         }
+        if (this.enlarge !== 1 & !this.full) {
+          dpr = Math.abs(Number(this.enlarge))          
+        }
+        obj.width = obj.width * dpr;
+        obj.height = obj.height * dpr;
         if (this.full) {
           obj.width = obj.width / this.scale;
           obj.height = obj.height / this.scale;
@@ -1166,6 +1175,10 @@ export default {
           if (this.high & !this.full) {
             dpr = window.devicePixelRatio;
           }
+          if (this.enlarge !== 1 & !this.full) {
+            dpr = Math.abs(Number(this.enlarge))
+            console.log(dpr)
+          }
           let width = this.cropW * dpr;
           let height = this.cropH * dpr;
           let imgW = trueWidth * this.scale * dpr;
@@ -1180,8 +1193,7 @@ export default {
             dpr;
           // console.log(dx, dy)
           //保存状态
-          canvas.width = width;
-          canvas.height = height;
+          setCanvasSize(width, height);
           ctx.save();
           switch (rotate) {
             case 0:
@@ -1189,8 +1201,7 @@ export default {
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 // 输出原图比例截图
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 ctx.drawImage(
                   img,
                   dx / this.scale,
@@ -1209,8 +1220,7 @@ export default {
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, dy, -dx - imgH, imgW, imgH);
               } else {
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 // 换算图片旋转后的坐标弥补
                 dx =
                   dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
@@ -1232,8 +1242,7 @@ export default {
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH);
               } else {
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 dx = dx / this.scale;
                 dy = dy / this.scale;
@@ -1255,8 +1264,7 @@ export default {
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, -dy - imgW, dx, imgW, imgH);
               } else {
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 // 换算图片旋转后的坐标弥补
                 dx =
                   dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
@@ -1277,8 +1285,7 @@ export default {
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 // 输出原图比例截图
-                canvas.width = width / this.scale;
-                canvas.height = height / this.scale;
+                setCanvasSize(width / this.scale, height / this.scale);
                 ctx.drawImage(
                   img,
                   dx / this.scale,
@@ -1296,35 +1303,30 @@ export default {
           ctx.save();
           switch (rotate) {
             case 0:
-              canvas.width = width;
-              canvas.height = height;
+              setCanvasSize(width, height);
               ctx.drawImage(img, 0, 0, width, height);
               break;
             case 1:
             case -3:
               // 旋转90度 或者-270度 宽度和高度对调
-              canvas.width = height;
-              canvas.height = width;
+              setCanvasSize(height, width);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, 0, -height, width, height);
               break;
             case 2:
             case -2:
-              canvas.width = width;
-              canvas.height = height;
+              setCanvasSize(width, height);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, -width, -height, width, height);
               break;
             case 3:
             case -1:
-              canvas.width = height;
-              canvas.height = width;
+              setCanvasSize(height, width);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, -width, 0, width, height);
               break;
             default:
-              canvas.width = width;
-              canvas.height = height;
+              setCanvasSize(width, height);
               ctx.drawImage(img, 0, 0, width, height);
           }
           ctx.restore();
@@ -1336,7 +1338,12 @@ export default {
       if (s !== "data") {
         img.crossOrigin = "Anonymous";
       }
-      img.src = this.imgs;     
+      img.src = this.imgs;
+
+      function setCanvasSize(width, height) {
+        canvas.width = Math.round(width);
+        canvas.height = Math.round(height);
+      }
     },
 
     // 获取转换成base64 的图片信息
@@ -1395,12 +1402,8 @@ export default {
         // 读取图片的信息原始信息， 解析是否需要旋转
         // 读取图片的旋转信息
         // 得到外层容器的宽度高度
-        this.w = window
-          .getComputedStyle(this.$refs.cropper)
-          .width.replace("px", "");
-        this.h = window
-          .getComputedStyle(this.$refs.cropper)
-          .height.replace("px", "");
+        this.w = parseFloat(window.getComputedStyle(this.$refs.cropper).width);
+        this.h = parseFloat(window.getComputedStyle(this.$refs.cropper).height);
 
         // 存入图片真实高度
         this.trueWidth = img.width;
