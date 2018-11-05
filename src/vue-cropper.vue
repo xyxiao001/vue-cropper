@@ -1,5 +1,5 @@
 <template>
-	<div class="vue-cropper" ref="cropper" @mouseover="scaleImg" @mouseout="cancleScale">
+	<div class="vue-cropper" ref="cropper" @mouseover="scaleImg" @mouseout="cancelScale">
 		<div class="cropper-box">
 			<div class="cropper-box-canvas"
 			 	v-show="!loading"
@@ -464,7 +464,7 @@ export default {
             // 记录手指刚刚放上去
             this.touches = e.touches;
             window.addEventListener("touchmove", this.touchScale);
-            window.addEventListener("touchend", this.cancleTouchScale);
+            window.addEventListener("touchend", this.cancelTouchScale);
           }
         } else {
           window.addEventListener("mousemove", this.moveImg);
@@ -557,7 +557,7 @@ export default {
       }
     },
 
-    cancleTouchScale(e) {
+    cancelTouchScale(e) {
       window.removeEventListener("touchmove", this.touchScale);
     },
 
@@ -567,7 +567,7 @@ export default {
       if (e.touches && e.touches.length === 2) {
         this.touches = e.touches;
         window.addEventListener("touchmove", this.touchScale);
-        window.addEventListener("touchend", this.cancleTouchScale);
+        window.addEventListener("touchend", this.cancelTouchScale);
         window.removeEventListener("touchmove", this.moveImg);
         return false;
       }
@@ -659,7 +659,7 @@ export default {
       }
     },
     // 移出框
-    cancleScale() {
+    cancelScale() {
       if (this.canScale) {
         window.removeEventListener(this.support, this.changeSize);
       }
