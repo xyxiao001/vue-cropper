@@ -1,15 +1,15 @@
 ## 使用 注意： 需要关掉本地的mock服务， 不然图片转化会报错 
 ```
 组件内使用
-import { VueCropper }  from vue-cropper 
+import { VueCropper }  from 'vue-cropper' 
 components: {
   VueCropper,
 },
 
 main.js里面使用
-import VueCropper from vue-cropper 
+import VueCropper from 'vue-cropper' 
 
-Vue.use(vueCropper)
+Vue.use(VueCropper)
 
 cdn方式使用
 <script src="vuecropper.js"></script>
