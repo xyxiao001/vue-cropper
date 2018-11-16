@@ -133,7 +133,9 @@ export default {
       // 是否正在多次缩放
       scaling: false,
       scalingSet: "",
-      coeStatus: ""
+      coeStatus: "",
+      // 控制emit触发频率
+      isCanShow: true,
     };
   },
   props: {
@@ -233,6 +235,12 @@ export default {
     enlarge: {
       type: [Number, String],
       default: 1
+    },
+
+    // 自动预览的固定宽度
+    preW: {
+      type: [Number, String],
+      default: 0
     }
   },
   computed: {
@@ -280,11 +288,9 @@ export default {
       this.reload();
     },
     cropW() {
-      this.cropW = this.cropW;
       this.showPreview();
     },
     cropH() {
-      this.cropH = this.cropH;
       this.showPreview();
     },
     cropOffsertX() {
@@ -396,6 +402,7 @@ export default {
       if (this.img === "") return;
       this.loading = true;
       this.scale = 1;
+      this.rotate = 0;
       this.clearCrop();
       let img = new Image();
       img.onload = () => {
@@ -1353,7 +1360,7 @@ export default {
       });
     },
 
-    //转化base64 为blob对象
+    //canvas获取为blob对象
     getCropBlob(cb) {
       this.getCropChecked(data => {
         data.toBlob(
@@ -1366,33 +1373,42 @@ export default {
 
     // 自动预览函数
     showPreview() {
+      // 优化不要多次触发
+      if (this.isCanShow) {
+        this.isCanShow = false;
+        setTimeout(() => {
+          this.isCanShow = true;
+        }, 16);
+      } else {
+        return false;
+      }
+      let w = this.cropW;
+      let h = this.cropH;
+      let scale = this.scale;
       var obj = {};
       obj.div = {
-        width: this.cropW + "px",
-        height: this.cropH + "px"
+        width: `${w}px`,
+        height: `${h}px`
       };
-      obj.img = {
-        width: this.trueWidth + "px",
-        height: this.trueHeight + "px",
-        transform:
-          "scale(" +
-          this.scale +
-          "," +
-          this.scale +
-          ") " +
-          "translate3d(" +
-          (this.x - this.cropOffsertX) / this.scale +
-          "px," +
-          (this.y - this.cropOffsertY) / this.scale +
-          "px," +
-          "0)" +
-          "rotateZ(" +
-          this.rotate * 90 +
-          "deg)"
-      };
-      obj.w = this.cropW;
-      obj.h = this.cropH;
+      let transformX = (this.x - this.cropOffsertX) / scale
+      let transformY = (this.y - this.cropOffsertY) / scale
+      let transformZ = 0
+      obj.w = w;
+      obj.h = h;
       obj.url = this.imgs;
+      obj.img = {
+        width: `${this.trueWidth}px`,
+        height: `${this.trueHeight}px`,
+        transform:
+          `scale(${scale})translate3d(${transformX}px, ${transformY}px, ${transformZ}px)rotateZ(${this.rotate * 90}deg)`
+      };
+      obj.html = `
+      <div class="show-preview" style="width: ${obj.w}px; height: ${obj.h}px,; overflow: hidden">
+        <div style="width: ${w}px; height: ${h}px">
+          <img src=${obj.url} style="width: ${this.trueWidth}px; height: ${this.trueHeight}px; transform:
+          scale(${scale})translate3d(${transformX}px, ${transformY}px, ${transformZ}px)rotateZ(${this.rotate * 90}deg)">
+        </div>
+      </div>`
       this.$emit("realTime", obj);
     },
     // reload 图片布局函数
@@ -1760,7 +1776,7 @@ export default {
   top: 50%;
   right: -4px;
   margin-top: -3px;
-  cursor: w-resize;
+  cursor: e-resize;
 }
 
 .point6 {
