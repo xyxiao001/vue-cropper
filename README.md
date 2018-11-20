@@ -15,6 +15,7 @@ cdn方式使用
 <script src="vuecropper.js"></script>
 Vue.use(window['vue-cropper'])
 
+nuxt 使用方式
 if(process.browser) {
   vueCropper = require('vue-cropper')
   Vue.use(vueCropper.default, {name: 'vue-cropper})
