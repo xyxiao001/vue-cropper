@@ -18,7 +18,7 @@ Vue.use(window['vue-cropper'])
 nuxt 使用方式
 if(process.browser) {
   vueCropper = require('vue-cropper')
-  Vue.use(vueCropper.default, {name: 'vue-cropper})
+  Vue.use(vueCropper.default)
 }
 
 ```
