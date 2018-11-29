@@ -101,8 +101,8 @@ export default {
       // 正在截图
       cropping: false,
       // 裁剪框大小
-      cropW: 0,
-      cropH: 0,
+      cropW: this.autoCropWidth,
+      cropH: this.autoCropHeight,
       cropOldW: 0,
       cropOldH: 0,
       // 判断是否能够改变
@@ -287,6 +287,12 @@ export default {
       }
       this.reload();
     },
+    autoCropWidth(newV) {
+      this.cropW = newV
+    },
+    autoCropHeight(newV) {
+      this.cropH = newV
+    },    
     cropW() {
       this.showPreview();
     },
