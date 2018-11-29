@@ -165,7 +165,7 @@ export default {
     autoCrop: {
       type: Boolean,
       default: false
-    },
+    },    
     autoCropWidth: {
       type: Number,
       default: 0
@@ -287,6 +287,7 @@ export default {
       }
       this.reload();
     },
+    // 频繁修改裁剪框宽高得保证样式同步  by @careteen
     autoCropWidth(newV) {
       this.cropW = newV
     },
