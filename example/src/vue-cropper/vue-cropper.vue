@@ -241,6 +241,16 @@ export default {
     preW: {
       type: [Number, String],
       default: 0
+    },
+    /*
+      图片布局方式 mode 实现和css背景一样的效果
+      contain  居中布局 默认不会缩放 保证图片在容器里面 mode: 'contain'
+      cover    拉伸布局 填充整个容器  mode: 'cover'
+      如果仅有一个数值被给定，这个数值将作为宽度值大小，高度值将被设定为auto。 mode: '50px'
+      如果有两个数值被给定，第一个将作为宽度值大小，第二个作为高度值大小。 mode: '50px 60px'
+    */
+    mode: {
+
     }
   },
   computed: {
@@ -1453,6 +1463,9 @@ export default {
           }
           // // 图片加载成功的回调
           this.$emit("imgLoad", "success");
+          setTimeout(() => {
+            this.showPreview();
+          }, 20);
         });
       };
       img.onerror = () => {
