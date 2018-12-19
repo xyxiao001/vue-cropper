@@ -38,6 +38,7 @@
 						@imgLoad="imgLoad"
 						@cropMoving="cropMoving"
 						:enlarge="option.enlarge"
+						:mode="option.mode"
 					></vueCropper>
 				</div>
 				<div class="test-button">
@@ -95,6 +96,20 @@
 
 				<div style="display:block; width: 100%;">
 					<label class="c-item">
+						<span>图片默认渲染方式</span>
+						<select v-model="option.mode">
+							<option value="contain">contain</option>
+							<option value="cover">cover</option>
+							<option value="400px auto">400px auto</option>
+							<option value="auto 400px">auto 400px</option>
+							<option value="50%">50%</option>
+							<option value="auto 50%">auto 50%</option>							
+						</select>
+						<section>
+							类似css background属性设置  设置不符合规范不生效， 参照文档说明
+						</section>
+					</label>
+					<label class="c-item">
 						<span>上传图片是否显示原始宽高 (针对大图 可以铺满)</span>
 						<input type="checkbox" v-model="option.original">
 						<span>original: {{ option.original}}</span>
@@ -135,6 +150,11 @@
 						<span>autoCrop: {{ option.autoCrop}}</span>
 					</label>
 					<label class="c-item">
+						<span>自动生成截图框的宽高</span>
+						<span>宽度:  </span><input type="number" v-model="option.autoCropWidth">
+						<span>高度:  </span><input type="number" v-model="option.autoCropHeight">
+					</label>
+					<label class="c-item">
 						<span>截图框是否限制在图片里(只有在自动生成截图框时才能生效)</span>
 						<input type="checkbox" v-model="option.centerBox">
 						<span>centerBox: {{ option.centerBox}}</span>
@@ -153,48 +173,6 @@
 				
 				<codes>
 					<div slot="body">{{ code1 }}</div>
-				</codes>
-			</div>
-
-			<div class="show-info">
-				<h2>example2 自动生成截图框 固定比例 w : h => 4 : 3</h2>
-				<div class="test">
-					<vueCropper
-						ref="cropper2"
-						:img="example2.img"
-						:outputSize="example2.size"
-						:outputType="example2.outputType"
-						:info="example2.info"
-						:canScale="example2.canScale"
-						:autoCrop="example2.autoCrop"
-						:autoCropWidth="example2.autoCropWidth"
-						:autoCropHeight="example2.autoCropHeight"
-						:fixed="example2.fixed"
-						:fixedNumber="example2.fixedNumber"
-					></vueCropper>
-				</div>
-				<label class="btn" for="upload2">upload</label>
-				<input type="file" id="upload2" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 2)">
-				<button @click="finish2('base64')" class="btn">preview(base64)</button>
-				<codes>
-					<div slot="body"></div>
-				</codes>
-			</div>
-			<div class="show-info">
-				<h2>example3 自动生成截图框 固定大小 不能改变</h2>
-				<div class="test">
-					<vueCropper
-						ref="cropper3"
-						:img="example3.img"
-						:autoCrop="example3.autoCrop"
-						:autoCropWidth="example3.autoCropWidth"
-						:autoCropHeight="example3.autoCropHeight"
-						:fixedBox="example3.fixedBox"
-					></vueCropper>
-				</div>
-				<button @click="finish3('base64')" class="btn">preview(base64)</button>
-				<codes>
-					<div slot="body"></div>
 				</codes>
 			</div>
 		</div>
@@ -256,7 +234,8 @@ export default {
         centerBox: false,
         high: true,
         cropData: {},
-        enlarge: 1
+				enlarge: 1,
+				mode: 'contain'
       },
       example2: {
         img: "http://cdn.xyxiao.cn/Landscape_1.jpg",

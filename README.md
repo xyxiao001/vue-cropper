@@ -211,6 +211,12 @@ module.exports = {
         <td>1</td>
         <td>0-max(建议不要太大不然会卡死的呢)</td>
     </tr>
+    <tr>
+        <td>mode</td>
+        <td>图片默认渲染方式</td>
+        <td>contain</td>
+        <td>contain , cover, 100px, 100% auto</td>
+    </tr>
   </tbody>
 </table>
 
@@ -244,6 +250,14 @@ this.$refs.cropper.getCropBlob((data) => {
   // do something
   console.log(data)  
 })
+
+### Description of the default rendering mode of the image
+Image layout mode mode achieves the same effect as css background
+Contain Centered layout Default does not scale Ensure the image is inside the container mode: 'contain'
+Cover stretch layout fill the entire container mode: 'cover'
+If only one value is given, this value will be used as the width value and the height value will be set to auto. mode: '50px'
+If two values are given, the first one will be the width value and the second will be the height value. mode: '50px 60px'
+
 ### 预览
 ``` html
 @realTime="realTime"
@@ -324,6 +338,10 @@ data type
 
 
 ## 更新日志
+
+### 0.47
+修复第一次不触发预览的问题
+新增加图片渲染mode功能
 
 ### 0.46
 修复图片旋转bug

@@ -167,11 +167,11 @@ export default {
       default: false
     },
     autoCropWidth: {
-      type: Number,
+      type: [Number, String],
       default: 0
     },
     autoCropHeight: {
-      type: Number,
+      type: [Number, String],
       default: 0
     },
     // 是否开启固定宽高比
@@ -241,6 +241,17 @@ export default {
     preW: {
       type: [Number, String],
       default: 0
+    },
+    /*
+      图片布局方式 mode 实现和css背景一样的效果
+      contain  居中布局 默认不会缩放 保证图片在容器里面 mode: 'contain'
+      cover    拉伸布局 填充整个容器  mode: 'cover'
+      如果仅有一个数值被给定，这个数值将作为宽度值大小，高度值将被设定为auto。 mode: '50px'
+      如果有两个数值被给定，第一个将作为宽度值大小，第二个作为高度值大小。 mode: '50px 60px'
+    */
+    mode: {
+      type: String,
+      default: 'contain'
     }
   },
   computed: {
@@ -312,6 +323,20 @@ export default {
       if (val) {
         this.goAutoCrop();
       }
+    },
+    // 修改了自动截图框
+    autoCropWidth () {
+      if (this.autoCrop) {
+        this.goAutoCrop();
+      }
+    },
+    autoCropHeight () {
+      if (this.autoCrop) {
+        this.goAutoCrop();
+      }
+    },
+    mode () {
+      this.checkedImg()
     },
     rotate() {
       this.showPreview();
@@ -1427,16 +1452,10 @@ export default {
 
         // 判断是否需要压缩大图
         if (!this.original) {
-          if (this.trueWidth > this.w) {
-            // 如果图片宽度大于容器宽度
-            this.scale = this.w / this.trueWidth;
-          }
-
-          if (this.trueHeight * this.scale > this.h) {
-            this.scale = this.h / this.trueHeight;
-          }
+          // 判断布局方式 mode
+          this.scale = this.checkedMode()
         } else {
-          this.scale = 1;
+          this.scale = 1
         }
 
         this.$nextTick(() => {
@@ -1453,12 +1472,78 @@ export default {
           }
           // // 图片加载成功的回调
           this.$emit("imgLoad", "success");
+          setTimeout(() => {
+            this.showPreview();
+          }, 20);
         });
       };
       img.onerror = () => {
         this.$emit("imgLoad", "error");
       };
       img.src = this.imgs;
+    },
+    // 背景布局的函数
+    checkedMode () {
+      let scale = 1
+      // 通过字符串分割
+      let imgW = this.trueWidth;
+      let imgH = this.trueHeight;
+      const arr = this.mode.split(' ')
+      switch(arr[0]) {
+        case 'contain':
+          if (this.trueWidth > this.w) {
+            // 如果图片宽度大于容器宽度
+            scale = this.w / this.trueWidth;
+          }
+
+          if (this.trueHeight * this.scale > this.h) {
+            scale = this.h / this.trueHeight;
+          }
+        break
+        case 'cover':
+          // 扩展布局 默认填充满整个容器
+          // 图片宽度大于容器
+          imgW = this.w
+          scale = imgW / this.trueWidth
+          imgH = this.imgH * scale
+          // 如果扩展之后高度小于容器的外层高度 继续扩展高度
+          if (imgH < this.h) {
+            imgH = this.h
+            scale = imgH / this.trueHeight
+          }
+        break
+        default:
+          try {
+            let str = arr[0]
+            if (str.search('px') !== -1) {
+              str = str.replace('px', '')
+              imgW = parseFloat(str)
+              scale = imgW / this.trueWidth
+            }
+            if (str.search('%') !== -1) {
+              str = str.replace('%', '')
+              imgW = parseFloat(str) / 100 * this.w
+              scale = imgW / this.trueWidth
+            }
+
+            if (arr.length === 2 && str === 'auto') {
+              let str2 = arr[1]
+              if (str2.search('px') !== -1) {
+                str2 = str2.replace('px', '')
+                imgH = parseFloat(str2)
+                scale = imgH / this.trueHeight
+              }
+              if (str2.search('%') !== -1) {
+                str2 = str2.replace('%', '')
+                imgH = parseFloat(str2) / 100 * this.h
+                scale = imgH / this.trueHeight
+              }
+            }
+          } catch (error) {
+            scale = 1
+          }
+      }
+      return scale
     },
     // 自动截图函数
     goAutoCrop(cw, ch) {
@@ -1474,8 +1559,8 @@ export default {
       }
       // 截图框默认大小
       // 如果为0 那么计算容器大小 默认为80%
-      var w = cw ? cw : this.autoCropWidth;
-      var h = ch ? ch : this.autoCropHeight;
+      var w = cw ? cw : parseFloat(this.autoCropWidth)
+      var h = ch ? ch : parseFloat(this.autoCropHeight)
       if (w === 0 || h === 0) {
         w = maxWidth * 0.8;
         h = maxHeight * 0.8;
