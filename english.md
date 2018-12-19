@@ -200,6 +200,12 @@ module.exports = {
         <td>1</td>
         <td>0-max(Don't be too big.)</td>
     </tr>
+    <tr>
+        <td>mode</td>
+        <td>img render mode</td>
+        <td>contain</td>
+        <td>contain , cover, 100px, 100% auto</td>
+    </tr>
   </tbody>
 </table>
 
@@ -279,6 +285,14 @@ data type
 
 
 ## Update log
+### 0.47
+Fix the problem that does not trigger preview for the first time
+New image rendering mode function
+
+### 0.46
+Fix image rotation bug
+Fix some bugs displayed
+
 ### 0.45
 
 Add multiples using enlarge
