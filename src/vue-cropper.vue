@@ -464,7 +464,11 @@ export default {
         this.$emit("imgLoad", "error");
       };
 
-      img.crossOrigin = "";
+      // 判断如果不是base64图片 再添加crossOrigin属性，否则会导致iOS低版本(10.2)无法显示图片
+      if (this.img.substr(0, 4) !== 'data') {
+        img.crossOrigin = '';
+      }
+      
       if (this.isIE) {
         var xhr = new XMLHttpRequest();
         xhr.onload = function() {
