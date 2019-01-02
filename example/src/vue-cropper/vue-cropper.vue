@@ -342,7 +342,11 @@ export default {
       this.showPreview();
       if (this.autoCrop) {
         this.goAutoCrop(this.cropW, this.cropH);
-      }
+      } else {
+        if (this.cropW > 0 || this.cropH > 0) {
+          this.goAutoCrop(this.cropW, this.cropH);
+        }
+      } 
     }
   },
   methods: {
@@ -464,7 +468,11 @@ export default {
         this.$emit("imgLoad", "error");
       };
 
-      img.crossOrigin = "";
+      // 判断如果不是base64图片 再添加crossOrigin属性，否则会导致iOS低版本(10.2)无法显示图片
+      if (this.img.substr(0, 4) !== 'data') {
+        img.crossOrigin = '';
+      }
+
       if (this.isIE) {
         var xhr = new XMLHttpRequest();
         xhr.onload = function() {
@@ -1496,7 +1504,7 @@ export default {
             scale = this.w / this.trueWidth;
           }
 
-          if (this.trueHeight * this.scale > this.h) {
+          if (this.trueHeight * scale > this.h) {
             scale = this.h / this.trueHeight;
           }
         break
@@ -1505,7 +1513,7 @@ export default {
           // 图片宽度大于容器
           imgW = this.w
           scale = imgW / this.trueWidth
-          imgH = this.imgH * scale
+          imgH = imgH * scale
           // 如果扩展之后高度小于容器的外层高度 继续扩展高度
           if (imgH < this.h) {
             imgH = this.h
