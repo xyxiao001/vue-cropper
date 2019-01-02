@@ -25,14 +25,7 @@
   },
   "devDependencies": {
     "vue-loader": "^15.4.2",
-    "webpack-cli": "^3.1.2"
-  },
-  "browserify": {
-    "transform": [
-      "vueify"
-    ]
-  },
-  "dependencies": {
+    "webpack-cli": "^3.1.2",
     "@babel/core": "^7.1.2",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
@@ -44,5 +37,10 @@
     "vue": "^2.5.17",
     "vue-template-compiler": "^2.5.17",
     "webpack": "^4.20.2"
+  },
+  "browserify": {
+    "transform": [
+      "vueify"
+    ]
   }
 }
