@@ -26,16 +26,16 @@ yarn add vue-cropper
 ```
 views
 
-import { VueCropper }  from vue-cropper 
+import { VueCropper }  from "vue-cropper"
 components: {
   VueCropper,
 },
 
 main.js
 
-import VueCropper from vue-cropper 
+import VueCropper from "vue-cropper" 
 
-Vue.use(vueCropper)
+Vue.use(VueCropper)
 
 cdn
 <script src="vuecropper.js"></script>
