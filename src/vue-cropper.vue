@@ -266,7 +266,7 @@ export default {
            dpr = window.devicePixelRatio;
         }
         if (this.enlarge !== 1 & !this.full) {
-          dpr = Math.abs(Number(this.enlarge))          
+          dpr = Math.abs(Number(this.enlarge))
         }
         obj.width = obj.width * dpr;
         obj.height = obj.height * dpr;
@@ -281,8 +281,8 @@ export default {
     },
 
     isIE () {
-      var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
-      var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE浏览器  
+      var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+      var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE浏览器
       return isIE
     },
   },
@@ -346,7 +346,7 @@ export default {
         if (this.cropW > 0 || this.cropH > 0) {
           this.goAutoCrop(this.cropW, this.cropH);
         }
-      } 
+      }
     }
   },
   methods: {
@@ -1587,6 +1587,17 @@ export default {
     },
     // 手动改变截图框大小函数
     changeCrop(w, h) {
+      if (this.centerBox) { // 修复初始化时候在centerBox=true情况下
+        let axis = this.getImgAxis()
+        if (w > axis.x2 - axis.x1) { // 宽度超标
+          w = axis.x2 - axis.x1
+          h = (w / this.fixedNumber[0]) * this.fixedNumber[1]
+        }
+        if (h > axis.y2 - axis.y1) { // 高度超标
+          h = axis.y2 - axis.y1
+          w = (h / this.fixedNumber[1]) * this.fixedNumber[0]
+        }
+      }
       // 判断是否大于容器
       this.cropW = w;
       this.cropH = h;
