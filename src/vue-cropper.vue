@@ -1,73 +1,116 @@
 <template>
-	<div class="vue-cropper" ref="cropper" @mouseover="scaleImg" @mouseout="cancelScale">
-		<div class="cropper-box">
-			<div class="cropper-box-canvas"
-			 	v-show="!loading"
-				:style="{
+  <div class="vue-cropper" ref="cropper" @mouseover="scaleImg" @mouseout="cancelScale">
+    <div class="cropper-box">
+      <div
+        class="cropper-box-canvas"
+        v-show="!loading"
+        :style="{
 					'width': trueWidth + 'px',
 					'height': trueHeight + 'px',
 					'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ x / scale + 'px,' + y / scale + 'px,' + '0)'
 					+ 'rotateZ('+ rotate * 90 +'deg)'
 					}"
-          >
-				<img
-					:src="imgs"
-					alt="cropper-img"
-					ref="cropperImg"
-					/>
-			</div>
-		</div>
-		<div
-			class="cropper-drag-box"
-		  :class="{'cropper-move': move && !crop, 'cropper-crop': crop, 'cropper-modal': cropping}"
-			@mousedown="startMove"
+      >
+        <img :src="imgs" alt="cropper-img" ref="cropperImg">
+      </div>
+    </div>
+    <div
+      class="cropper-drag-box"
+      :class="{'cropper-move': move && !crop, 'cropper-crop': crop, 'cropper-modal': cropping}"
+      @mousedown="startMove"
       @touchstart="startMove"
-			>
-			</div>
-			<div
-				v-show="cropping"
-				class="cropper-crop-box"
-				:style="{
+    ></div>
+    <div
+      v-show="cropping"
+      class="cropper-crop-box"
+      :style="{
 					'width': cropW + 'px',
 					'height': cropH + 'px',
 					'transform': 'translate3d('+ cropOffsertX + 'px,' + cropOffsertY + 'px,' + '0)'
-				}">
-				<span class="cropper-view-box">
-					<img
-					:style="{
+				}"
+    >
+      <span class="cropper-view-box">
+        <img
+          :style="{
 						'width': trueWidth + 'px',
 						'height': trueHeight + 'px',
 						'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ (x - cropOffsertX) / scale  + 'px,' + (y - cropOffsertY) / scale + 'px,' + '0)'
 						+ 'rotateZ('+ rotate * 90 +'deg)'
 						}"
-						:src="imgs"
-						alt="cropper-img"
-						/>
-				</span>
-				<span
-				  class="cropper-face cropper-move"
-					@mousedown="cropMove"
-		      @touchstart="cropMove"
-				></span>
-				<span class="crop-info" v-if="info" :style="{'top': cropInfo.top}">
-          {{  this.cropInfo.width }} × {{ this.cropInfo.height }}
-        </span>
-				<span v-if="!fixedBox">
-					<span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)"></span>
-					<span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)"></span>
-					<span class="crop-line line-s" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchstart="changeCropSize($event, false, true, 0, 2)"></span>
-					<span class="crop-line line-d" @mousedown="changeCropSize($event, true, false, 2, 0)" @touchstart="changeCropSize($event, true, false, 2, 0)"></span>
-					<span class="crop-point point1" @mousedown="changeCropSize($event, true, true, 1, 1)" @touchstart="changeCropSize($event, true, true, 1, 1)"></span>
-					<span class="crop-point point2" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)"></span>
-					<span class="crop-point point3" @mousedown="changeCropSize($event, true, true, 2, 1)" @touchstart="changeCropSize($event, true, true, 2, 1)"></span>
-					<span class="crop-point point4" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)"></span>
-					<span class="crop-point point5" @mousedown="changeCropSize($event, true, false, 2, 0)" @touchstart="changeCropSize($event, true, false, 2, 0)"></span>
-					<span class="crop-point point6" @mousedown="changeCropSize($event, true, true, 1, 2)" @touchstart="changeCropSize($event, true, true, 1, 2)"></span>
-					<span class="crop-point point7" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchstart="changeCropSize($event, false, true, 0, 2)"></span>
-					<span class="crop-point point8" @mousedown="changeCropSize($event, true, true, 2, 2)" @touchstart="changeCropSize($event, true, true, 2, 2)"></span>
-				</span>
-		</div>
-	</div>
+          :src="imgs"
+          alt="cropper-img"
+        >
+      </span>
+      <span class="cropper-face cropper-move" @mousedown="cropMove" @touchstart="cropMove"></span>
+      <span
+        class="crop-info"
+        v-if="info"
+        :style="{'top': cropInfo.top}"
+      >{{ this.cropInfo.width }} × {{ this.cropInfo.height }}</span>
+      <span v-if="!fixedBox">
+        <span
+          class="crop-line line-w"
+          @mousedown="changeCropSize($event, false, true, 0, 1)"
+          @touchstart="changeCropSize($event, false, true, 0, 1)"
+        ></span>
+        <span
+          class="crop-line line-a"
+          @mousedown="changeCropSize($event, true, false, 1, 0)"
+          @touchstart="changeCropSize($event, true, false, 1, 0)"
+        ></span>
+        <span
+          class="crop-line line-s"
+          @mousedown="changeCropSize($event, false, true, 0, 2)"
+          @touchstart="changeCropSize($event, false, true, 0, 2)"
+        ></span>
+        <span
+          class="crop-line line-d"
+          @mousedown="changeCropSize($event, true, false, 2, 0)"
+          @touchstart="changeCropSize($event, true, false, 2, 0)"
+        ></span>
+        <span
+          class="crop-point point1"
+          @mousedown="changeCropSize($event, true, true, 1, 1)"
+          @touchstart="changeCropSize($event, true, true, 1, 1)"
+        ></span>
+        <span
+          class="crop-point point2"
+          @mousedown="changeCropSize($event, false, true, 0, 1)"
+          @touchstart="changeCropSize($event, false, true, 0, 1)"
+        ></span>
+        <span
+          class="crop-point point3"
+          @mousedown="changeCropSize($event, true, true, 2, 1)"
+          @touchstart="changeCropSize($event, true, true, 2, 1)"
+        ></span>
+        <span
+          class="crop-point point4"
+          @mousedown="changeCropSize($event, true, false, 1, 0)"
+          @touchstart="changeCropSize($event, true, false, 1, 0)"
+        ></span>
+        <span
+          class="crop-point point5"
+          @mousedown="changeCropSize($event, true, false, 2, 0)"
+          @touchstart="changeCropSize($event, true, false, 2, 0)"
+        ></span>
+        <span
+          class="crop-point point6"
+          @mousedown="changeCropSize($event, true, true, 1, 2)"
+          @touchstart="changeCropSize($event, true, true, 1, 2)"
+        ></span>
+        <span
+          class="crop-point point7"
+          @mousedown="changeCropSize($event, false, true, 0, 2)"
+          @touchstart="changeCropSize($event, false, true, 0, 2)"
+        ></span>
+        <span
+          class="crop-point point8"
+          @mousedown="changeCropSize($event, true, true, 2, 2)"
+          @touchstart="changeCropSize($event, true, true, 2, 2)"
+        ></span>
+      </span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -135,7 +178,7 @@ export default {
       scalingSet: "",
       coeStatus: "",
       // 控制emit触发频率
-      isCanShow: true,
+      isCanShow: true
     };
   },
   props: {
@@ -251,7 +294,7 @@ export default {
     */
     mode: {
       type: String,
-      default: 'contain'
+      default: "contain"
     }
   },
   computed: {
@@ -263,10 +306,10 @@ export default {
       if (this.infoTrue) {
         let dpr = 1;
         if (this.high && !this.full) {
-           dpr = window.devicePixelRatio;
+          dpr = window.devicePixelRatio;
         }
-        if (this.enlarge !== 1 & !this.full) {
-          dpr = Math.abs(Number(this.enlarge))
+        if ((this.enlarge !== 1) & !this.full) {
+          dpr = Math.abs(Number(this.enlarge));
         }
         obj.width = obj.width * dpr;
         obj.height = obj.height * dpr;
@@ -280,11 +323,12 @@ export default {
       return obj;
     },
 
-    isIE () {
+    isIE() {
       var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-      var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE浏览器
-      return isIE
-    },
+      var isIE =
+        userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE浏览器
+      return isIE;
+    }
   },
   watch: {
     // 如果图片改变， 重新布局
@@ -325,18 +369,18 @@ export default {
       }
     },
     // 修改了自动截图框
-    autoCropWidth () {
+    autoCropWidth() {
       if (this.autoCrop) {
         this.goAutoCrop();
       }
     },
-    autoCropHeight () {
+    autoCropHeight() {
       if (this.autoCrop) {
         this.goAutoCrop();
       }
     },
-    mode () {
-      this.checkedImg()
+    mode() {
+      this.checkedImg();
     },
     rotate() {
       this.showPreview();
@@ -437,6 +481,7 @@ export default {
       img.onload = () => {
         if (this.img === "") {
           this.$emit("imgLoad", "error");
+          this.$emit("img-load", "error");
           return false;
         }
 
@@ -466,11 +511,12 @@ export default {
 
       img.onerror = () => {
         this.$emit("imgLoad", "error");
+        this.$emit("img-load", "error");
       };
 
       // 判断如果不是base64图片 再添加crossOrigin属性，否则会导致iOS低版本(10.2)无法显示图片
-      if (this.img.substr(0, 4) !== 'data') {
-        img.crossOrigin = '';
+      if (this.img.substr(0, 4) !== "data") {
+        img.crossOrigin = "";
       }
 
       if (this.isIE) {
@@ -512,6 +558,10 @@ export default {
         }
         // 触发图片移动事件
         this.$emit("imgMoving", {
+          moving: true,
+          axis: this.getImgAxis()
+        });
+        this.$emit("img-moving", {
           moving: true,
           axis: this.getImgAxis()
         });
@@ -569,7 +619,7 @@ export default {
         Math.pow(newTouch1.x - newTouch2.x, 2) +
           Math.pow(newTouch1.y - newTouch2.y, 2)
       );
-      var cha = (newL - oldL);
+      var cha = newL - oldL;
       // 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
       // 1px - 0.2
       var coe = 1;
@@ -615,8 +665,8 @@ export default {
       let nowY = e.clientY ? e.clientY : e.touches[0].clientY;
 
       let changeX, changeY;
-      changeX = (nowX - this.moveX);
-      changeY = (nowY - this.moveY);
+      changeX = nowX - this.moveX;
+      changeY = nowY - this.moveY;
 
       this.$nextTick(() => {
         if (this.centerBox) {
@@ -678,6 +728,10 @@ export default {
           moving: true,
           axis: this.getImgAxis()
         });
+        this.$emit("img-moving", {
+          moving: true,
+          axis: this.getImgAxis()
+        });
       });
     },
     // 移动图片结束
@@ -691,11 +745,17 @@ export default {
         moving: false,
         axis: this.getImgAxis()
       });
+      this.$emit("img-moving", {
+        moving: false,
+        axis: this.getImgAxis()
+      });
     },
     // 缩放图片
     scaleImg() {
       if (this.canScale) {
-        window.addEventListener(this.support, this.changeSize);
+        window.addEventListener(this.support, this.changeSize, {
+          passive: false
+        });
       }
     },
     // 移出框
@@ -726,8 +786,8 @@ export default {
       num < 0
         ? (scale += Math.abs(num))
         : scale > Math.abs(num)
-          ? (scale -= Math.abs(num))
-          : scale;
+        ? (scale -= Math.abs(num))
+        : scale;
       // 延迟0.1s 每次放大大或者缩小的范围
       let status = num < 0 ? "add" : "reduce";
       if (status !== this.coeStatus) {
@@ -760,8 +820,8 @@ export default {
       num > 0
         ? (scale += Math.abs(num))
         : scale > Math.abs(num)
-          ? (scale -= Math.abs(num))
-          : scale;
+        ? (scale -= Math.abs(num))
+        : scale;
       if (!this.checkoutImgAxis(this.x, this.y, scale)) {
         return false;
       }
@@ -774,8 +834,8 @@ export default {
       var nowX = e.clientX ? e.clientX : e.touches ? e.touches[0].clientX : 0;
       var nowY = e.clientY ? e.clientY : e.touches ? e.touches[0].clientY : 0;
       this.$nextTick(() => {
-        var fw = (nowX - this.cropX);
-        var fh = (nowY - this.cropY);
+        var fw = nowX - this.cropX;
+        var fh = nowY - this.cropY;
         if (fw > 0) {
           this.cropW =
             fw + this.cropChangeX > this.w ? this.w - this.cropChangeX : fw;
@@ -803,16 +863,12 @@ export default {
               this.cropChangeY + fh > 0 ? this.cropChangeY + fh : 0;
           }
         } else {
-          var fixedHeight = (
-            (this.cropW / this.fixedNumber[0]) *
-            this.fixedNumber[1]
-          );
+          var fixedHeight =
+            (this.cropW / this.fixedNumber[0]) * this.fixedNumber[1];
           if (fixedHeight + this.cropOffsertY > this.h) {
             this.cropH = this.h - this.cropOffsertY;
-            this.cropW = (
-              (this.cropH / this.fixedNumber[1]) *
-              this.fixedNumber[0]
-            );
+            this.cropW =
+              (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
             if (fw > 0) {
               this.cropOffsertX = this.cropChangeX;
             } else {
@@ -879,8 +935,8 @@ export default {
       }
 
       this.$nextTick(() => {
-        var fw = (nowX - this.cropX);
-        var fh = (nowY - this.cropY);
+        var fw = nowX - this.cropX;
+        var fh = nowY - this.cropY;
         if (this.canChangeX) {
           if (this.changeCropTypeX === 1) {
             if (this.cropOldW - fw > 0) {
@@ -963,32 +1019,24 @@ export default {
         }
 
         if (this.canChangeX && this.fixed) {
-          var fixedHeight = (
-            (this.cropW / this.fixedNumber[0]) *
-            this.fixedNumber[1]
-          );
+          var fixedHeight =
+            (this.cropW / this.fixedNumber[0]) * this.fixedNumber[1];
           if (fixedHeight + this.cropOffsertY > wrapperH) {
             this.cropH = wrapperH - this.cropOffsertY;
-            this.cropW = (
-              (this.cropH / this.fixedNumber[1]) *
-              this.fixedNumber[0]
-            );
+            this.cropW =
+              (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
           } else {
             this.cropH = fixedHeight;
           }
         }
 
         if (this.canChangeY && this.fixed) {
-          var fixedWidth = (
-            (this.cropH / this.fixedNumber[1]) *
-            this.fixedNumber[0]
-          );
+          var fixedWidth =
+            (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
           if (fixedWidth + this.cropOffsertX > wrapperW) {
             this.cropW = wrapperW - this.cropOffsertX;
-            this.cropH = (
-              (this.cropW / this.fixedNumber[0]) *
-              this.fixedNumber[1]
-            );
+            this.cropH =
+              (this.cropW / this.fixedNumber[0]) * this.fixedNumber[1];
           } else {
             this.cropW = fixedWidth;
           }
@@ -1062,6 +1110,10 @@ export default {
         moving: true,
         axis: this.getCropAxis()
       });
+      this.$emit("crop-moving", {
+        moving: true,
+        axis: this.getCropAxis()
+      });
     },
 
     moveCrop(e, isMove) {
@@ -1074,8 +1126,8 @@ export default {
       }
       this.$nextTick(() => {
         let cx, cy;
-        let fw = (nowX - this.cropX);
-        let fh = (nowY - this.cropY);
+        let fw = nowX - this.cropX;
+        let fh = nowY - this.cropY;
         if (isMove) {
           fw = this.cropOffsertX;
           fh = this.cropOffsertY;
@@ -1083,7 +1135,7 @@ export default {
         // 不能超过外层容器
         if (fw <= 0) {
           cx = 0;
-        } else if ((fw + this.cropW) > this.w) {
+        } else if (fw + this.cropW > this.w) {
           cx = this.w - this.cropW;
         } else {
           cx = fw;
@@ -1091,7 +1143,7 @@ export default {
 
         if (fh <= 0) {
           cy = 0;
-        } else if ((fh + this.cropH) > this.h) {
+        } else if (fh + this.cropH > this.h) {
           cy = this.h - this.cropH;
         } else {
           cy = fh;
@@ -1127,6 +1179,10 @@ export default {
           moving: true,
           axis: this.getCropAxis()
         });
+        this.$emit("crop-moving", {
+          moving: true,
+          axis: this.getCropAxis()
+        });
       });
     },
 
@@ -1147,27 +1203,25 @@ export default {
       let imgH = this.trueHeight * scale;
       switch (this.rotate) {
         case 0:
-          obj.x1 = (x + (this.trueWidth * (1 - scale)) / 2);
-          obj.x2 = (obj.x1 + this.trueWidth * scale);
-          obj.y1 = (y + (this.trueHeight * (1 - scale)) / 2);
-          obj.y2 = (obj.y1 + this.trueHeight * scale);
+          obj.x1 = x + (this.trueWidth * (1 - scale)) / 2;
+          obj.x2 = obj.x1 + this.trueWidth * scale;
+          obj.y1 = y + (this.trueHeight * (1 - scale)) / 2;
+          obj.y2 = obj.y1 + this.trueHeight * scale;
           break;
         case 1:
         case -1:
         case 3:
         case -3:
-          obj.x1 =
-            (x + (this.trueWidth * (1 - scale)) / 2) + (imgW - imgH) / 2;
-          obj.x2 = (obj.x1 + this.trueHeight * scale);
-          obj.y1 =
-            (y + (this.trueHeight * (1 - scale)) / 2) + (imgH - imgW) / 2;
-          obj.y2 = (obj.y1 + this.trueWidth * scale);
+          obj.x1 = x + (this.trueWidth * (1 - scale)) / 2 + (imgW - imgH) / 2;
+          obj.x2 = obj.x1 + this.trueHeight * scale;
+          obj.y1 = y + (this.trueHeight * (1 - scale)) / 2 + (imgH - imgW) / 2;
+          obj.y2 = obj.y1 + this.trueWidth * scale;
           break;
         default:
-          obj.x1 = (x + (this.trueWidth * (1 - scale)) / 2);
-          obj.x2 = (obj.x1 + this.trueWidth * scale);
-          obj.y1 = (y + (this.trueHeight * (1 - scale)) / 2);
-          obj.y2 = (obj.y1 + this.trueHeight * scale);
+          obj.x1 = x + (this.trueWidth * (1 - scale)) / 2;
+          obj.x2 = obj.x1 + this.trueWidth * scale;
+          obj.y1 = y + (this.trueHeight * (1 - scale)) / 2;
+          obj.y2 = obj.y1 + this.trueHeight * scale;
           break;
       }
       return obj;
@@ -1198,6 +1252,10 @@ export default {
         moving: false,
         axis: this.getCropAxis()
       });
+      this.$emit("crop-moving", {
+        moving: false,
+        axis: this.getCropAxis()
+      });
     },
 
     getCropChecked(cb) {
@@ -1215,9 +1273,9 @@ export default {
           if (this.high & !this.full) {
             dpr = window.devicePixelRatio;
           }
-          if (this.enlarge !== 1 & !this.full) {
-            dpr = Math.abs(Number(this.enlarge))
-            console.log(dpr)
+          if ((this.enlarge !== 1) & !this.full) {
+            dpr = Math.abs(Number(this.enlarge));
+            console.log(dpr);
           }
           let width = this.cropW * dpr;
           let height = this.cropH * dpr;
@@ -1423,26 +1481,32 @@ export default {
         width: `${w}px`,
         height: `${h}px`
       };
-      let transformX = (this.x - this.cropOffsertX) / scale
-      let transformY = (this.y - this.cropOffsertY) / scale
-      let transformZ = 0
+      let transformX = (this.x - this.cropOffsertX) / scale;
+      let transformY = (this.y - this.cropOffsertY) / scale;
+      let transformZ = 0;
       obj.w = w;
       obj.h = h;
       obj.url = this.imgs;
       obj.img = {
         width: `${this.trueWidth}px`,
         height: `${this.trueHeight}px`,
-        transform:
-          `scale(${scale})translate3d(${transformX}px, ${transformY}px, ${transformZ}px)rotateZ(${this.rotate * 90}deg)`
+        transform: `scale(${scale})translate3d(${transformX}px, ${transformY}px, ${transformZ}px)rotateZ(${this
+          .rotate * 90}deg)`
       };
       obj.html = `
-      <div class="show-preview" style="width: ${obj.w}px; height: ${obj.h}px,; overflow: hidden">
+      <div class="show-preview" style="width: ${obj.w}px; height: ${
+        obj.h
+      }px,; overflow: hidden">
         <div style="width: ${w}px; height: ${h}px">
-          <img src=${obj.url} style="width: ${this.trueWidth}px; height: ${this.trueHeight}px; transform:
-          scale(${scale})translate3d(${transformX}px, ${transformY}px, ${transformZ}px)rotateZ(${this.rotate * 90}deg)">
+          <img src=${obj.url} style="width: ${this.trueWidth}px; height: ${
+        this.trueHeight
+      }px; transform:
+          scale(${scale})translate3d(${transformX}px, ${transformY}px, ${transformZ}px)rotateZ(${this
+        .rotate * 90}deg)">
         </div>
-      </div>`
+      </div>`;
       this.$emit("realTime", obj);
+      this.$emit("real-time", obj);
     },
     // reload 图片布局函数
     reload() {
@@ -1461,9 +1525,9 @@ export default {
         // 判断是否需要压缩大图
         if (!this.original) {
           // 判断布局方式 mode
-          this.scale = this.checkedMode()
+          this.scale = this.checkedMode();
         } else {
-          this.scale = 1
+          this.scale = 1;
         }
 
         this.$nextTick(() => {
@@ -1478,8 +1542,9 @@ export default {
           if (this.autoCrop) {
             this.goAutoCrop();
           }
-          // // 图片加载成功的回调
-          this.$emit("imgLoad", "success");
+          // 图片加载成功的回调
+          this.$emit("img-load", "success");
+          this.$emit("imgLoad", "success");        
           setTimeout(() => {
             this.showPreview();
           }, 20);
@@ -1487,18 +1552,19 @@ export default {
       };
       img.onerror = () => {
         this.$emit("imgLoad", "error");
+        this.$emit("img-load", "error");
       };
       img.src = this.imgs;
     },
     // 背景布局的函数
-    checkedMode () {
-      let scale = 1
+    checkedMode() {
+      let scale = 1;
       // 通过字符串分割
       let imgW = this.trueWidth;
       let imgH = this.trueHeight;
-      const arr = this.mode.split(' ')
-      switch(arr[0]) {
-        case 'contain':
+      const arr = this.mode.split(" ");
+      switch (arr[0]) {
+        case "contain":
           if (this.trueWidth > this.w) {
             // 如果图片宽度大于容器宽度
             scale = this.w / this.trueWidth;
@@ -1507,51 +1573,51 @@ export default {
           if (this.trueHeight * scale > this.h) {
             scale = this.h / this.trueHeight;
           }
-        break
-        case 'cover':
+          break;
+        case "cover":
           // 扩展布局 默认填充满整个容器
           // 图片宽度大于容器
-          imgW = this.w
-          scale = imgW / this.trueWidth
-          imgH = imgH * scale
+          imgW = this.w;
+          scale = imgW / this.trueWidth;
+          imgH = imgH * scale;
           // 如果扩展之后高度小于容器的外层高度 继续扩展高度
           if (imgH < this.h) {
-            imgH = this.h
-            scale = imgH / this.trueHeight
+            imgH = this.h;
+            scale = imgH / this.trueHeight;
           }
-        break
+          break;
         default:
           try {
-            let str = arr[0]
-            if (str.search('px') !== -1) {
-              str = str.replace('px', '')
-              imgW = parseFloat(str)
-              scale = imgW / this.trueWidth
+            let str = arr[0];
+            if (str.search("px") !== -1) {
+              str = str.replace("px", "");
+              imgW = parseFloat(str);
+              scale = imgW / this.trueWidth;
             }
-            if (str.search('%') !== -1) {
-              str = str.replace('%', '')
-              imgW = parseFloat(str) / 100 * this.w
-              scale = imgW / this.trueWidth
+            if (str.search("%") !== -1) {
+              str = str.replace("%", "");
+              imgW = (parseFloat(str) / 100) * this.w;
+              scale = imgW / this.trueWidth;
             }
 
-            if (arr.length === 2 && str === 'auto') {
-              let str2 = arr[1]
-              if (str2.search('px') !== -1) {
-                str2 = str2.replace('px', '')
-                imgH = parseFloat(str2)
-                scale = imgH / this.trueHeight
+            if (arr.length === 2 && str === "auto") {
+              let str2 = arr[1];
+              if (str2.search("px") !== -1) {
+                str2 = str2.replace("px", "");
+                imgH = parseFloat(str2);
+                scale = imgH / this.trueHeight;
               }
-              if (str2.search('%') !== -1) {
-                str2 = str2.replace('%', '')
-                imgH = parseFloat(str2) / 100 * this.h
-                scale = imgH / this.trueHeight
+              if (str2.search("%") !== -1) {
+                str2 = str2.replace("%", "");
+                imgH = (parseFloat(str2) / 100) * this.h;
+                scale = imgH / this.trueHeight;
               }
             }
           } catch (error) {
-            scale = 1
+            scale = 1;
           }
       }
-      return scale
+      return scale;
     },
     // 自动截图函数
     goAutoCrop(cw, ch) {
@@ -1567,8 +1633,8 @@ export default {
       }
       // 截图框默认大小
       // 如果为0 那么计算容器大小 默认为80%
-      var w = cw ? cw : parseFloat(this.autoCropWidth)
-      var h = ch ? ch : parseFloat(this.autoCropHeight)
+      var w = cw ? cw : parseFloat(this.autoCropWidth);
+      var h = ch ? ch : parseFloat(this.autoCropHeight);
       if (w === 0 || h === 0) {
         w = maxWidth * 0.8;
         h = maxHeight * 0.8;
@@ -1587,15 +1653,18 @@ export default {
     },
     // 手动改变截图框大小函数
     changeCrop(w, h) {
-      if (this.centerBox) { // 修复初始化时候在centerBox=true情况下
-        let axis = this.getImgAxis()
-        if (w > axis.x2 - axis.x1) { // 宽度超标
-          w = axis.x2 - axis.x1
-          h = (w / this.fixedNumber[0]) * this.fixedNumber[1]
+      if (this.centerBox) {
+        // 修复初始化时候在centerBox=true情况下
+        let axis = this.getImgAxis();
+        if (w > axis.x2 - axis.x1) {
+          // 宽度超标
+          w = axis.x2 - axis.x1;
+          h = (w / this.fixedNumber[0]) * this.fixedNumber[1];
         }
-        if (h > axis.y2 - axis.y1) { // 高度超标
-          h = axis.y2 - axis.y1
-          w = (h / this.fixedNumber[1]) * this.fixedNumber[0]
+        if (h > axis.y2 - axis.y1) {
+          // 高度超标
+          h = axis.y2 - axis.y1;
+          w = (h / this.fixedNumber[1]) * this.fixedNumber[0];
         }
       }
       // 判断是否大于容器
@@ -1681,8 +1750,8 @@ export default {
       "onwheel" in document.createElement("div")
         ? "wheel"
         : document.onmousewheel !== undefined
-          ? "mousewheel"
-          : "DOMMouseScroll";
+        ? "mousewheel"
+        : "DOMMouseScroll";
     let that = this;
     var u = navigator.userAgent;
     this.isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);

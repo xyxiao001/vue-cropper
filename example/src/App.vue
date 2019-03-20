@@ -34,6 +34,7 @@
 						:centerBox="option.centerBox"
 						:high="option.high"
 						:infoTrue="option.infoTrue"
+            :maxImgSize="option.maxImageSize"
 						@realTime="realTime"
 						@imgLoad="imgLoad"
 						@cropMoving="cropMoving"
@@ -85,12 +86,33 @@
 						</div>
 					</section>
 
-					<p>迷你大小</p>
-					<div :style="previewStyle2"> 
-						<div :style="previews.div">
-							<img :src="previews.url" :style="previews.img">
-						</div>
-					</div>
+					<section class="pre-item">
+            <p>迷你大小</p>
+            <div :style="previewStyle2"> 
+              <div :style="previews.div">
+                <img :src="previews.url" :style="previews.img">
+              </div>
+            </div>
+					</section>
+
+          <section class="pre-item" title="zoom: (100 / previews.w)">
+            <p>固定为100宽度</p>
+            <div :style="previewStyle3"> 
+              <div :style="previews.div">
+                <img :src="previews.url" :style="previews.img">
+              </div>
+            </div>
+					</section>
+
+
+          <section class="pre-item" title="zoom: (100 / previews.h)">
+            <p>固定为100高度</p>
+            <div :style="previewStyle4">
+              <div :style="previews.div">
+                <img :src="previews.url" :style="previews.img">
+              </div>
+            </div>
+					</section>
 				</div>
 
 
@@ -109,6 +131,10 @@
 							类似css background属性设置  设置不符合规范不生效， 参照文档说明
 						</section>
 					</label>
+          <label class="c-item">
+            <span>上传时图片最大大小(默认会压缩尺寸到这个大小)</span>
+            <input type="nubmer" v-model="option.maxImgSize">
+          </label>
 					<label class="c-item">
 						<span>上传图片是否显示原始宽高 (针对大图 可以铺满)</span>
 						<input type="checkbox" v-model="option.original">
@@ -232,10 +258,11 @@ export default {
         autoCropWidth: 200,
         autoCropHeight: 150,
         centerBox: false,
-        high: true,
+        high: false,
         cropData: {},
 				enlarge: 1,
-				mode: 'contain'
+        mode: 'contain',
+        maxImgSize: 2000
       },
       example2: {
         img: "http://cdn.xyxiao.cn/Landscape_1.jpg",
@@ -261,7 +288,9 @@ export default {
       },
       downImg: "#",
       previewStyle1: {},
-			previewStyle2: {},
+      previewStyle2: {},
+      previewStyle3: {},
+      previewStyle4: {},
 			code0: '',
 			code1: '',
 			code2: '',
@@ -339,6 +368,23 @@ export default {
         margin: "0",
         zoom: w
       };
+
+      this.previewStyle3 = {
+        width: previews.w + "px",
+        height: previews.h + "px",
+        overflow: "hidden",
+        margin: "0",
+        zoom: (100 / previews.w)
+      };
+
+      this.previewStyle4 = {
+        width: previews.w + "px",
+        height: previews.h + "px",
+        overflow: "hidden",
+        margin: "0",
+        zoom: (100 / previews.h)        
+      };
+
 			this.previews = data;
     },
 
@@ -586,7 +632,7 @@ export default {
 				<codes>
 					<div slot="body">{{ code1 }}</div>
 				</codes>
-			</div>
+      </div>
 		`
   }
 };
