@@ -1,46 +1,31 @@
 {
-  "name": "vue-cropper",
-  "version": "0.4.9",
-  "description": "A simple Vue picture clipping plugin",
-  "keywords": [
-    "vue",
-    "cropper",
-    "vue-cropper",
-    "vue-component",
-    "vue-cropper-component"
-  ],
-  "main": "./dist/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xyxiao001/vue-cropper.git"
-  },
-  "author": "goodboy",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/xyxiao001/vue-cropper/issues"
-  },
-  "homepage": "https://github.com/xyxiao001/vue-cropper#readme",
+  "name": "vue-cropper-next",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "build": "rm -rf ./dist && webpack --config webpack.config.js"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "vue": "^2.6.6",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^7.0.0",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
-    "vue-loader": "^15.4.2",
-    "webpack-cli": "^3.1.2",
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/preset-env": "^7.1.0",
-    "babel-loader": "^8.0.0-beta.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-runtime": "^6.26.0",
-    "css-loader": "^1.0.0",
-    "style-loader": "^0.23.1",
-    "vue": "^2.5.17",
-    "vue-template-compiler": "^2.5.17",
-    "webpack": "^4.20.2"
-  },
-  "browserify": {
-    "transform": [
-      "vueify"
-    ]
+    "@types/chai": "^4.1.0",
+    "@types/mocha": "^5.2.4",
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-typescript": "^3.5.0",
+    "@vue/cli-plugin-unit-mocha": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "chai": "^4.1.2",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "typescript": "^3.2.1",
+    "vue-template-compiler": "^2.5.21"
   }
 }
