@@ -282,6 +282,24 @@ realTime(data) {
     margin: "0",
     zoom: w
   };
+
+  固定为100宽度
+  this.previewStyle3 = {
+    width: previews.w + "px",
+    height: previews.h + "px",
+    overflow: "hidden",
+    margin: "0",
+    zoom: 100 / preview.w
+  };
+
+  固定为100高度
+  this.previewStyle4 = {
+    width: previews.w + "px",
+    height: previews.h + "px",
+    overflow: "hidden",
+    margin: "0",
+    zoom: 100 / preview.h
+  };
   this.previews = data;
 },
 
@@ -338,6 +356,11 @@ data type
 
 
 ## 更新日志
+
+
+### 0.49
+修复滚轮默认事件问题
+修复html静态文件引入事件触发问题
 
 ### 0.48
 修复mode 属性 contain 和cover的显示bug问题
