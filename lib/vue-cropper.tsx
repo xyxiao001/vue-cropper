@@ -2,15 +2,19 @@ import { Component, Model, Prop, Watch, Vue, Emit } from 'vue-property-decorator
 
 import './style/index.scss'
 
+import { Layout } from './interface'
+
 @Component({
   data() {
     return {
-      imgs: ''
     }
   },
 })
 
 export default class VueCropper extends Vue {
+  // 高清屏的问题
+  ratio = window.devicePixelRatio
+
   // 图片属性
   @Prop({
     default: '',
@@ -18,8 +22,20 @@ export default class VueCropper extends Vue {
   })
   img!: string
 
+  // 外层容器宽高
+  @Prop({
+    default: () => (
+      {
+        width: 200,
+        height: 200
+      }
+    ),
+    type: Object,
+  })
+  wrapper!: Layout
+
   @Watch('img')
-  onImgChanged(val: string, oldVal: string) {
+  onImgChanged(val: string) {
     if (val) {
       this.checkedImg(val)
     }
@@ -54,10 +70,17 @@ export default class VueCropper extends Vue {
     console.log('img load success')
     // 图片加载成功之后的操作
     // CanvasRenderingContext2D
-    const ctx:any = this.$refs.canvas.getContext('2d')
-    this.$refs.canvas.width = img.width
-    this.$refs.canvas.height = img.height
-    ctx.drawImage(img, 0, 0, img.width, img.height)
+    const canvas:HTMLCanvasElement = this.$refs.canvas
+    const ctx:any = canvas.getContext('2d')
+    let {width, height} = {... this.wrapper}
+    canvas.style.width = `${width}px`
+    canvas.style.height = `${height}px`
+    
+    width = width * this.ratio
+    height = height * this.ratio
+    canvas.width = width
+    canvas.height = height
+    ctx.drawImage(img, 0, 0, width, width / img.width * img.height)
     return true
   }
 

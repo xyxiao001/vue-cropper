@@ -1,7 +1,10 @@
 <template>
   <div class="home">
     vue-cropper-next版本
-    <vue-cropper :img="option.img"></vue-cropper>
+    <vue-cropper
+      :img="option.img"
+      :wrapper="option.wrapper"
+    ></vue-cropper>
   </div>
 </template>
 
@@ -13,7 +16,11 @@ import vueCropper from '../../lib/index'
   data() {
     return {
       option: {
-        img: 'http://cdn.xyxiao.cn/his-2019.jpg'
+        img: 'http://cdn.xyxiao.cn/bg10.jpg',
+        wrapper: {
+          width: 500,
+          height: 500
+        }
       }
     }
   },
