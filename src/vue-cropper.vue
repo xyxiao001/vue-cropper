@@ -1653,18 +1653,20 @@ export default {
     },
     // 手动改变截图框大小函数
     changeCrop(w, h) {
+      let whRate = w / h;
+      if (Number.isNaN(whRate)) whRate = this.fixedNumber[0] / this.fixedNumber[1];
       if (this.centerBox) {
         // 修复初始化时候在centerBox=true情况下
         let axis = this.getImgAxis();
         if (w > axis.x2 - axis.x1) {
           // 宽度超标
           w = axis.x2 - axis.x1;
-          h = (w / this.fixedNumber[0]) * this.fixedNumber[1];
+          h = w / whRate;
         }
         if (h > axis.y2 - axis.y1) {
           // 高度超标
           h = axis.y2 - axis.y1;
-          w = (h / this.fixedNumber[1]) * this.fixedNumber[0];
+          w = h * whRate;
         }
       }
       // 判断是否大于容器
