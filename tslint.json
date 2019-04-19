@@ -9,8 +9,11 @@
     ]
   },
   "rules": {
-    "quotemark": [true, "single"],
+    "semicolon": [true, "never"],
+    "member-access": [true, "no-public"],
+    "quotemark": [true, "single", "jsx-double"],
     "indent": [true, "spaces", 2],
+    "no-console": false,
     "interface-name": false,
     "ordered-imports": false,
     "object-literal-sort-keys": false,

@@ -1,4 +1,4 @@
 export interface Layout {
-  width: number,
+  width: number
   height: number
 }

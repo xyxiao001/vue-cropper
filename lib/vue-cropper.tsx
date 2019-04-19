@@ -15,6 +15,10 @@ export default class VueCropper extends Vue {
   // 高清屏的问题
   ratio = window.devicePixelRatio
 
+  $refs!: {
+    canvas: HTMLCanvasElement,
+  }
+
   // 图片属性
   @Prop({
     default: '',
@@ -24,12 +28,10 @@ export default class VueCropper extends Vue {
 
   // 外层容器宽高
   @Prop({
-    default: () => (
-      {
-        width: 200,
-        height: 200
-      }
-    ),
+    default: () => ({
+      width: 200,
+      height: 200,
+    }),
     type: Object,
   })
   wrapper!: Layout
@@ -41,41 +43,37 @@ export default class VueCropper extends Vue {
     }
   }
 
-  $refs!: {
-    canvas: HTMLCanvasElement
-  }
-
-  created (): void {
+  created(): void {
     if (this.img) {
       this.checkedImg(this.img)
     }
   }
 
   @Emit()
-  imgLoad (status: string):string {
+  imgLoad(status: string): string {
     return status
   }
 
   // 检查图片
-  checkedImg  = async (url: string) => {
-    let img:HTMLImageElement
+  async checkedImg(url: string) {
+    let img: HTMLImageElement
     try {
       img = await this.loadImg(url)
       this.imgLoad('success')
     } catch (error) {
       this.imgLoad(error)
       console.log('img load error')
-      return false      
+      return false
     }
     console.log('img load success')
     // 图片加载成功之后的操作
     // CanvasRenderingContext2D
-    const canvas:HTMLCanvasElement = this.$refs.canvas
-    const ctx:any = canvas.getContext('2d')
+    const canvas: HTMLCanvasElement = this.$refs.canvas
+    const ctx: any = canvas.getContext('2d')
     let {width, height} = {... this.wrapper}
     canvas.style.width = `${width}px`
     canvas.style.height = `${height}px`
-    
+
     width = width * this.ratio
     height = height * this.ratio
     canvas.width = width
@@ -85,7 +83,7 @@ export default class VueCropper extends Vue {
   }
 
   // 加载图片
-  loadImg = async (url: string):Promise<HTMLImageElement> => {
+  async loadImg(url: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
       const img = new Image()
       img.onload = () => resolve(img)

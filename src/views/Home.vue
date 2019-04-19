@@ -9,30 +9,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator'
 import vueCropper from '../../lib/index'
 
 @Component({
-  data() {
-    return {
-      option: {
-        img: 'http://cdn.xyxiao.cn/bg10.jpg',
-        wrapper: {
-          width: 500,
-          height: 500
-        }
-      }
-    }
-  },
-
   components: {
-    vueCropper
+    vueCropper,
   },
-
-  mounted () {
-  }
 })
 export default class Home extends Vue {
-
+  option = {
+    img: 'http://cdn.xyxiao.cn/bg10.jpg',
+    wrapper: {
+      width: 500,
+      height: 500,
+    },
+  }
 }
 </script>
