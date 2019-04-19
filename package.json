@@ -6,7 +6,17 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "prettier": "prettier --write lib/**/*.{ts,tsx,scss}"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,scss}": [
+      "npm run prettier",
+      "git add"
+    ]
   },
   "dependencies": {
     "vue": "^2.6.6",
@@ -23,7 +33,9 @@
     "@vue/cli-service": "^3.5.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "chai": "^4.1.2",
+    "lint-staged": "^8.1.5",
     "node-sass": "^4.9.0",
+    "prettier": "^1.17.0",
     "sass-loader": "^7.1.0",
     "typescript": "^3.2.1",
     "vue-template-compiler": "^2.5.21"
