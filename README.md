@@ -12,7 +12,7 @@ import VueCropper from 'vue-cropper'
 Vue.use(VueCropper)
 
 cdn方式使用
-<script src="vuecropper.js"></script>
+<script src="//cdn.jsdelivr.net/npm/vue-cropper@0.4.9/dist/index.js"></script>
 Vue.use(window['vue-cropper'])
 
 nuxt 使用方式
