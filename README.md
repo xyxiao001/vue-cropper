@@ -80,7 +80,6 @@ module.exports = {
 
 ###  目前还不知道什么原因项目里面开启mock 会导致file报错, 建议使用时 关掉mock
 
-
 <table style="text-align: center">
   <thead>
     <tr>
@@ -217,8 +216,21 @@ module.exports = {
         <td>contain</td>
         <td>contain , cover, 100px, 100% auto</td>
     </tr>
+    <tr>
+        <td>defaultWidth</td>
+        <td>图片初始宽度</td>
+        <td>undefined</td>
+        <td>number</td>
+    </tr>
+    <tr>
+        <td>defaultHeight</td>
+        <td>图片初始高度</td>
+        <td>undefined</td>
+        <td>number</td>
+    </tr>
   </tbody>
 </table>
+
 
 
 ### 内置方法  通过this.$refs.cropper 调用
@@ -259,7 +271,7 @@ If only one value is given, this value will be used as the width value and the h
 If two values are given, the first one will be the width value and the second will be the height value. mode: '50px 60px'
 
 ### 预览
-``` html
+​``` html
 @realTime="realTime"
 // Real time preview function
 realTime(data) {

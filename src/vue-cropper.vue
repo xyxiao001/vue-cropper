@@ -11,7 +11,7 @@
 					+ 'rotateZ('+ rotate * 90 +'deg)'
 					}"
       >
-        <img :src="imgs" alt="cropper-img" ref="cropperImg">
+        <img :src="imgs" alt="cropper-img" ref="cropperImg" :style='`width: ${defaultWidth}px; height: ${defaultHeight}px`'>
       </div>
     </div>
     <div
@@ -295,7 +295,15 @@ export default {
     mode: {
       type: String,
       default: "contain"
-    }
+    },
+    // 初始宽度
+    defaultWidth: {
+        type: Number
+    },
+    // 初始高度
+    defaultHeight: {
+        type: Number
+    },
   },
   computed: {
     cropInfo() {
@@ -1519,8 +1527,9 @@ export default {
         this.h = parseFloat(window.getComputedStyle(this.$refs.cropper).height);
 
         // 存入图片真实高度
-        this.trueWidth = img.width;
-        this.trueHeight = img.height;
+        // 使用 提供的初始宽高 或 图片真实高度 进行显示
+        this.trueWidth = this.defaultWidth || img.width;
+        this.trueHeight = this.defaultHeight || img.height;
 
         // 判断是否需要压缩大图
         if (!this.original) {
