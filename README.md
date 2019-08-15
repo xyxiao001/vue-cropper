@@ -41,7 +41,8 @@ if(process.browser) {
  [english](https://github.com/xyxiao001/vue-cropper/blob/master/english.md)
 
 ### vue-cropper 相关文章参考。
-#### [vue全家桶开发管理后台—裁切图片](https://blog.csdn.net/qq_30632003/article/details/79639346)   作者： 麻球科技-菅双鹏
+#### [shn_ui - vue-cropper ](https://shnhz.github.io/shn-ui/#/component/vue-cropper) 作者  野宁新之助
+#### [vue全家桶开发管理后台—裁切图片](https://blog.csdn.net/qq_30632003/article/details/79639346)   作者： 麻球科技-菅双鹏
 #### [Vue-cropper 图片裁剪的基本原理](https://www.cnblogs.com/tugenhua0707/p/8859291.html)  作者： 龙恩0707
 #### [关于昵称和头像的总结（模仿微信）](https://zhuanlan.zhihu.com/p/45746753)  作者： 秋晨光
 
