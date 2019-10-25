@@ -34,7 +34,7 @@
 						:centerBox="option.centerBox"
 						:high="option.high"
 						:infoTrue="option.infoTrue"
-            :maxImgSize="option.maxImageSize"
+            :maxImgSize="option.maxImgSize"
 						@realTime="realTime"
 						@imgLoad="imgLoad"
 						@cropMoving="cropMoving"
