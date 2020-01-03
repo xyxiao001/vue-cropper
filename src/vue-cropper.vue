@@ -29,7 +29,7 @@
 					'transform': 'translate3d('+ cropOffsertX + 'px,' + cropOffsertY + 'px,' + '0)'
 				}"
     >
-      <span class="cropper-view-box">
+      <span class="cropper-view-box" @contextmenu="contextmenu">
         <img
           :style="{
 						'width': trueWidth + 'px',
@@ -295,7 +295,9 @@ export default {
     mode: {
       type: String,
       default: "contain"
-    }
+    },
+    // 在裁剪框鼠标右击自定义事件
+    contextmenu:Funtion
   },
   computed: {
     cropInfo() {
