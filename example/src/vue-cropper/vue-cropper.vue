@@ -23,13 +23,14 @@
     <div
       v-show="cropping"
       class="cropper-crop-box"
+      @contextmenu="contextmenu"
       :style="{
 					'width': cropW + 'px',
 					'height': cropH + 'px',
 					'transform': 'translate3d('+ cropOffsertX + 'px,' + cropOffsertY + 'px,' + '0)'
 				}"
     >
-      <span class="cropper-view-box" @contextmenu="contextmenu">
+      <span class="cropper-view-box">
         <img
           :style="{
 						'width': trueWidth + 'px',
@@ -297,7 +298,10 @@ export default {
       default: "contain"
     },
     // 裁剪框自定义鼠标右键事件
-    contextmenu:Function
+    contextmenu: {
+      type: Function,
+      default: function() {}
+    }
   },
   computed: {
     cropInfo() {
