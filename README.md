@@ -44,6 +44,7 @@ if(process.browser) {
 #### [vue全家桶开发管理后台—裁切图片](https://blog.csdn.net/qq_30632003/article/details/79639346)   作者： 麻球科技-菅双鹏
 #### [Vue-cropper 图片裁剪的基本原理](https://www.cnblogs.com/tugenhua0707/p/8859291.html)  作者： 龙恩0707
 #### [关于昵称和头像的总结（模仿微信）](https://zhuanlan.zhihu.com/p/45746753)  作者： 秋晨光
+#### [vue-cropper-h5](https://github.com/2277419213/vue-cropper-h5)  作者：居里栈栈
 
 ### vue-cropper 交流。
 ##### 有什么意见,或者bug  或者想一起开发vue-cropper， 或者想一起开发其他插件
