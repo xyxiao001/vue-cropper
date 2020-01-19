@@ -8,6 +8,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "exif-js": "^2.3.0",
     "vue": "^2.5.17",
     "vue-cropper": "^0.4.9",

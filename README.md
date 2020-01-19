@@ -360,6 +360,16 @@ data type
 
 ## 更新日志
 
+### 0.50
+支持图片清空
+修复 ie11 ie10 不能使用问题
+修复 URL.createObjectURL 创建后没有销毁的 bug
+添加截图框修改触发事件 
+this.$emit('change-crop-size', {
+  width: this.cropW,
+  height: this.cropH
+})
+
 
 ### 0.49
 修复滚轮默认事件问题

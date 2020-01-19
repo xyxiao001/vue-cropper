@@ -56,6 +56,7 @@
 					<button @click="rotateRight" class="btn">rotateRight</button>
 					<button @click="finish('base64')" class="btn">preview(base64)</button>
 					<button @click="finish('blob')" class="btn">preview(blob)</button>
+					<button @click="() => option.img = ''" class="btn">清除图片</button>
 					<a @click="down('base64')" class="btn">download(base64)</a>
 					<a @click="down('blob')" class="btn">download(blob)</a>
 					<a :href="downImg" download="demo.png" ref="downloadDom"></a>

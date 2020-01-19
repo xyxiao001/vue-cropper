@@ -1,6 +1,6 @@
 {
   "name": "vue-cropper",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "description": "A simple Vue picture clipping plugin",
   "keywords": [
     "vue",
@@ -42,5 +42,8 @@
     "transform": [
       "vueify"
     ]
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
   }
 }
