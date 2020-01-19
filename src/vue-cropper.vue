@@ -1,6 +1,6 @@
 <template>
   <div class="vue-cropper" ref="cropper" @mouseover="scaleImg" @mouseout="cancelScale">
-    <div class="cropper-box">
+    <div class="cropper-box" v-if="imgs">
       <div
         class="cropper-box-canvas"
         v-show="!loading"
@@ -325,9 +325,14 @@ export default {
 
     isIE() {
       var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-      var isIE =
-        userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE浏览器
+      const isIE = !!window.ActiveXObject || 'ActiveXObject' in window; //判断是否IE浏览器
       return isIE;
+    },
+
+    passive () {
+      return this.isIE ? null : {
+        passive: false
+      }
     }
   },
   watch: {
@@ -463,6 +468,7 @@ export default {
       canvas.toBlob(
         blob => {
           let data = URL.createObjectURL(blob);
+          URL.revokeObjectURL(this.imgs)
           this.imgs = data;
         },
         "image/" + this.outputType,
@@ -472,7 +478,11 @@ export default {
 
     // checkout img
     checkedImg() {
-      if (this.img === "") return;
+      if (this.img === null || this.img === '') {
+        this.imgs = ''
+        this.clearCrop()
+        return
+      }
       this.loading = true;
       this.scale = 1;
       this.rotate = 0;
@@ -753,9 +763,7 @@ export default {
     // 缩放图片
     scaleImg() {
       if (this.canScale) {
-        window.addEventListener(this.support, this.changeSize, {
-          passive: false
-        });
+        window.addEventListener(this.support, this.changeSize, this.passive);
       }
     },
     // 移出框
@@ -904,6 +912,10 @@ export default {
           this.canChangeY = 0;
         }
       }
+      this.$emit('change-crop-size', {
+        width: this.cropW,
+        height: this.cropH
+      })
     },
 
     // 正在改变
@@ -1621,6 +1633,7 @@ export default {
     },
     // 自动截图函数
     goAutoCrop(cw, ch) {
+      if (this.imgs === '' || this.imgs === null) return
       this.clearCrop();
       this.cropping = true;
       let maxWidth = this.w;
@@ -1653,20 +1666,18 @@ export default {
     },
     // 手动改变截图框大小函数
     changeCrop(w, h) {
-      let whRate = w / h;
-      if (Number.isNaN(whRate)) whRate = this.fixedNumber[0] / this.fixedNumber[1];
       if (this.centerBox) {
         // 修复初始化时候在centerBox=true情况下
         let axis = this.getImgAxis();
         if (w > axis.x2 - axis.x1) {
           // 宽度超标
           w = axis.x2 - axis.x1;
-          h = w / whRate;
+          h = (w / this.fixedNumber[0]) * this.fixedNumber[1];
         }
         if (h > axis.y2 - axis.y1) {
           // 高度超标
           h = axis.y2 - axis.y1;
-          w = h * whRate;
+          w = (h / this.fixedNumber[1]) * this.fixedNumber[0];
         }
       }
       // 判断是否大于容器
