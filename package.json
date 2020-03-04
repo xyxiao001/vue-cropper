@@ -36,14 +36,12 @@
     "style-loader": "^0.23.1",
     "vue": "^2.5.17",
     "vue-template-compiler": "^2.5.17",
-    "webpack": "^4.20.2"
+    "webpack": "^4.20.2",
+    "babel-polyfill": "^6.26.0"
   },
   "browserify": {
     "transform": [
       "vueify"
     ]
-  },
-  "dependencies": {
-    "babel-polyfill": "^6.26.0"
   }
 }
