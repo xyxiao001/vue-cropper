@@ -133,10 +133,10 @@
 							类似css background属性设置  设置不符合规范不生效， 参照文档说明
 						</section>
 					</label>
-          <label class="c-item">
+          <!-- <label class="c-item">
 						<span>截图框最小限制 </span>
-						<input type="number" v-model="option.limitMinSize">
-					</label>
+						<input type="text" v-model="option.limitMinSize">
+					</label> -->
           <label class="c-item">
             <span>上传时图片最大大小(默认会压缩尺寸到这个大小)</span>
             <input type="nubmer" v-model="option.maxImgSize">
@@ -269,7 +269,7 @@ export default {
 				enlarge: 1,
         mode: 'contain',
         maxImgSize: 2000,
-        limitMinSize: 100
+        limitMinSize: [100, 120]
       },
       example2: {
         img: "http://cdn.xyxiao.cn/Landscape_1.jpg",

@@ -1061,7 +1061,6 @@ export default {
             this.cropW = fixedWidth;
           }
         }
-        this.checkCropLimitSize()
       });
     },
 
@@ -1076,12 +1075,9 @@ export default {
       }
       
       //限制最小宽度和高度
-      if (parseFloat(limitMinNum[0]) && cropW < parseFloat(limitMinNum[0])) {
-        this.cropW = parseFloat(limitMinNum[0])
-      }
-      if (parseFloat(limitMinNum[1]) && cropH < parseFloat(limitMinNum[1])) {
-        this.cropH = parseFloat(limitMinNum[1])
-      }
+      cropW = parseFloat(limitMinNum[0])
+      cropH = parseFloat(limitMinNum[1])
+      return [cropW, cropH]
     },
     // 结束改变
     changeCropEnd(e) {

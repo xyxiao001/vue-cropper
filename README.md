@@ -220,12 +220,12 @@ module.exports = {
         <td>contain</td>
         <td>contain , cover, 100px, 100% auto</td>
     </tr>
-    <tr>
+    <!-- <tr>
         <td>limitMinSize</td>
         <td>截图框最小宽高</td>
         <td>10</td>
         <td>number, string, [number, number]</td>
-    </tr>
+    </tr> -->
   </tbody>
 </table>
 
@@ -365,6 +365,11 @@ data type
 
 
 ## 更新日志
+
+### 0.52
+```
+撤回最小弹框属性, 存在弹框拖拽坐标判断的 bug
+```
 
 ### 0.51
 ```
