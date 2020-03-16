@@ -40,6 +40,7 @@
 						@cropMoving="cropMoving"
 						:enlarge="option.enlarge"
 						:mode="option.mode"
+            :limitMinSize="option.limitMinSize"
 					></vueCropper>
 				</div>
 				<div class="test-button">
@@ -131,6 +132,10 @@
 						<section>
 							类似css background属性设置  设置不符合规范不生效， 参照文档说明
 						</section>
+					</label>
+          <label class="c-item">
+						<span>截图框最小限制 </span>
+						<input type="number" v-model="option.limitMinSize">
 					</label>
           <label class="c-item">
             <span>上传时图片最大大小(默认会压缩尺寸到这个大小)</span>
@@ -263,7 +268,8 @@ export default {
         cropData: {},
 				enlarge: 1,
         mode: 'contain',
-        maxImgSize: 2000
+        maxImgSize: 2000,
+        limitMinSize: 100
       },
       example2: {
         img: "http://cdn.xyxiao.cn/Landscape_1.jpg",
