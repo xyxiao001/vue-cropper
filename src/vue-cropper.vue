@@ -297,7 +297,7 @@ export default {
       default: "contain"
     },
     //限制最小区域,可传1以上的数字和字符串，限制长宽都是这么大
-    // 也可以传数组[90,90] ，长宽都是90
+    // 也可以传数组[90,90] 
     limitMinSize: {
       type: [Number, Array, String],
       default: () => {
@@ -1061,25 +1061,28 @@ export default {
             this.cropW = fixedWidth;
           }
         }
-        let { cropW, cropH, limitMinSize } = this;
-
-        let limitMinNum = new Array;
-        if (!Array.isArray[limitMinSize]) {
-          limitMinNum = [limitMinSize, limitMinSize]
-        } else {
-          limitMinNum = limitMinSize
-        }
-        
-        //限制最小宽度和高度
-        if (parseFloat(limitMinNum[0]) && cropW < parseFloat(limitMinNum[0])) {
-          this.cropW = limitMinNum[0]
-        }
-        if (parseFloat(limitMinNum[1]) && cropH < parseFloat(limitMinNum[1])) {
-          this.cropH = limitMinNum[1]
-        }
+        this.checkCropLimitSize()
       });
     },
 
+    checkCropLimitSize () {
+      let { cropW, cropH, limitMinSize } = this;
+
+      let limitMinNum = new Array;
+      if (!Array.isArray[limitMinSize]) {
+        limitMinNum = [limitMinSize, limitMinSize]
+      } else {
+        limitMinNum = limitMinSize
+      }
+      
+      //限制最小宽度和高度
+      if (parseFloat(limitMinNum[0]) && cropW < parseFloat(limitMinNum[0])) {
+        this.cropW = parseFloat(limitMinNum[0])
+      }
+      if (parseFloat(limitMinNum[1]) && cropH < parseFloat(limitMinNum[1])) {
+        this.cropH = parseFloat(limitMinNum[1])
+      }
+    },
     // 结束改变
     changeCropEnd(e) {
       window.removeEventListener("mousemove", this.changeCropNow);
@@ -1707,14 +1710,15 @@ export default {
       // 判断是否大于容器
       this.cropW = w;
       this.cropH = h;
-      // 居中走一走
-      this.cropOffsertX = (this.w - w) / 2;
-      this.cropOffsertY = (this.h - h) / 2;
-      if (this.centerBox) {
-        this.$nextTick(() => {
+      this.checkCropLimitSize()
+      this.$nextTick(() => {
+        // 居中走一走
+        this.cropOffsertX = (this.w - this.cropW) / 2;
+        this.cropOffsertY = (this.h - this.cropH) / 2;
+        if (this.centerBox) {
           this.moveCrop(null, true);
-        });
-      }
+        }
+      });
     },
     // 重置函数， 恢复组件置初始状态
     refresh() {

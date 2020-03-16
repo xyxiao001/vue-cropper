@@ -220,6 +220,12 @@ module.exports = {
         <td>contain</td>
         <td>contain , cover, 100px, 100% auto</td>
     </tr>
+    <tr>
+        <td>limitMinSize</td>
+        <td>截图框最小宽高</td>
+        <td>10</td>
+        <td>number, string, [number, number]</td>
+    </tr>
   </tbody>
 </table>
 
@@ -359,6 +365,12 @@ data type
 
 
 ## 更新日志
+
+### 0.51
+```
+更新裁剪框最小属性, 限制最小区域,可传1以上的数字和字符串，限制长宽都是这么大 也可以传数组[90,90] 
+limitMinSize:  [Number, Array, String]
+```
 
 ### 0.50
 支持图片清空
