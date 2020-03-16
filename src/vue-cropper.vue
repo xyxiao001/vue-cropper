@@ -297,7 +297,7 @@ export default {
       default: "contain"
     },
     //限制最小区域,可传1以上的数字和字符串，限制长宽都是这么大
-    // 也可以传数组[90,90] 
+    // 也可以传数组[90,90] ，长宽都是90
     limitMinSize: {
       type: [Number, Array, String],
       default: () => {
