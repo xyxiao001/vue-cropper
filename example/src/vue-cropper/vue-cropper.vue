@@ -295,7 +295,15 @@ export default {
     mode: {
       type: String,
       default: "contain"
-    }
+    },
+    //限制最小区域,可传1以上的数字和字符串，限制长宽都是这么大
+    // 也可以传数组[90,90] 
+    limitMinSize: {
+      type: [Number, Array, String],
+      default: () => {
+        return 10;
+      }
+    },
   },
   computed: {
     cropInfo() {
@@ -1052,6 +1060,22 @@ export default {
           } else {
             this.cropW = fixedWidth;
           }
+        }
+        let { cropW, cropH, limitMinSize } = this;
+
+        let limitMinNum = new Array;
+        if (!Array.isArray[limitMinSize]) {
+          limitMinNum = [limitMinSize, limitMinSize]
+        } else {
+          limitMinNum = limitMinSize
+        }
+        
+        //限制最小宽度和高度
+        if (parseFloat(limitMinNum[0]) && cropW < parseFloat(limitMinNum[0])) {
+          this.cropW = limitMinNum[0]
+        }
+        if (parseFloat(limitMinNum[1]) && cropH < parseFloat(limitMinNum[1])) {
+          this.cropH = limitMinNum[1]
         }
       });
     },
