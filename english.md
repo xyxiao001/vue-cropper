@@ -206,12 +206,12 @@ module.exports = {
         <td>contain</td>
         <td>contain , cover, 100px, 100% auto</td>
     </tr>
-    <tr>
+    <!-- <tr>
         <td>limitMinSize</td>
         <td>crop mini width height</td>
         <td>10</td>
         <td>number, string, [number, number]</td>
-    </tr>
+    </tr> -->
   </tbody>
 </table>
 
@@ -291,6 +291,11 @@ data type
 
 
 ## Update log
+### 0.52
+```
+Recall the attribute of the minimum bullet box. There is a bug in the judgment of the dragging coordinate of the bullet box
+```
+
 ## 0.51
 `` `
 Update the minimum attributes of the crop box, limit the minimum area, can pass more than 1 numbers and strings, limit the length and width are so large, can also pass arrays [90,90]
