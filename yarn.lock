@@ -774,9 +774,9 @@ acorn-dynamic-import@^3.0.0:
     acorn "^5.0.0"
 
 acorn@^5.0.0, acorn@^5.6.2:
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.3.tgz#67aa231bf8812974b85235a96771eb6bd07ea279"
-  integrity sha512-T/zvzYRfbVojPWahDsE5evJdHb3oJoQfFbsrKM7w5Zcs++Tr257tia3BmMP8XYVjp1S9RZXQMh7gao96BlqZOw==
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
+  integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
 
 ajv-errors@^1.0.0:
   version "1.0.0"
@@ -917,6 +917,15 @@ babel-plugin-transform-runtime@^6.23.0:
   integrity sha1-iEkNRGUC6puOfvsP4J7E2ZR5se4=
   dependencies:
     babel-runtime "^6.22.0"
+
+babel-polyfill@^6.26.0:
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/babel-polyfill/-/babel-polyfill-6.26.0.tgz#379937abc67d7895970adc621f284cd966cf2153"
+  integrity sha1-N5k3q8Z9eJWXCtxiHyhM2WbPIVM=
+  dependencies:
+    babel-runtime "^6.26.0"
+    core-js "^2.5.0"
+    regenerator-runtime "^0.10.5"
 
 babel-runtime@^6.22.0, babel-runtime@^6.26.0:
   version "6.26.0"
@@ -1320,6 +1329,11 @@ core-js@^2.4.0:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
   integrity sha512-RszJCAxg/PP6uzXVXL6BsxSXx/B05oJAQ2vkJRjyjrEcNVycaqOmNb5OTxZPE3xa5gwZduqza6L9JOCenh/Ecw==
+
+core-js@^2.5.0:
+  version "2.6.11"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
+  integrity sha512-5wjnpaT/3dV+XB4borEsnAYQchn00XSgTAWKDkEqv+K8KevjbzmofK6hfJ9TZIlpj2N0xQpazy7PiRQiWHqzWg==
 
 core-util-is@~1.0.0:
   version "1.0.2"
@@ -3144,6 +3158,11 @@ regenerate@^1.2.1, regenerate@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
   integrity sha512-1G6jJVDWrt0rK99kBjvEtziZNCICAuvIPkSiUFIQxVP06RCVpq3dmDo2oi6ABpYaDYaTRr67BEhL8r1wgEZZKg==
+
+regenerator-runtime@^0.10.5:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
+  integrity sha1-M2w+/BIgrc7dosn6tntaeVWjNlg=
 
 regenerator-runtime@^0.11.0:
   version "0.11.1"
