@@ -12,7 +12,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 export { VueCropper }
 
 export default {
-  version: '0.5.2',
+  version: '0.5.3',
   install,
   VueCropper,
   vueCropper: VueCropper

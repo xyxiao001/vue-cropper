@@ -46,7 +46,7 @@
 				<div class="test-button">
 					<button @click="changeImg" class="btn">changeImg</button>
 					<label class="btn" for="uploads">upload</label>
-					<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
+					<input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)" ref="uploadImg">
 					<button @click="startCrop" v-if="!crap" class="btn">start</button>
 					<button @click="stopCrop" v-else class="btn">stop</button>
 					<button @click="clearCrop" class="btn">clear</button>
@@ -268,11 +268,11 @@ export default {
         cropData: {},
 				enlarge: 1,
         mode: 'contain',
-        maxImgSize: 2000,
+        maxImgSize: 3000,
         limitMinSize: [100, 120]
       },
       example2: {
-        img: "http://cdn.xyxiao.cn/Landscape_1.jpg",
+        img: "http://cdn.xyxiao.cn/Landscape_2.jpg",
         info: true,
         size: 1,
         outputType: "jpeg",
@@ -459,6 +459,7 @@ export default {
         } else if (num === 2) {
           this.example2.img = data;
         }
+        this.$refs.uploadImg.value = ''
       };
       // 转化为base64
       // reader.readAsDataURL(file)
@@ -792,6 +793,7 @@ code.language-html {
 
 .pre {
 	display: flex;
+  flex-wrap: wrap;
 }
 
 .pre-item {

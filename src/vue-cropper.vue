@@ -407,11 +407,38 @@ export default {
     }
   },
   methods: {
+    getVersion (name) {
+      var arr = navigator.userAgent.split(' '); 
+      var chromeVersion = '';
+      let result = 0;
+      const reg = new RegExp(name, 'i')
+      console.log(reg)
+      for(var i=0;i < arr.length;i++){
+          if(reg.test(arr[i]))
+          chromeVersion = arr[i]
+      }
+      if(chromeVersion){
+          result =  Number(chromeVersion.split('/')[1].split('.')[0]);
+      } else {
+          result = 0;
+      }
+      console.log(name, result)
+      return result
+    },
     checkOrientationImage(img, orientation, width, height) {
+      // 如果是 chrome内核版本在81 safari 在 605 以上不处理图片旋转
+      // alert(navigator.userAgent)
+      if (this.getVersion('chrome') >= 81) {
+        orientation = -1
+      }
+      if (this.getVersion('appleWebkit') >= 605) {
+        orientation = -1
+      }
+      // alert(`当前处理的orientation${orientation}`)
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
       ctx.save();
-
+      
       switch (orientation) {
         case 2:
           canvas.width = width;
@@ -506,6 +533,7 @@ export default {
         let width = img.width;
         let height = img.height;
         exifmin.getData(img).then(data => {
+          console.log(data, '当前的 orientation')
           this.orientation = data.orientation || 1;
           let max = this.maxImgSize;
           if (!this.orientation && (width < max) & (height < max)) {
@@ -522,7 +550,6 @@ export default {
             width = (width / height) * max;
             height = max;
           }
-
           this.checkOrientationImage(img, this.orientation, width, height);
         });
       };
