@@ -291,7 +291,7 @@ data type
 
 
 ## Update log
-### 0.53
+### 0.54
 ` ` ` `
 Remove log information
 Fix PC Safari low version
