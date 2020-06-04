@@ -412,28 +412,35 @@ export default {
       var chromeVersion = '';
       let result = 0;
       const reg = new RegExp(name, 'i')
-      console.log(reg)
       for(var i=0;i < arr.length;i++){
           if(reg.test(arr[i]))
           chromeVersion = arr[i]
       }
       if(chromeVersion){
-          result =  Number(chromeVersion.split('/')[1].split('.')[0]);
+          result = chromeVersion.split('/')[1].split('.');
       } else {
-          result = 0;
+          result = ['0', '0', '0'];
       }
-      console.log(name, result)
       return result
     },
     checkOrientationImage(img, orientation, width, height) {
       // 如果是 chrome内核版本在81 safari 在 605 以上不处理图片旋转
       // alert(navigator.userAgent)
-      if (this.getVersion('chrome') >= 81) {
+      if (this.getVersion('chrome')[0] >= 81) {
         orientation = -1
+      } else {
+        if (this.getVersion('safari')[0] >= 605 ) {
+          const safariVersion = this.getVersion('version')
+          if (safariVersion[0] > 13 && safariVersion[1] > 1) {
+              orientation = -1
+          }
+        } else {
+            if (this.getVersion('appleWebkit')[0] >= 605 ) {
+              orientation = -1
+          }
+        }
       }
-      if (this.getVersion('appleWebkit') >= 605) {
-        orientation = -1
-      }
+      
       // alert(`当前处理的orientation${orientation}`)
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
@@ -533,7 +540,6 @@ export default {
         let width = img.width;
         let height = img.height;
         exifmin.getData(img).then(data => {
-          console.log(data, '当前的 orientation')
           this.orientation = data.orientation || 1;
           let max = this.maxImgSize;
           if (!this.orientation && (width < max) & (height < max)) {
@@ -1127,19 +1133,16 @@ export default {
     // 开始截图
     startCrop() {
       this.crop = true;
-      // console.log('开始截图')
     },
     // 停止截图
     stopCrop() {
       this.crop = false;
-      // console.log('停止截图')
     },
     // 清除截图
     clearCrop() {
       this.cropping = false;
       this.cropW = 0;
       this.cropH = 0;
-      // console.log('清除截图')
     },
     // 截图移动
     cropMove(e) {
@@ -1337,7 +1340,6 @@ export default {
           }
           if ((this.enlarge !== 1) & !this.full) {
             dpr = Math.abs(Number(this.enlarge));
-            console.log(dpr);
           }
           let width = this.cropW * dpr;
           let height = this.cropH * dpr;
@@ -1351,7 +1353,6 @@ export default {
           let dy =
             (this.y - cropOffsertY + (this.trueHeight * (1 - this.scale)) / 2) *
             dpr;
-          // console.log(dx, dy)
           //保存状态
           setCanvasSize(width, height);
           ctx.save();
@@ -1745,7 +1746,6 @@ export default {
     },
     // 重置函数， 恢复组件置初始状态
     refresh() {
-      // console.log('refresh')
       let img = this.img;
       this.imgs = "";
       this.scale = 1;
