@@ -291,6 +291,17 @@ data type
 
 
 ## Update log
+### 0.53
+` ` ` `
+Remove log information
+Fix PC Safari low version
+` ` ` `
+### 0.53
+` ` ` `
+Because chrome 81 kernel and IOS 13.5 fix the image rotation bug
+The plug-in will not process rotation by default in the new version of browser, and it will be processed automatically in the lower version of browser
+https://www.chromestatus.com/feature/6313474512650240
+
 ### 0.52
 ```
 Recall the attribute of the minimum bullet box. There is a bug in the judgment of the dragging coordinate of the bullet box
