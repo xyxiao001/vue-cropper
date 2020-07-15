@@ -271,7 +271,7 @@ export default {
     },
     // 可以压缩图片宽高  默认不超过200
     maxImgSize: {
-      type: Number,
+      type: [Number, String],
       default: 2000
     },
     // 倍数  可渲染当前截图框的n倍 0 - 1000;
@@ -435,9 +435,16 @@ export default {
               orientation = -1
           }
         } else {
-            if (this.getVersion('appleWebkit')[0] >= 605 ) {
-              orientation = -1
-          }
+          //  判断 ios 版本进行处理
+         // 针对 ios 版本大于 13.4的系统不做图片旋转
+         const isIos  = navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
+         if (isIos) {
+           let version = isIos[1]
+           version = version.split('_')
+           if (version[0] > 13 ||  (version[0] >= 13 && version[1] >= 4)) {
+             orientation = -1
+           }
+         }
         }
       }
       
