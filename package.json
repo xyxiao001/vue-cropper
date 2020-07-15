@@ -1,6 +1,6 @@
 {
   "name": "vue-cropper",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "A simple Vue picture clipping plugin",
   "keywords": [
     "vue",
