@@ -525,6 +525,49 @@ export default {
       );
     },
 
+    // 预览图片需要rotate的角度
+    checkRotateNum () {
+      let orientation = this.orientation
+      // 如果是 chrome内核版本在81 safari 在 605 以上不处理图片旋转
+      // alert(navigator.userAgent)
+      if (this.getVersion('chrome')[0] >= 81) {
+        orientation = -1
+      } else {
+        if (this.getVersion('safari')[0] >= 605 ) {
+          const safariVersion = this.getVersion('version')
+          if (safariVersion[0] > 13 && safariVersion[1] > 1) {
+              orientation = -1
+          }
+        } else {
+          //  判断 ios 版本进行处理
+         // 针对 ios 版本大于 13.4的系统不做图片旋转
+         const isIos  = navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
+         if (isIos) {
+           let version = isIos[1]
+           version = version.split('_')
+           if (version[0] > 13 ||  (version[0] >= 13 && version[1] >= 4)) {
+             orientation = -1
+           }
+         }
+        }
+      }
+      
+      switch (orientation) {
+        case 3:
+          rotateNum = 180
+          break
+        case 6:
+          rotateNum = 90
+          break
+        case 8:
+          rotateNum = -90
+          break
+        default:
+          rotateNum = 0
+      }
+      return rotateNum
+    },
+
     // checkout img
     checkedImg() {
       if (this.img === null || this.img === '') {
@@ -1554,6 +1597,8 @@ export default {
       let transformX = (this.x - this.cropOffsertX) / scale;
       let transformY = (this.y - this.cropOffsertY) / scale;
       let transformZ = 0;
+      // 添加预览图片旋转角度
+      let rotateNum = this.checkRotateNum()
       obj.w = w;
       obj.h = h;
       obj.url = this.imgs;
@@ -1561,7 +1606,7 @@ export default {
         width: `${this.trueWidth}px`,
         height: `${this.trueHeight}px`,
         transform: `scale(${scale})translate3d(${transformX}px, ${transformY}px, ${transformZ}px)rotateZ(${this
-          .rotate * 90}deg)`
+          .rotate * 90}deg)rotate(${rotateNum}deg)`
       };
       obj.html = `
       <div class="show-preview" style="width: ${obj.w}px; height: ${
@@ -1572,7 +1617,7 @@ export default {
         this.trueHeight
       }px; transform:
           scale(${scale})translate3d(${transformX}px, ${transformY}px, ${transformZ}px)rotateZ(${this
-        .rotate * 90}deg)">
+        .rotate * 90}deg)rotate(${rotateNum}deg)">
         </div>
       </div>`;
       this.$emit("realTime", obj);
