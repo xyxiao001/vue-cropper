@@ -304,6 +304,11 @@ export default {
         return 10;
       }
     },
+    // 屏幕方向自动旋转
+    orientationAuto: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     cropInfo() {
@@ -447,7 +452,10 @@ export default {
          }
         }
       }
-      
+
+      // 控制图片是否自动旋转
+      if (!this.orientationAuto) orientation = -1;
+
       // alert(`当前处理的orientation${orientation}`)
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
