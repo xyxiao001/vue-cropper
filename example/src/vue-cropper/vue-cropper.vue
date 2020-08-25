@@ -1662,7 +1662,16 @@ export default {
             if (str.search("px") !== -1) {
               str = str.replace("px", "");
               imgW = parseFloat(str);
-              scale = imgW / this.trueWidth;
+              const scaleX = imgW / this.trueWidth;
+              let scaleY = 1;
+              let strH = arr[1];
+              if (strH.search("px") !== -1) {
+                strH = strH.replace("px", "");
+                imgH = parseFloat(strH);
+                scaleY = imgH / this.trueHeight;
+              }
+              scale = Math.min(scaleX,scaleY)
+
             }
             if (str.search("%") !== -1) {
               str = str.replace("%", "");
@@ -1697,8 +1706,9 @@ export default {
       let maxWidth = this.w;
       let maxHeight = this.h;
       if (this.centerBox) {
-        let imgW = this.trueWidth * this.scale;
-        let imgH = this.trueHeight * this.scale;
+        const switchWH = Math.abs(this.rotate) % 2 > 0
+        let imgW = (switchWH ? this.trueHeight : this.trueWidth) * this.scale;
+        let imgH = (switchWH ? this.trueWidth : this.trueHeight) * this.scale;
         maxWidth = imgW < maxWidth ? imgW : maxWidth;
         maxHeight = imgH < maxHeight ? imgH : maxHeight;
       }
