@@ -1101,6 +1101,25 @@ export default {
             this.cropW = fixedWidth;
           }
         }
+
+          let { cropW, cropH, limitMinSize } = this;
+          let limitMinNum = new Array;
+          if (!Array.isArray[limitMinSize]) {
+              limitMinNum = [limitMinSize[0], limitMinSize[1]]
+          } else {
+              limitMinNum = limitMinSize
+          }
+
+          //限制最小宽度和高度
+          if (parseFloat(limitMinNum[0]) && this.cropW < parseFloat(limitMinNum[0])) {
+              this.cropW = limitMinNum[0];
+              // this.$refs.cropper.stopCrop;
+          }
+          if (parseFloat(limitMinNum[1]) && this.cropH < parseFloat(limitMinNum[1])) {
+              this.cropH = limitMinNum[1];
+              // this.$refs.cropper.stopCrop;
+          }
+
       });
     },
 
@@ -1109,7 +1128,7 @@ export default {
 
       let limitMinNum = new Array;
       if (!Array.isArray[limitMinSize]) {
-        limitMinNum = [limitMinSize, limitMinSize]
+        limitMinNum = [limitMinSize[0], limitMinSize[1]]
       } else {
         limitMinNum = limitMinSize
       }
@@ -1610,7 +1629,12 @@ export default {
           this.loading = false;
           // // 获取是否开启了自动截图
           if (this.autoCrop) {
-            this.goAutoCrop();
+              if(this.limitMinSize){
+                  this.goAutoCrop(this.limitMinSize[0], this.limitMinSize[1]);
+              }
+              else {
+                  this.goAutoCrop();
+              }
           }
           // 图片加载成功的回调
           this.$emit("img-load", "success");
