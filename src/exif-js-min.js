@@ -155,5 +155,38 @@ function getOrientation(arrayBuffer) {
 }
 
 
+Exif.getCircleData = (img) => {
+  return new Promise((resolve, reject) => {
+    let temp = new Image()
+    console.log(img)
+    temp.src = img
+    temp.onload = () => {
+      var radius, diameter, canvas, ctx, natural;
+      if (temp.width > temp.height) {
+        radius = temp.height / 2;
+      } else {
+        radius = temp.width / 2;
+      }
+      if (temp.naturalWidth > temp.naturalHeight) {
+        natural = temp.naturalHeight;
+      } else {
+        natural = temp.naturalWidth;
+      }
+      diameter = radius * 2;
+      canvas = document.createElement('canvas');
+      canvas.width = diameter;
+      canvas.height = diameter;
+      let contex = canvas.getContext("2d");
+      contex.clearRect(0, 0, diameter, diameter);
+      contex.save();
+      contex.beginPath();
+      contex.arc(radius, radius, radius, 0, Math.PI * 2, false);
+      contex.clip();
+      console.log(temp, natural, diameter)
+      contex.drawImage(temp, 0, 0, natural, natural, 0, 0, diameter, diameter);
+      resolve(canvas)
+    }
+  })
+}
 
 export default Exif

@@ -29,7 +29,7 @@
 					'transform': 'translate3d('+ cropOffsertX + 'px,' + cropOffsertY + 'px,' + '0)'
 				}"
     >
-      <span class="cropper-view-box">
+      <span class="cropper-view-box" :class='{ "is-circle": circle }'>
         <img
           :style="{
 						'width': trueWidth + 'px',
@@ -41,34 +41,34 @@
           alt="cropper-img"
         >
       </span>
-      <span class="cropper-face cropper-move" @mousedown="cropMove" @touchstart="cropMove"></span>
+      <span class="cropper-face cropper-move" :class='{ "is-circle": circle }' @mousedown="cropMove" @touchstart="cropMove"></span>
       <span
         class="crop-info"
         v-if="info"
         :style="{'top': cropInfo.top}"
       >{{ this.cropInfo.width }} × {{ this.cropInfo.height }}</span>
       <span v-if="!fixedBox">
-        <span
+        <span v-if='!circle'
           class="crop-line line-w"
           @mousedown="changeCropSize($event, false, true, 0, 1)"
           @touchstart="changeCropSize($event, false, true, 0, 1)"
         ></span>
-        <span
+        <span v-if='!circle'
           class="crop-line line-a"
           @mousedown="changeCropSize($event, true, false, 1, 0)"
           @touchstart="changeCropSize($event, true, false, 1, 0)"
         ></span>
-        <span
+        <span v-if='!circle'
           class="crop-line line-s"
           @mousedown="changeCropSize($event, false, true, 0, 2)"
           @touchstart="changeCropSize($event, false, true, 0, 2)"
         ></span>
-        <span
+        <span v-if='!circle'
           class="crop-line line-d"
           @mousedown="changeCropSize($event, true, false, 2, 0)"
           @touchstart="changeCropSize($event, true, false, 2, 0)"
         ></span>
-        <span
+        <span v-if='!circle'
           class="crop-point point1"
           @mousedown="changeCropSize($event, true, true, 1, 1)"
           @touchstart="changeCropSize($event, true, true, 1, 1)"
@@ -78,7 +78,7 @@
           @mousedown="changeCropSize($event, false, true, 0, 1)"
           @touchstart="changeCropSize($event, false, true, 0, 1)"
         ></span>
-        <span
+        <span v-if='!circle'
           class="crop-point point3"
           @mousedown="changeCropSize($event, true, true, 2, 1)"
           @touchstart="changeCropSize($event, true, true, 2, 1)"
@@ -93,7 +93,7 @@
           @mousedown="changeCropSize($event, true, false, 2, 0)"
           @touchstart="changeCropSize($event, true, false, 2, 0)"
         ></span>
-        <span
+        <span v-if='!circle'
           class="crop-point point6"
           @mousedown="changeCropSize($event, true, true, 1, 2)"
           @touchstart="changeCropSize($event, true, true, 1, 2)"
@@ -103,7 +103,7 @@
           @mousedown="changeCropSize($event, false, true, 0, 2)"
           @touchstart="changeCropSize($event, false, true, 0, 2)"
         ></span>
-        <span
+        <span v-if='!circle'
           class="crop-point point8"
           @mousedown="changeCropSize($event, true, true, 2, 2)"
           @touchstart="changeCropSize($event, true, true, 2, 2)"
@@ -304,6 +304,11 @@ export default {
         return 10;
       }
     },
+    // 是否显示圆形裁剪框
+    circle: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     cropInfo() {
@@ -403,6 +408,15 @@ export default {
         if (this.cropW > 0 || this.cropH > 0) {
           this.goAutoCrop(this.cropW, this.cropH);
         }
+      }
+    },
+    circle () {
+      if (this.limitMinSize instanceof Array) {
+        this.cropW = Math.max(this.limitMinSize[0], this.limitMinSize[1])
+        this.cropH = this.cropW
+      } else {
+        this.cropW = this.limitMinSize
+        this.cropH = this.cropW
       }
     }
   },
@@ -935,6 +949,11 @@ export default {
           }
           this.cropOffsertY = this.cropOffsertY;
         }
+        
+        // 圆形裁剪下，长宽相等
+        if (this.circle) {
+          this.cropW > this.cropH ? (this.cropW = this.cropH) : (this.cropH = this.cropW)
+        }
       });
     },
 
@@ -997,7 +1016,8 @@ export default {
       this.$nextTick(() => {
         var fw = nowX - this.cropX;
         var fh = nowY - this.cropY;
-        if (this.canChangeX) {
+        
+        var ChangeWidth = function () {
           if (this.changeCropTypeX === 1) {
             if (this.cropOldW - fw > 0) {
               this.cropW =
@@ -1037,8 +1057,7 @@ export default {
             }
           }
         }
-
-        if (this.canChangeY) {
+        var ChangeHeight = function () {
           if (this.changeCropTypeY === 1) {
             if (this.cropOldH - fh > 0) {
               this.cropH =
@@ -1077,6 +1096,60 @@ export default {
             }
           }
         }
+        
+        // 裁剪圆形图片，要注意如何控制另外一边超出后，如何限制当前边长度
+        if (this.circle) {
+          if (this.canChangeX) {
+            // (0,1) 和 (1,0) 点以(1,1)为基准点，(0,2)和(2,0)点以(2,2)为基准点
+            if (this.changeCropTypeX === 1 ) {
+              this.changeCropTypeX = this.changeCropTypeY = 1
+            } else {
+              this.changeCropTypeX = this.changeCropTypeY = 2
+            }
+            // 只有宽度和高度都没有超出限制的时候，才能够改变
+            let flag = true
+            if (this.changeCropTypeX === 1 && (this.cropOldW - fw > 0) && (wrapperW - this.cropChangeX - fw <= wrapperW - minX) && (wrapperH - this.cropChangeY - fw <= wrapperH - minY)) {
+            } else if (this.changeCropTypeX === 1 && (this.cropOldW - fw <= 0) && (Math.abs(fw) + this.cropChangeX <= wrapperW) && (Math.abs(fw) + this.cropChangeY <= wrapperH)) {
+            } else if (this.changeCropTypeX === 2 && (this.cropOldW + fw > 0) && (this.cropOldW + fw + this.cropOffsertX <= wrapperW) && (this.cropOldH + fw + this.cropOffsertY <= wrapperH)) {
+            } else if (this.changeCropTypeX === 2 && (this.cropOldW + fw <= 0) && (wrapperW - this.cropChangeX + Math.abs(fw + this.cropOldW) <=  wrapperW - minX) && (wrapperH - this.cropChangeY + Math.abs(fw + this.cropOldH) <=  wrapperH - minY)) {
+            } else {
+              flag = false
+            }
+            if (flag) {
+              ChangeWidth.apply(this)
+              fh = fw
+              ChangeHeight.apply(this)
+            }
+          }
+          if (this.canChangeY) {
+            if (this.changeCropTypeY === 1 ) {
+              this.changeCropTypeX = this.changeCropTypeY = 1
+            } else {
+              this.changeCropTypeX = this.changeCropTypeY = 2
+            }
+            // 只有宽度和高度都没有超出限制的时候，才能够改变
+            let flag = true
+            if (this.changeCropTypeX === 1 && (this.cropOldW - fw > 0) && (wrapperW - this.cropChangeX - fh <= wrapperW - minX) && (wrapperH - this.cropChangeY - fh <= wrapperH - minY)) {
+            } else if (this.changeCropTypeX === 1 && (this.cropOldW - fw <= 0) && (Math.abs(fh) + this.cropChangeX <= wrapperW) && (Math.abs(fh) + this.cropChangeY <= wrapperH)) {
+            } else if (this.changeCropTypeX === 2 && (this.cropOldW + fw > 0) && (this.cropOldW + fh + this.cropOffsertX <= wrapperW) && (this.cropOldH + fh + this.cropOffsertY <= wrapperH)) {
+            } else if (this.changeCropTypeX === 2 && (this.cropOldW + fw <= 0) && (wrapperW - this.cropChangeX + Math.abs(fh + this.cropOldW) <=  wrapperW - minX) && (wrapperH - this.cropChangeY + Math.abs(fh + this.cropOldH) <=  wrapperH - minY)) {
+            } else {
+              flag = false
+            }
+            if (flag) {
+              ChangeHeight.apply(this)
+              fw = fh
+              ChangeWidth.apply(this)
+            }
+          }
+        } else {
+          if (this.canChangeX) {
+            ChangeWidth.apply(this)
+          }
+          if (this.canChangeY) {
+            ChangeHeight.apply(this)
+          }
+        }
 
         if (this.canChangeX && this.fixed) {
           var fixedHeight =
@@ -1101,6 +1174,25 @@ export default {
             this.cropW = fixedWidth;
           }
         }
+
+          let { cropW, cropH, limitMinSize } = this;
+          let limitMinNum = new Array;
+          if (!Array.isArray[limitMinSize]) {
+              limitMinNum = [limitMinSize[0], limitMinSize[1]]
+          } else {
+              limitMinNum = limitMinSize
+          }
+
+          //限制最小宽度和高度
+          if (parseFloat(limitMinNum[0]) && this.cropW < parseFloat(limitMinNum[0])) {
+              this.cropW = limitMinNum[0];
+              // this.$refs.cropper.stopCrop;
+          }
+          if (parseFloat(limitMinNum[1]) && this.cropH < parseFloat(limitMinNum[1])) {
+              this.cropH = limitMinNum[1];
+              // this.$refs.cropper.stopCrop;
+          }
+
       });
     },
 
@@ -1109,7 +1201,7 @@ export default {
 
       let limitMinNum = new Array;
       if (!Array.isArray[limitMinSize]) {
-        limitMinNum = [limitMinSize, limitMinSize]
+        limitMinNum = [limitMinSize[0], limitMinSize[1]]
       } else {
         limitMinNum = limitMinSize
       }
@@ -1517,18 +1609,31 @@ export default {
     // 获取转换成base64 的图片信息
     getCropData(cb) {
       this.getCropChecked(data => {
-        cb(data.toDataURL("image/" + this.outputType, this.outputSize));
+        if (this.circle) {
+          exifmin.getCircleData(data.toDataURL("image/" + this.outputType, this.outputSize)).then(canvas => {
+            cb(canvas.toDataURL("image/" + this.outputType, this.outputSize));
+          })
+        } else {
+          cb(data.toDataURL("image/" + this.outputType, this.outputSize));
+        }
       });
     },
 
     //canvas获取为blob对象
     getCropBlob(cb) {
       this.getCropChecked(data => {
-        data.toBlob(
-          blob => cb(blob),
+        let f = (data, callback) => data.toBlob(
+          blob => callback(blob),
           "image/" + this.outputType,
           this.outputSize
-        );
+        )
+        if (this.circle) {
+          exifmin.getCircleData(data.toDataURL("image/" + this.outputType, this.outputSize)).then(canvas => {
+            f(canvas, cb)
+          })
+        } else {
+          f(data, cb)
+        }
       });
     },
 
@@ -1610,7 +1715,12 @@ export default {
           this.loading = false;
           // // 获取是否开启了自动截图
           if (this.autoCrop) {
-            this.goAutoCrop();
+              if(this.limitMinSize){
+                  this.goAutoCrop(this.limitMinSize[0], this.limitMinSize[1]);
+              }
+              else {
+                  this.goAutoCrop();
+              }
           }
           // 图片加载成功的回调
           this.$emit("img-load", "success");
@@ -1929,6 +2039,11 @@ export default {
   outline-color: rgba(51, 153, 255, 0.75);
   user-select: none;
 }
+.cropper-view-box.is-circle{
+  border-radius: 50%;
+  outline: none;
+  border: 1px solid #39f;
+}
 
 .cropper-view-box img {
   user-select: none;
@@ -1942,6 +2057,10 @@ export default {
   left: 0;
   background-color: #fff;
   opacity: 0.1;
+}
+
+.cropper-face.is-circle{
+  border-radius: 50%;
 }
 
 .crop-info {
@@ -2095,3 +2214,4 @@ export default {
   }
 }
 </style>
+

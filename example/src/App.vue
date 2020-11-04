@@ -35,6 +35,7 @@
 						:high="option.high"
 						:infoTrue="option.infoTrue"
             :maxImgSize="option.maxImgSize"
+            :circle='circle'
 						@realTime="realTime"
 						@imgLoad="imgLoad"
 						@cropMoving="cropMoving"
@@ -58,12 +59,13 @@
 					<button @click="finish('base64')" class="btn">preview(base64)</button>
 					<button @click="finish('blob')" class="btn">preview(blob)</button>
 					<button @click="() => option.img = ''" class="btn">清除图片</button>
+          <button @click='circle = !circle' class="btn">{{ circle ? "矩形裁剪" : "圆形裁剪" }}</button>
 					<a @click="down('base64')" class="btn">download(base64)</a>
 					<a @click="down('blob')" class="btn">download(blob)</a>
 					<a :href="downImg" download="demo.png" ref="downloadDom"></a>
 				</div>
 
-				<div class="pre">
+				<div class="pre" :class='{ "is-circle": circle }'>
 					<!-- <section class="pre-item">
 						<p>固定大小 固定宽度100px</p>
 						<section v-html="previews.html"></section>
@@ -220,6 +222,7 @@ import codes from "./code";
 export default {
   data: function() {
     return {
+      circle: false,
       model: false,
       modelSrc: "",
       crap: false,
@@ -304,6 +307,11 @@ export default {
 			code3: '',
 			preview3: '',
     };
+  },
+  watch: {
+    circle (val) {
+      this.limitMinSize = [120, 120]
+    }
   },
   methods: {
     changeImg() {
@@ -794,6 +802,10 @@ code.language-html {
 .pre {
 	display: flex;
   flex-wrap: wrap;
+}
+
+.pre.is-circle .pre-item > div{
+  border-radius: 50%;
 }
 
 .pre-item {
