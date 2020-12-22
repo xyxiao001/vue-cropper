@@ -548,7 +548,7 @@ export default {
         let height = img.height;
         exifmin.getData(img).then(data => {
           this.orientation = data.orientation || 1;
-          let max = this.maxImgSize;
+          let max = Number(this.maxImgSize);
           if (!this.orientation && (width < max) & (height < max)) {
             this.imgs = this.img;
             return;
@@ -599,8 +599,8 @@ export default {
           return false;
         }
         // 开始移动
-        this.moveX = (e.clientX ? e.clientX : e.touches[0].clientX) - this.x;
-        this.moveY = (e.clientY ? e.clientY : e.touches[0].clientY) - this.y;
+        this.moveX = ('clientX' in e ? e.clientX : e.touches[0].clientX) - this.x;
+        this.moveY = ('clientY' in e ? e.clientY : e.touches[0].clientY) - this.y;
         if (e.touches) {
           window.addEventListener("touchmove", this.moveImg);
           window.addEventListener("touchend", this.leaveImg);
@@ -637,8 +637,8 @@ export default {
         this.cropOffsertY = e.offsetY
           ? e.offsetY
           : e.touches[0].pageY - this.$refs.cropper.offsetTop;
-        this.cropX = e.clientX ? e.clientX : e.touches[0].clientX;
-        this.cropY = e.clientY ? e.clientY : e.touches[0].clientY;
+        this.cropX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
+        this.cropY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
         this.cropChangeX = this.cropOffsertX;
         this.cropChangeY = this.cropOffsertY;
         this.cropW = 0;
@@ -719,8 +719,8 @@ export default {
         window.removeEventListener("touchmove", this.moveImg);
         return false;
       }
-      let nowX = e.clientX ? e.clientX : e.touches[0].clientX;
-      let nowY = e.clientY ? e.clientY : e.touches[0].clientY;
+      let nowX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
+      let nowY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
 
       let changeX, changeY;
       changeX = nowX - this.moveX;
@@ -887,8 +887,8 @@ export default {
     createCrop(e) {
       e.preventDefault();
       // 移动生成大小
-      var nowX = e.clientX ? e.clientX : e.touches ? e.touches[0].clientX : 0;
-      var nowY = e.clientY ? e.clientY : e.touches ? e.touches[0].clientY : 0;
+      var nowX = 'clientX' in e ? e.clientX : e.touches ? e.touches[0].clientX : 0;
+      var nowY = 'clientY' in e ? e.clientY : e.touches ? e.touches[0].clientY : 0;
       this.$nextTick(() => {
         var fw = nowX - this.cropX;
         var fh = nowY - this.cropY;
@@ -949,8 +949,8 @@ export default {
       this.canChangeY = h;
       this.changeCropTypeX = typeW;
       this.changeCropTypeY = typeH;
-      this.cropX = e.clientX ? e.clientX : e.touches[0].clientX;
-      this.cropY = e.clientY ? e.clientY : e.touches[0].clientY;
+      this.cropX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
+      this.cropY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
       this.cropOldW = this.cropW;
       this.cropOldH = this.cropH;
       this.cropChangeX = this.cropOffsertX;
@@ -969,8 +969,8 @@ export default {
     // 正在改变
     changeCropNow(e) {
       e.preventDefault();
-      var nowX = e.clientX ? e.clientX : e.touches ? e.touches[0].clientX : 0;
-      var nowY = e.clientY ? e.clientY : e.touches ? e.touches[0].clientY : 0;
+      var nowX = 'clientX' in e ? e.clientX : e.touches ? e.touches[0].clientX : 0;
+      var nowY = 'clientY' in e ? e.clientY : e.touches ? e.touches[0].clientY : 0;
       // 容器的宽高
       let wrapperW = this.w;
       let wrapperH = this.h;
@@ -1101,25 +1101,6 @@ export default {
             this.cropW = fixedWidth;
           }
         }
-
-          let { cropW, cropH, limitMinSize } = this;
-          let limitMinNum = new Array;
-          if (!Array.isArray[limitMinSize]) {
-              limitMinNum = [limitMinSize[0], limitMinSize[1]]
-          } else {
-              limitMinNum = limitMinSize
-          }
-
-          //限制最小宽度和高度
-          if (parseFloat(limitMinNum[0]) && this.cropW < parseFloat(limitMinNum[0])) {
-              this.cropW = limitMinNum[0];
-              // this.$refs.cropper.stopCrop;
-          }
-          if (parseFloat(limitMinNum[1]) && this.cropH < parseFloat(limitMinNum[1])) {
-              this.cropH = limitMinNum[1];
-              // this.$refs.cropper.stopCrop;
-          }
-
       });
     },
 
@@ -1128,7 +1109,7 @@ export default {
 
       let limitMinNum = new Array;
       if (!Array.isArray[limitMinSize]) {
-        limitMinNum = [limitMinSize[0], limitMinSize[1]]
+        limitMinNum = [limitMinSize, limitMinSize]
       } else {
         limitMinNum = limitMinSize
       }
@@ -1189,8 +1170,8 @@ export default {
       window.addEventListener("mouseup", this.leaveCrop);
       window.addEventListener("touchmove", this.moveCrop);
       window.addEventListener("touchend", this.leaveCrop);
-      let x = e.clientX ? e.clientX : e.touches[0].clientX;
-      let y = e.clientY ? e.clientY : e.touches[0].clientY;
+      let x = 'clientX' in e ? e.clientX : e.touches[0].clientX;
+      let y = 'clientY' in e ? e.clientY : e.touches[0].clientY;
       let newX, newY;
       newX = x - this.cropOffsertX;
       newY = y - this.cropOffsertY;
@@ -1212,8 +1193,8 @@ export default {
       let nowY = 0;
       if (e) {
         e.preventDefault();
-        nowX = e.clientX ? e.clientX : e.touches[0].clientX;
-        nowY = e.clientY ? e.clientY : e.touches[0].clientY;
+        nowX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
+        nowY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
       }
       this.$nextTick(() => {
         let cx, cy;
@@ -1629,12 +1610,7 @@ export default {
           this.loading = false;
           // // 获取是否开启了自动截图
           if (this.autoCrop) {
-              if(this.limitMinSize){
-                  this.goAutoCrop(this.limitMinSize[0], this.limitMinSize[1]);
-              }
-              else {
-                  this.goAutoCrop();
-              }
+            this.goAutoCrop();
           }
           // 图片加载成功的回调
           this.$emit("img-load", "success");
@@ -1882,6 +1858,7 @@ export default {
     window.removeEventListener("mouseup", this.leaveCrop);
     window.removeEventListener("touchmove", this.moveCrop);
     window.removeEventListener("touchend", this.leaveCrop);
+    this.cancelScale()
   }
 };
 </script>

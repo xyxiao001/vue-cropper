@@ -291,6 +291,16 @@ data type
 
 
 ## Update log
+### 0.56
+```
+Fix the problem of incorrect judgment of binding events
+Fix the issue that component removal does not unbind scroll events
+```
+
+### 0.55
+```
+Fix the bug that ios version less than 13.4 does not handle image rotation
+```
 ### 0.54
 ` ` ` `
 Remove log information
