@@ -46,7 +46,7 @@
         class="crop-info"
         v-if="info"
         :style="{'top': cropInfo.top}"
-      >{{ this.cropInfo.width }} × {{ this.cropInfo.height }}</span>
+      >{{ cropInfo.width }} × {{ cropInfo.height }}</span>
       <span v-if="!fixedBox">
         <span
           class="crop-line line-w"
