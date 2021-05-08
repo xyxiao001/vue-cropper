@@ -1101,8 +1101,6 @@ export default {
             this.cropW = fixedWidth;
           }
         }
-	// 触发截图框改变大小事件
-	this.$emit('crop-sizing', {cropW: this.cropW, cropH: this.cropH})
       });
     },
 
