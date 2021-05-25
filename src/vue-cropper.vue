@@ -1101,6 +1101,62 @@ export default {
             this.cropW = fixedWidth;
           }
         }
+        //限制裁剪框的宽高
+        var _this = this;
+        var cropperBoxCanvasW = (
+          parseInt(
+            window.getComputedStyle(
+              document.getElementsByClassName("cropper-box-canvas")[0]
+            ).width
+          ) * e.scale
+        ).toFixed(2);
+        var cropperBoxCanvasH = (
+          parseInt(
+            window.getComputedStyle(
+              document.getElementsByClassName("cropper-box-canvas")[0]
+            ).height
+          ) * e.scale
+        ).toFixed(2);
+        var cropperW = parseFloat(
+          window.getComputedStyle(_this.$refs.cropper).width
+        );
+        var cropperH = parseFloat(
+          window.getComputedStyle(_this.$refs.cropper).height
+        );
+        var cropperBoxCanvasOffsertX = _this.getImgAxis().x1,
+          cropperBoxCanvasOffsertY = _this.getImgAxis().y1;
+        var cropisAllFull =
+          cropperBoxCanvasW >= cropperW &&
+          cropperBoxCanvasH >= cropperH &&
+          cropperBoxCanvasOffsertX < 0 &&
+          cropperBoxCanvasOffsertY < 0;
+        var cropAreaW = cropisAllFull
+          ? cropperW
+          : _this.getImgAxis().x2 >= cropperW
+          ? cropperW
+          : _this.getImgAxis().x2;
+        var cropAreaH = cropisAllFull
+          ? cropperH
+          : _this.getImgAxis().y2 >= cropperH
+          ? cropperH
+          : _this.getImgAxis().y2;
+        var limitMinSizeX = _this.limitMinSize[0], //限制的裁剪框的宽度
+          limitMinSizeY = _this.limitMinSize[1],//限制的裁剪框的高度
+          limitCropOffsertY = cropAreaH - limitMinSizeY,
+          limitCropOffsertX = cropAreaW - limitMinSizeX;
+        //裁剪框最小宽高需大于等于1
+        if (limitMinSizeX >= 1 && limitMinSizeY >= 1) {
+          if (_this.cropW <= limitMinSizeX && _this.cropH <= limitMinSizeY) {
+            _this.cropW = limitMinSizeX;
+            _this.cropH = limitMinSizeY;
+            if (_this.cropOffsertY >= limitCropOffsertY) {
+              _this.cropOffsertY = limitCropOffsertY;
+            }
+            if (_this.cropOffsertX >= limitCropOffsertX) {
+              _this.cropOffsertX = limitCropOffsertX;
+            }
+          }
+        }
       });
     },
 
