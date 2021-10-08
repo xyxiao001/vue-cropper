@@ -114,9 +114,9 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import exifmin from "./exif-js-min";
-
-export default {
+export default defineComponent({
   data: function() {
     return {
       // 容器高宽
@@ -1860,7 +1860,7 @@ export default {
     window.removeEventListener("touchend", this.leaveCrop);
     this.cancelScale()
   }
-};
+});
 </script>
 
 <style scoped lang="css">

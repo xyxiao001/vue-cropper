@@ -215,8 +215,8 @@
 // import { VueCropper } from "../lib/index";
 // import '../dist/index.css'
 // import { VueCropper }  from "../dist/vue-cropper.es.js";
-import 'vue-cropper/dist/index.css'
-import { VueCropper }  from "vue-cropper";
+// import 'vue-cropper/dist/index.css'
+// import { VueCropper }  from "vue-cropper";
 
 
 import codes from "./code.vue";
@@ -481,7 +481,7 @@ export default {
     }
   },
   components: {
-    VueCropper,
+    // VueCropper,
     codes
   },
   mounted() {

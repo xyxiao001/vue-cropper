@@ -6,7 +6,7 @@ const { defineConfig } = require('vite')
 module.exports = defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, './lib/index.js'),
+      entry: path.resolve(__dirname, './lib/index.ts'),
       name: 'vue-cropper',
       fileName: (format) => `vue-cropper.${format}.js`
     },
