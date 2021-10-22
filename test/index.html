@@ -179,6 +179,7 @@
       <button @click="changeScale(-1)" class="btn">-</button>
       <button @click="rotateLeft" class="btn">rotateLeft</button>
       <button @click="rotateRight" class="btn">rotateRight</button>
+      <button @click="rotateMirror" class="btn">rotateMirror</button>
       <button @click="finish('base64')" class="btn">preview(base64)</button>
       <button @click="finish('blob')" class="btn">preview(blob)</button>
       <a @click="down('base64')" class="btn">download(base64)</a>
@@ -325,6 +326,9 @@
         },
         rotateRight() {
           this.$refs.cropper.rotateRight()
+        },
+        rotateMirror() {
+          this.$refs.cropper.rotateMirror()
         },
         finish(type) {
           // 输出

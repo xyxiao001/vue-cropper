@@ -257,6 +257,7 @@ this.$refs.cropper.getCropAxis() | 获取截图框基于容器的坐标点
 this.$refs.cropper.goAutoCrop | 自动生成截图框函数
 this.$refs.cropper.rotateRight() | 向右边旋转90度
 this.$refs.cropper.rotateLeft() | 向左边旋转90度
+this.$refs.cropper.rotateMirror() | 镜像
 
 **获取截图内容**
 

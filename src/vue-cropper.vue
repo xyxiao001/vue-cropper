@@ -8,7 +8,7 @@
 					'width': trueWidth + 'px',
 					'height': trueHeight + 'px',
 					'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ x / scale + 'px,' + y / scale + 'px,' + '0)'
-					+ 'rotateZ('+ rotate * 90 +'deg)'
+					+ 'rotateZ('+ rotate * 90 +'deg)' + ` rotateY(${mirror ? 180 : 0}deg)`
 					}"
       >
         <img :src="imgs" alt="cropper-img" ref="cropperImg">
@@ -35,7 +35,7 @@
 						'width': trueWidth + 'px',
 						'height': trueHeight + 'px',
 						'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ (x - cropOffsertX) / scale  + 'px,' + (y - cropOffsertY) / scale + 'px,' + '0)'
-						+ 'rotateZ('+ rotate * 90 +'deg)'
+						+ 'rotateZ('+ rotate * 90 +'deg)' + ` rotateY(${mirror ? 180 : 0}deg)`
 						}"
           :src="imgs"
           alt="cropper-img"
@@ -178,7 +178,9 @@ export default {
       scalingSet: "",
       coeStatus: "",
       // 控制emit触发频率
-      isCanShow: true
+      isCanShow: true,
+      // 开启镜像
+      mirror: false
     };
   },
   props: {
@@ -1331,8 +1333,36 @@ export default {
         axis: this.getCropAxis()
       });
     },
-
-    getCropChecked(cb) {
+    /**
+     * 把图片镜像后返回dataUrl
+     * @author swy
+     */
+    getMirrorImg (canvas) {
+      function setCanvasSize(width, height) {
+        canvas.width = Math.round(width);
+        canvas.height = Math.round(height);
+      }
+      return new Promise((resolve)=>{
+        let img = new Image();
+        img.onload = () => {
+          setCanvasSize(img.width, img.height)
+          let ctx = canvas.getContext("2d");
+          ctx.translate(canvas.width, 0);
+          ctx.scale(-1, 1);
+          ctx.drawImage(img, 0, 0,canvas.width, canvas.height);
+          let dataUrl = canvas.toDataURL("image/" + this.outputType, this.outputSize)
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          resolve(dataUrl)
+        }
+        // 判断图片是否是base64
+        let s = this.img.substr(0, 4);
+        if (s !== "data") {
+          img.crossOrigin = "Anonymous";
+        }
+        img.src = this.imgs;
+      })
+    },
+    async getCropChecked(cb) {
       let canvas = document.createElement("canvas");
       let img = new Image();
       let rotate = this.rotate;
@@ -1508,7 +1538,8 @@ export default {
       if (s !== "data") {
         img.crossOrigin = "Anonymous";
       }
-      img.src = this.imgs;
+
+      img.src = this.mirror ? await this.getMirrorImg(canvas) : this.imgs
 
       function setCanvasSize(width, height) {
         canvas.width = Math.round(width);
@@ -1778,6 +1809,14 @@ export default {
       this.$nextTick(() => {
         this.checkedImg();
       });
+    },
+
+    /**
+     * 镜像
+     * @author swy
+     */
+    rotateMirror () {
+      this.mirror = !this.mirror
     },
 
     // 向左边旋转

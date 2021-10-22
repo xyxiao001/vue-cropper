@@ -226,6 +226,7 @@ module.exports = {
 ##### this.$refs.cropper.goAutoCrop Automatically generate screenshot box functions
 ##### this.$refs.cropper.rotateRight() Rotate 90 degrees to the right
 ##### this.$refs.cropper.rotateLeft() Rotate 90 degrees to the left
+##### this.$refs.cropper.rotateMirror() Mirror
 
 #### Image loaded callback imgLoad returns the result success, error
 
