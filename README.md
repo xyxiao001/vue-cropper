@@ -132,8 +132,6 @@ if(process.browser) {
 名称 | 功能 | 默认值 | 可选值
 --- | --- | --- | ---
 img | 裁剪图片的地址 | 空 | `url 地址`, `base64`, `blob`
-outputSize | 裁剪生成图片的质量 | 1 | 0.1 ~ 1
-img | 裁剪图片的地址 | 空 | `url 地址`, `base64`, `blob`
 outputSize | 裁剪生成图片的质量 | `1` | 0.1 ~ 1
 outputType | 裁剪生成图片的格式 | jpg (jpg 需要传入jpeg) | `jpeg`, `png`, `webp`
 info | 裁剪框的大小信息 | `true` | `true`, `false`
@@ -141,7 +139,7 @@ canScale | 图片是否允许滚轮缩放 | `true` | `true`, `false`
 autoCrop | 是否默认生成截图框 | `false` | `true`, `false`
 autoCropWidth | 默认生成截图框宽度 | 容器的 80% | 0 ~ max
 autoCropHeight | 默认生成截图框高度 | 容器的 80% | 0 ~ max
-fixed | 是否开启截图框宽高固定比例 | `true` | `true`, `false`
+fixed | 是否开启截图框宽高固定比例 | `false` | `true`, `false`
 fixedNumber | 截图框的宽高比例 | `[1, 1]` | `[ 宽度 ,  高度 ]`
 full | 是否输出原图比例的截图 | `false` | `true`, `false`
 fixedBox | 固定截图框大小 | 不允许改变 | `false` | `true`, `false`
