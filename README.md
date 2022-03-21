@@ -23,7 +23,10 @@ yarn add vue-cropper
 
 
 如果你没有使用 `npm`
-[在线例子](https://codepen.io/xyxiao001/pen/wxwKGz)
+
+[在线例子vue-cropper + vue.2x](https://codepen.io/xyxiao001/pen/wxwKGz)
+
+[在线例子vue-cropper@next + vue.3x](https://codepen.io/xyxiao001/pen/yLooYKg)
 
 服务器渲染 `nuxt` 解决方案 设置为 `ssr: false`
 ```js
@@ -42,14 +45,37 @@ module.exports = {
 
 
 ### 2. 引入 Vue Cropper 
-`Vue 3`
+`Vue 3` 组件内引入
 ```bash
 npm install vue-cropper@next
 import 'vue-cropper/dist/index.css'
 import { VueCropper }  from "vue-cropper";
 ```
 
-`Vue` 组件内引入
+`Vue3` 全局引入
+```js
+import VueCropper from 'vue-cropper'; 
+import 'vue-cropper/dist/index.css'
+
+const app = createApp(App)
+app.use(VueCropper)
+app.mount('#app')
+```
+
+`Vue3 CDN` 方式引入
+```html
+<style type="text/css" src="https://cdn.jsdelivr.net/npm/vue-cropper@1.0.2/dist/index.css"></style> 
+```
+
+```js
+<script src="https://cdn.jsdelivr.net/npm/vue@3.2.1/dist/vue.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-cropper@1.0.2/dist/vue-cropper.umd.js"></script>
+const app = Vue.createApp({...});
+app.component('vue-cropper', window['vue-cropper'].VueCropper);
+```
+
+
+`Vue2` 组件内引入
 ```js
 import { VueCropper }  from 'vue-cropper' 
 components: {
@@ -57,14 +83,14 @@ components: {
 }
 ```
 
-`main.js` 里面引入
+`Vue2` 全局引入
 ```js
 import VueCropper from 'vue-cropper'
 Vue.use(VueCropper)
 ```
 
 
-`CDN` 方式引入
+`Vue2 CDN` 方式引入
 ```html
 <script src="//cdn.jsdelivr.net/npm/vue-cropper@0.4.9/dist/index.js"></script>
 ```
@@ -106,8 +132,6 @@ if(process.browser) {
 名称 | 功能 | 默认值 | 可选值
 --- | --- | --- | ---
 img | 裁剪图片的地址 | 空 | `url 地址`, `base64`, `blob`
-outputSize | 裁剪生成图片的质量 | 1 | 0.1 ~ 1
-img | 裁剪图片的地址 | 空 | `url 地址`, `base64`, `blob`
 outputSize | 裁剪生成图片的质量 | `1` | 0.1 ~ 1
 outputType | 裁剪生成图片的格式 | jpg (jpg 需要传入jpeg) | `jpeg`, `png`, `webp`
 info | 裁剪框的大小信息 | `true` | `true`, `false`
@@ -115,7 +139,7 @@ canScale | 图片是否允许滚轮缩放 | `true` | `true`, `false`
 autoCrop | 是否默认生成截图框 | `false` | `true`, `false`
 autoCropWidth | 默认生成截图框宽度 | 容器的 80% | 0 ~ max
 autoCropHeight | 默认生成截图框高度 | 容器的 80% | 0 ~ max
-fixed | 是否开启截图框宽高固定比例 | `true` | `true`, `false`
+fixed | 是否开启截图框宽高固定比例 | `false` | `true`, `false`
 fixedNumber | 截图框的宽高比例 | `[1, 1]` | `[ 宽度 ,  高度 ]`
 full | 是否输出原图比例的截图 | `false` | `true`, `false`
 fixedBox | 固定截图框大小 | 不允许改变 | `false` | `true`, `false`

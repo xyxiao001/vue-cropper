@@ -1,6 +1,6 @@
 {
   "name": "vue-cropper",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "A simple Vue picture clipping plugin",
   "keywords": [
     "vue",
@@ -37,14 +37,12 @@
     "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.17",
     "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "sass": "^1.37.5"
   },
   "browserify": {
     "transform": [
       "vueify"
     ]
-  },
-  "dependencies": {
-    "sass": "^1.37.5"
   }
 }
