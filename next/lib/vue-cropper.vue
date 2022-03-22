@@ -539,7 +539,6 @@ export default defineComponent({
       let img = new Image();
       img.onload = () => {
         if (this.img === "") {
-          this.$emit("imgLoad", "error");
           this.$emit("img-load", "error");
           return false;
         }
@@ -568,7 +567,6 @@ export default defineComponent({
       };
 
       img.onerror = () => {
-        this.$emit("imgLoad", "error");
         this.$emit("img-load", "error");
       };
 
