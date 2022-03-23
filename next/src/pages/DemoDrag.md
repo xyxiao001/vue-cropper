@@ -50,7 +50,7 @@
   import { ElMessageBox, ElMessage } from 'element-plus'
 
   const cropper = ref()
-  const currentImg = ref('https://p3-pc.douyinpic.com/aweme/1080x1080/aweme-avatar/tos-cn-avt-0015_2f07496a52314c3e024eaafaba73dd35.jpeg')
+  const currentImg = ref('http://cdn.xyxiao.cn/Portrait_2.jpg')
   const loading = ref(false)
   const click = () => {
     loading.value = true;

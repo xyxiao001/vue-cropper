@@ -43,9 +43,55 @@ export const resetImg = (
   orientation: number,
 ): HTMLCanvasElement | null => {
   if (!canvas) return canvas;
-  return (canvas = conversion.render(img, canvas, orientation))
+  return conversion.render(img, canvas, orientation)
 }
 
+export const getVersion = (name: string) => {
+  var arr = navigator.userAgent.split(' '); 
+  var chromeVersion = '';
+  let result: any = 0;
+  const reg = new RegExp(name, 'i')
+  for(var i=0;i < arr.length;i++){
+      if(reg.test(arr[i]))
+      chromeVersion = arr[i]
+  }
+  if(chromeVersion){
+      result = chromeVersion.split('/')[1].split('.');
+  } else {
+      result = ['0', '0', '0'];
+  }
+  return result
+}
+
+export const checkOrientationImage = (orientation: number) => {
+  // 如果是 chrome内核版本在81 safari 在 605 以上不处理图片旋转
+  // alert(navigator.userAgent)
+  if (getVersion('chrome')[0] >= 81) {
+    return -1
+  }
+  if (getVersion('safari')[0] >= 605) {
+    const safariVersion = getVersion('version')
+    if (safariVersion[0] > 13 && safariVersion[1] > 1) {
+      return -1
+    }
+  }
+
+   //  判断 ios 版本进行处理
+   // 针对 ios 版本大于 13.4的系统不做图片旋转
+    const isIos  = navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
+    if (isIos) {
+    let version: any = isIos[1]
+    version = version.split('_')
+    if (version[0] > 13 ||  (version[0] >= 13 && version[1] >= 4)) {
+      return -1
+    }
+    // 火狐浏览器
+    if (getVersion('Firefox')[0] >= 97) {
+      return -1
+    }
+    return orientation;
+  }
+}
 // 给出图片的大小和容器大小 还有布局方式， 返回布局。
 export const createImgStyle = (
   imgStyle: InterfaceLayoutStyle,

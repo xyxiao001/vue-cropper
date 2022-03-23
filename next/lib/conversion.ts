@@ -27,6 +27,7 @@ class Conversion {
       },
 
       2: (canvas: HTMLCanvasElement): HTMLCanvasElement => {
+        // horizontal flip
         if (canvas && this.ctx && this.img) {
           canvas.width = this.img.width
           canvas.height = this.img.height
@@ -106,6 +107,7 @@ class Conversion {
       const curCanvas = this.handle[orientation](canvas)
       this.ctx = curCanvas.getContext('2d') as CanvasRenderingContext2D
       this.ctx.drawImage(this.img, 0, 0, this.img.width, this.img.height)
+      this.ctx.restore();
       return curCanvas
     } else {
       canvas.width = img.width

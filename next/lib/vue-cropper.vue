@@ -11,6 +11,7 @@ import {
   getCropImgData,
   detectionBoundary,
   setAnimation,
+  checkOrientationImage,
 } from './common'
 import { supportWheel, changeImgSize, isIE } from './changeImgSize'
 import './style/index.scss'
@@ -254,7 +255,8 @@ const checkedImg = async (url: string) => {
     console.log(error)
     result.orientation = 1
   }
-  const orientation = result.orientation || -1
+  let orientation = result.orientation || -1
+  orientation = checkOrientationImage(orientation)
   // console.log(`图片加载成功,orientation为${orientation}`)
 
   // 图片不需要进行处理的
