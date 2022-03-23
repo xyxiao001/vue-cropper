@@ -1,0 +1,136 @@
+:root{
+  --cropperColor:#1890ff; //全局可用
+}
+
+.vue-cropper {
+  position: relative;
+  box-sizing: border-box;
+  user-select: none;
+  direction: ltr;
+  touch-action: none;
+  text-align: left;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
+  // overflow: hidden;
+
+  .cropper-box,
+  .cropper-box-canvas,
+  .cropper-drag-box,
+  .cropper-crop-box,
+  .cropper-face {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    user-select: none;
+  }
+  .cropper-box-canvas img {
+    position: relative;
+    text-align: left;
+    user-select: none;
+    transform: none;
+    max-width: none;
+    max-height: none;
+  }
+
+  .cropper-drag-box {
+    transition: background 0.2s ease-in-out;
+  }
+
+  .cropper-box {
+    overflow: hidden;
+  }
+  .cropper-move {
+    cursor: move;
+  }
+  .cropper-crop {
+    cursor: crosshair;
+  }
+  .cropper-modal {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .cropper-view-box {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    outline: 1px solid #fff;
+    // border: 1px solid #fff;
+    outline-color: #fff;
+    user-select: none;
+  }
+  .cropper-view-box img {
+    user-select: none;
+    text-align: left;
+    max-width: none;
+    max-height: none;
+  }
+  .cropper-face {
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    opacity: 0.1;
+  }
+
+  .cropper-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #fff, $alpha: 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cropperColor);
+
+    .cropper-loading-spin {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-size: 14px;
+      font-variant: tabular-nums;
+      line-height: 1.5;
+      list-style: none;
+      font-feature-settings: 'tnum';
+      text-align: center;
+      vertical-align: middle;
+      transition: transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+
+      i {
+        svg {
+          animation: cropperLoadingCircle 1.2s infinite ease-out;
+        }
+      }
+    }
+  }
+
+  .cropper-fade-in {
+    animation-name: cropperFadeIn;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+  }
+
+  & + .vue-cropper {
+    margin-left: 20px;
+  }
+}
+
+// 旋转动画
+@keyframes cropperLoadingCircle {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+//  淡入淡出动画
+@keyframes cropperFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

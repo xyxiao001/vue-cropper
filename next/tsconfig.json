@@ -10,5 +10,5 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "lib/*", "shims-vue.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.md", "src/**/*.vue", "lib/*", "shims-vue.d.ts"]
 }
