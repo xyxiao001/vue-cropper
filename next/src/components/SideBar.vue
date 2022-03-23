@@ -41,6 +41,10 @@
       path: '/demo-loading'
     },
     {
+      name: '直接拖拽渲染图片',
+      path: '/demo-drag'
+    },
+    {
       name: '更新日志',
       path: '/changelog'
     }

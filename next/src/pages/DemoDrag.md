@@ -1,11 +1,14 @@
-#  基础例子
+#  拖拽图片渲染例子
 
-### 基础功能展示
+### 功能展示
+#### 选择一张本地图片拖拽到截图区域
 :::demo
 ```html
 <vue-cropper 
   ref="cropper"
-  img="https://p3-pc.douyinpic.com/aweme/1080x1080/aweme-avatar/tos-cn-avt-0015_2f07496a52314c3e024eaafaba73dd35.jpeg">
+  :img="currentImg"
+  @img-upload="handleUpload"
+>
 </vue-cropper>
 <el-button :loading="loading" @click="click">获取截图</el-button>
 ```
@@ -16,6 +19,7 @@
   import { ElMessageBox, ElMessage } from 'element-plus'
 
   const cropper = ref()
+  const currentImg = ref('https://p3-pc.douyinpic.com/aweme/1080x1080/aweme-avatar/tos-cn-avt-0015_2f07496a52314c3e024eaafaba73dd35.jpeg')
   const loading = ref(false)
   const click = () => {
     loading.value = true;
@@ -32,7 +36,12 @@
       confirmButtonText: '确定'
     })
   }
+
+  const handleUpload = img => {
+    currentImg.value = img
+  }
 </script>
+
 ```
 :::
 
@@ -41,6 +50,7 @@
   import { ElMessageBox, ElMessage } from 'element-plus'
 
   const cropper = ref()
+  const currentImg = ref('https://p3-pc.douyinpic.com/aweme/1080x1080/aweme-avatar/tos-cn-avt-0015_2f07496a52314c3e024eaafaba73dd35.jpeg')
   const loading = ref(false)
   const click = () => {
     loading.value = true;
@@ -56,6 +66,10 @@
       dangerouslyUseHTMLString: true,
       confirmButtonText: '确定'
     })
+  }
+
+  const handleUpload = img => {
+    currentImg.value = img
   }
 </script>
 

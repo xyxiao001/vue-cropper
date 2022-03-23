@@ -760,16 +760,21 @@ defineExpose({
       </section>
 
       <section :class="computedClassDrag()" ref="cropperImg" />
-      <section
-        v-if="cropping"
-        class="cropper-crop-box"
-        :style="getCropBoxStyle()"
-      >
-        <span class="cropper-view-box">
-          <img v-if="img" :src="imgs" :style="getCropImgStyle()" alt="cropper-img" />
-        </span>
-        <span class="cropper-face cropper-move" ref="cropperBox" />
-      </section>
+    </section>
+    <section
+      v-if="cropping && imgs"
+      class="cropper-crop-box cropper-fade-in"
+      :style="getCropBoxStyle()"
+    >
+      <span class="cropper-view-box" :style="{outlineColor: cropColor}">
+        <img v-if="img" :src="imgs" :style="getCropImgStyle()" alt="cropper-img" />
+      </span>
+      <span class="cropper-face cropper-move" ref="cropperBox" />
+    </section>
+    <section v-if="isDrag" class="drag">
+      <slot name="drag">
+        <p>拖动图片到此</p>
+      </slot>
     </section>
     <cropperLoading :is-visible="imgLoading">
       <template v-if="slots.loading" #default>

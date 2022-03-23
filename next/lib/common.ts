@@ -99,8 +99,8 @@ export const loadFile = async (file: File): Promise<any> => {
     return ''
   }
 
-  if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(file.name)) {
-    alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
+  if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG|WEBP)$/.test(file.name)) {
+    alert('图片类型必须是.gif,jpeg,jpg,png,bmp,WEBP中的一种')
     return ''
   }
   return new Promise((resolve, reject) => {
@@ -290,7 +290,6 @@ export const boundaryCalculation = (
   const rectCrop = getRectPoints(cropAxis.x, cropAxis.y, cropLayout.width, cropLayout.height)
   const isCover = isWholeCover(rectImg, rectCrop)
   if (!isCover) {
-    console.log('超出边界， 需要生成新的矩形坐标')
     // 获取目前矩形的坐标
     // console.log(rectImg, rectCrop)
 
@@ -513,11 +512,9 @@ export const isWholeCover = (rectImg: InterfaceAxis[], rectCrop: InterfaceAxis[]
   for (const i of rectCrop) {
     // 检测截图框的 4 个点是不是在矩形里面
     if (!isPointInRectCheckByLen(i, rectImg)) {
-      console.log('不包含了哦--')
       return false
     }
   }
-  console.log('包含了哦--')
   return true
 }
 
