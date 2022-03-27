@@ -9,7 +9,7 @@ import { InterfaceMessageEvent, InterfaceAxis } from '../interface'
 /**
  * 1. 单指 用于计算移动点的坐标距离
  * 2. 双指缩放
- *    计算前后两个点的连线距离然后跳转缩放比例
+ *    计算前后两个点的连线距离然后计算缩放比例
  *    两个点的中心
  *    v = {
  *      x: t[1].x - t[0].x,
@@ -41,9 +41,13 @@ class TouchEvent {
   element: HTMLElement
   pre: InterfaceAxis
   watcher: WatchEvent
+  touches: TouchList
   constructor(element: HTMLElement) {
     // 节点
     this.element = element
+
+    // 保存前一时刻的手指信息
+    this.touches = null;
 
     this.pre = {
       x: 0,
@@ -79,7 +83,7 @@ class TouchEvent {
     // console.log('down')
   }
 
-  startTouch(event: any) {
+  startTouch(event: TouchEvent) {
     // 鼠标按下去或者手按下去
     const x = event.touches[0].clientX
     const y = event.touches[0].clientY
@@ -91,7 +95,15 @@ class TouchEvent {
       type: 'down',
       event,
     })
-    window.addEventListener('touchmove', this.moveTouch)
+    // 表示是两个手指放上去那么直接开始，检测双指
+    if (event.touches.length === 2) {
+      this.touches = event.touches
+      window.addEventListener('touchmove', this.scaleTouch)
+      window.removeEventListener('touchmove', this.moveTouch)
+    } else {
+      window.addEventListener('touchmove', this.moveTouch)
+      window.removeEventListener('touchmove', this.scaleTouch)
+    }
     window.addEventListener('touchend', this.stopTouch)
   }
 
@@ -113,7 +125,8 @@ class TouchEvent {
     // console.log('move')
   }
 
-  moveTouch(event: any) {
+  moveTouch(event: TouchEvent) {
+    event.preventDefault()
     // 鼠标按下去或者手按下去
     const x = event.touches[0].clientX
     const y = event.touches[0].clientY
@@ -131,6 +144,36 @@ class TouchEvent {
     }
   }
 
+  // 获取连线中心点
+  getLen(touches: InterfaceAxis): Number {
+    return Math.sqrt(touches.x * touches.x + touches.y * touches.y);
+  }
+
+  getScale(cur: TouchList[], pre: TouchList[]): Number {
+    const curCenter = {
+      x: cur[1].clientX - cur[0].clientX,
+      y: cur[1].clientY - cur[0].clientX,
+    }
+    const preCenter = {
+      x: pre[1].clientX - pre[0].clientX,
+      y: pre[1].clientY - pre[0].clientX,
+    }
+    return this.getLen(curCenter) / this.getLen(preCenter)
+  }
+
+  // 双指缩放
+  scaleTouch(event: MouseEvent) {
+    event.preventDefault()
+    const scale = this.getScale(event.touches, this.touches);
+    // 返回两个手指直接的差值
+    this.watcher.fire({
+      type: 'down-to-scale',
+      event,
+      scale,
+    })
+    this.touches = event.touches
+  }
+
   stop(event: MouseEvent) {
     this.watcher.fire({
       type: 'up',
@@ -141,15 +184,16 @@ class TouchEvent {
     window.removeEventListener('mouseup', this.stop)
   }
 
-  stopTouch(event: any) {
+  stopTouch(event: TouchEvent) {
     this.watcher.fire({
       type: 'up',
       event,
     })
-    // console.log('stop')
     window.removeEventListener('touchmove', this.moveTouch)
+    window.removeEventListener('touchmove', this.scaleTouch)
     window.removeEventListener('touchend', this.stopTouch)
   }
+
   // 绑定事件
   on(type: string, handler: (message: InterfaceMessageEvent) => void) {
     this.watcher.addHandler(type, handler)
@@ -164,6 +208,7 @@ class TouchEvent {
       if (SUPPORT_TOUCH) {
         this.startTouch = this.startTouch.bind(this)
         this.moveTouch = this.moveTouch.bind(this)
+        this.scaleTouch = this.scaleTouch.bind(this)
         this.stopTouch = this.stopTouch.bind(this)
         this.move = this.move.bind(this)
         this.stop = this.stop.bind(this)

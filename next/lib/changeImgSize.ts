@@ -1,3 +1,4 @@
+import { cursorTo } from 'readline'
 import { InterfaceLayoutStyle } from './interface'
 
 // 当前是否在缩放
@@ -52,6 +53,11 @@ export const changeImgSize = (e: any, scale: number, imgStyle: InterfaceLayoutSt
   }
   scaling = true
   return nowScale
+}
+
+export const changeImgSizeByTouch = (value: number, scale: number, imgStyle: InterfaceLayoutStyle):number => {
+  const nowScale = value * scale
+  return nowScale;
 }
 
 export const supportWheel = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel'

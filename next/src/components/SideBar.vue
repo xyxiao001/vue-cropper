@@ -41,8 +41,16 @@
       path: '/demo-loading'
     },
     {
-      name: '直接拖拽渲染图片',
+      name: '本地上传图片例子',
       path: '/demo-drag'
+    },
+    {
+      name: '截图框操作例子',
+      path: '/demo-crop'
+    },
+    {
+      name: '图片控制例子',
+      path: '/demo-img'
     },
     {
       name: '更新日志',
@@ -52,7 +60,7 @@
 </script>
 
 <style lang="scss">
-    @import "../assets/color.scss";
+  @import "../assets/color.scss";
   .side-bar {
     flex-wrap: wrap;
     justify-content: center;

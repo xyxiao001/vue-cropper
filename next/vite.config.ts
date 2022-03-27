@@ -28,6 +28,9 @@ module.exports = defineConfig({
   //     }
   //   },
   // },
+  server: {
+    host: '0.0.0.0'
+  },
   plugins: [
     vue({
       include: [/\.vue$/, /\.md$/],

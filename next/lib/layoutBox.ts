@@ -21,7 +21,6 @@ const modeHandle = {
   contain: (
     imgStyle: InterfaceLayoutStyle,
     layoutStyle: InterfaceLayoutStyle,
-    mode: string,
   ): number => {
     // contain 布局 图片需要在容器内展示， 默认是容器的 80%, 不会自己放大
     let scale = 1
@@ -42,7 +41,6 @@ const modeHandle = {
   cover: (
     imgStyle: InterfaceLayoutStyle,
     layoutStyle: InterfaceLayoutStyle,
-    mode: string,
   ): number => {
     // cover布局, 图片会变成铺满容器， 默认先铺宽，然后铺高度
     let scale = 1

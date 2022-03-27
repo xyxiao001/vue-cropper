@@ -146,7 +146,7 @@ export const loadFile = async (file: File): Promise<any> => {
   }
 
   if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG|WEBP)$/.test(file.name)) {
-    alert('图片类型必须是.gif,jpeg,jpg,png,bmp,WEBP中的一种')
+    alert('图片类型必须是.gif,jpeg,jpg,png,bmp,webp中的一种')
     return ''
   }
   return new Promise((resolve, reject) => {

@@ -12,7 +12,6 @@ module.exports = (md: any) => {
       render: (tokens, idx) => {
         if (tokens[idx].nesting === 1) {
           const html = convertHtml(striptags(tokens[idx + 1].content, 'script'))
-
           return `<demo>
                     <template #demo>${html}</template>
                     <template #sourceCode>`

@@ -10,15 +10,9 @@
   </div>
 </template>
 
-<script>
-
-export default {
-  data () {
-    return {
-      isShow: true
-    }
-  },
-}
+<script setup>
+  import { ref } from 'vue'
+  const isShow = ref(true)
 </script>
 
 <style lang="scss" scoped>

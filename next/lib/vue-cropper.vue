@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, reactive, ref, toRefs, watch, useSlots } from 'vue'
-import { InterfaceAxis, InterfaceImgLoad, InterfaceLayout, InterfaceMessageEvent, InterfaceModeHandle, InterfaceTransformStyle } from './interface'
+import { InterfaceAxis, InterfaceImgLoad, InterfaceLayout, InterfaceLayoutStyle, InterfaceMessageEvent, InterfaceModeHandle, InterfaceTransformStyle } from './interface'
 import {
   loadImg,
   getExif,
@@ -13,9 +13,9 @@ import {
   setAnimation,
   checkOrientationImage,
 } from './common'
-import { supportWheel, changeImgSize, isIE } from './changeImgSize'
+import { supportWheel, changeImgSize, isIE, changeImgSizeByTouch } from './changeImgSize'
 import './style/index.scss'
-import { BOUNDARY_DURATION } from './config'
+import { BOUNDARY_DURATION, RESISTANCE } from './config'
 
 import TouchEvent from './touch'
 import cropperLoading from './loading'
@@ -26,6 +26,8 @@ interface InterfaceVueCropperProps {
   img?: string
   // 外层容器宽高
   wrapper?: InterfaceLayout
+  // 截图框大小
+  cropLayout?: InterfaceLayoutStyle,
   // 主题色
   color?: string,
   // 滤镜函数
@@ -46,6 +48,11 @@ const props = withDefaults(defineProps<InterfaceVueCropperProps>(), {
   wrapper: {
     width: '300px',
     height: '300px',
+  },
+    // 截图框的大小
+  cropLayout: {
+    width: 200,
+    height: 200,
   },
   color: '#fff',
   filter: null,
@@ -104,11 +111,6 @@ const LayoutContainer = reactive({
     x: 0,
     y: 0,
   },
-  // 截图框的大小
-  cropLayout: {
-    width: 200,
-    height: 200,
-  },
   // 截图框的样式， 包含外层和里面
   cropExhibitionStyle: {
     div: {},
@@ -149,8 +151,11 @@ const waitingImgChecked = ref(false)
 
 const setWaitFunc = ref(0)
 
+// 图片是否处于双指操作状态，禁止截图框拖动
+const isImgTouchScale = ref(false)
+
 // 处理 props
-const { img, filter, mode, defaultRotate, outputType, centerBox } = toRefs(props);
+const { img, filter, mode, defaultRotate, outputType, centerBox, cropLayout } = toRefs(props);
 
 watch(img, (val) => {
   if (val && val !== imgs.value) {
@@ -358,12 +363,14 @@ const renderImgLayout = async (url: string): Promise<number> => {
     width: 0,
     height: 0,
   }
-  wrapper.width = Number(
+  if (cropperRef.value) {
+    wrapper.width = Number(
     (window.getComputedStyle(cropperRef.value).width || '').replace('px', ''),
-  )
-  wrapper.height = Number(
-    (window.getComputedStyle(cropperRef.value).height || '').replace('px', ''),
-  )
+    )
+    wrapper.height = Number(
+      (window.getComputedStyle(cropperRef.value).height || '').replace('px', ''),
+    )
+  }
   LayoutContainer.imgLayout = {
     width: img.width,
     height: img.height,
@@ -460,21 +467,21 @@ const moveImg = (message: InterfaceMessageEvent) => {
       y: message.change.y + LayoutContainer.imgAxis.y,
     }
 
-    // if (this.centerBox) {
-    //   // 这个时候去校验下是否图片已经被拖拽出了不可限制区域，添加回弹
-    //   const crossing = detectionBoundary(
-    //     { ...this.cropAxis },
-    //     { ...this.cropLayout },
-    //     { ...this.imgAxis },
-    //     { ...this.imgLayout },
-    //   )
+    if (centerBox.value) {
+      // 这个时候去校验下是否图片已经被拖拽出了不可限制区域，添加回弹
+      const crossing = detectionBoundary(
+        { ...LayoutContainer.cropAxis },
+        { ...cropLayout.value },
+        { ...LayoutContainer.imgAxis },
+        { ...LayoutContainer.imgLayout },
+      )
 
-    //   if (crossing.landscape !== '' || crossing.portrait !== '') {
-    //     // 施加拖动阻力 ？是否需要添加越来越大的阻力
-    //     axis.x = this.imgAxis.x + message.change.x * RESISTANCE
-    //     axis.y = this.imgAxis.y + message.change.y * RESISTANCE
-    //   }
-    // }
+      if (crossing.landscape !== '' || crossing.portrait !== '') {
+        // 施加拖动阻力 ？是否需要添加越来越大的阻力
+        axis.x = LayoutContainer.imgAxis.x + message.change.x * RESISTANCE
+        axis.y = LayoutContainer.imgAxis.y + message.change.y * RESISTANCE
+      }
+    }
 
     setImgAxis(axis)
   }
@@ -497,13 +504,14 @@ const setImgAxis = (axis: InterfaceAxis) => {
 
 // 回弹图片
 const reboundImg = (): void => {
+  isImgTouchScale.value = false
   if (!centerBox.value) {
     return
   }
   // 这个时候去校验下是否图片已经被拖拽出了不可限制区域，添加回弹
   const crossing = detectionBoundary(
     { ...LayoutContainer.cropAxis },
-    { ...LayoutContainer.cropLayout },
+    { ...cropLayout.value },
     { ...LayoutContainer.imgAxis },
     { ...LayoutContainer.imgLayout },
   )
@@ -555,6 +563,15 @@ const reboundImg = (): void => {
   // console.log('可以开始校验位置，回弹了')
 }
 
+const moveScale = (message: InterfaceMessageEvent)=> {
+  isImgTouchScale.value = true
+  if (message.scale) {
+    const scale = changeImgSizeByTouch(message.scale, LayoutContainer.imgAxis.scale, LayoutContainer.imgLayout);
+    // alert(`${message.scale}${scale}`);
+    setScale(scale)
+  }
+}
+
 // 绑定拖拽
 const bindMoveImg = (): void => {
   unbindMoveImg()
@@ -562,6 +579,7 @@ const bindMoveImg = (): void => {
   cropImg = new TouchEvent(domImg)
   // 图片拖拽绑定
   cropImg.on('down-to-move', moveImg)
+  cropImg.on('down-to-scale', moveScale)
   cropImg.on('up', reboundImg)
 }
 
@@ -569,6 +587,7 @@ const unbindMoveImg = (): void => {
   if (cropImg) {
     cropImg.off('down-to-move', moveImg)
     cropImg.off('up', reboundImg)
+    cropImg.off('down-to-scale', moveScale)
   }
 }
 
@@ -577,6 +596,7 @@ const bindMoveCrop = (): void => {
   const domBox = cropperBox.value
   cropBox = new TouchEvent(domBox)
   cropBox.on('down-to-move', moveCrop)
+  cropBox.on('down-to-scale', moveScale)
   cropBox.on('up', reboundImg)
   cropImg = null
 }
@@ -584,6 +604,7 @@ const bindMoveCrop = (): void => {
 const unbindMoveCrop = (): void => {
   if (cropBox) {
     cropBox.off('down-to-move', moveCrop)
+    cropBox.off('down-to-scale', moveScale)
     cropBox.off('up', reboundImg)
     cropBox = null
   }
@@ -615,7 +636,7 @@ const getCropData = (type?: string) => {
     url: imgs.value,
     imgAxis: { ...LayoutContainer.imgAxis },
     imgLayout: { ...LayoutContainer.imgLayout },
-    cropLayout: { ...LayoutContainer.cropLayout },
+    cropLayout: { ...cropLayout.value },
     cropAxis: { ...LayoutContainer.cropAxis },
     cropping: cropping.value,
   }
@@ -626,8 +647,8 @@ const getCropData = (type?: string) => {
 const renderCrop = (axis?: InterfaceAxis): void => {
   // 如果没有指定截图框的容器位置， 默认截图框为居中布局
   const { width, height } = LayoutContainer.wrapLayout
-  let cropW = LayoutContainer.cropLayout.width
-  let cropH = LayoutContainer.cropLayout.height
+  let cropW = cropLayout.value.width
+  let cropH = cropLayout.value.height
   cropW = cropW < width ? cropW : width
   cropH = cropW < height ? cropH : height
   const defaultAxis: InterfaceAxis = {
@@ -644,6 +665,7 @@ const renderCrop = (axis?: InterfaceAxis): void => {
 
 // 移动截图框
 const moveCrop = (message: InterfaceMessageEvent) => {
+  if (isImgTouchScale.value) return;
   // 拿到的是变化之后的坐标轴
   if (message.change) {
     const axis = {
@@ -659,8 +681,8 @@ const checkedCrop = (axis: InterfaceAxis) => {
   // 截图了默认不允许超过容器
   const maxLeft = 0
   const maxTop = 0
-  const maxRight = LayoutContainer.wrapLayout.width - LayoutContainer.cropLayout.width
-  const maxBottom = LayoutContainer.wrapLayout.height - LayoutContainer.cropLayout.height
+  const maxRight = LayoutContainer.wrapLayout.width - cropLayout.value.width
+  const maxBottom = LayoutContainer.wrapLayout.height - cropLayout.value.height
   if (axis.x < maxLeft) {
     axis.x = maxLeft
   }
@@ -712,8 +734,8 @@ const computedClassDrag = (): string => {
 // 计算截图框外层样式
 const getCropBoxStyle = (): InterfaceTransformStyle => {
   const style = {
-    width: `${LayoutContainer.cropLayout.width}px`,
-    height: `${LayoutContainer.cropLayout.height}px`,
+    width: `${cropLayout.value.width}px`,
+    height: `${cropLayout.value.height}px`,
     transform: `translate3d(${LayoutContainer.cropAxis.x}px, ${LayoutContainer.cropAxis.y}px, 0)`,
   }
   LayoutContainer.cropExhibitionStyle.div = style

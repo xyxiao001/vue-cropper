@@ -8,6 +8,8 @@ import ChangeLog from './pages/ChangeLog.md'
 import DemoBasic from './pages/DemoBasic.md'
 import DemoLoading from './pages/DemoLoading.md'
 import DemoDrag from './pages/DemoDrag.md'
+import DemoCrop from './pages/DemoCrop.md'
+import DemoImg from './pages/DemoImg.md'
 import Demo from './components/Demo.vue'
 import { createRouter, createWebHashHistory} from 'vue-router'
 import ElementPlus from 'element-plus'
@@ -67,6 +69,16 @@ const router = createRouter({
       name: 'DemoDrag',
       path: '/demo-drag',
       component: DemoDrag,
+    },
+    {
+      name: 'DemoCrop',
+      path: '/demo-crop',
+      component: DemoCrop,
+    },
+    {
+      name: 'DemoImg',
+      path: '/demo-img',
+      component: DemoImg,
     },
   ], // `routes: routes` 的缩写
 })

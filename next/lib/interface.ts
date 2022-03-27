@@ -38,7 +38,8 @@ export interface InterfaceRenderImgLayout {
 export interface InterfaceMessageEvent {
   type: string
   event?: Event
-  change?: InterfaceAxis
+  change?: InterfaceAxis,
+  scale?: number,
 }
 
 export interface InterfaceAxis {
