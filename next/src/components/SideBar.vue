@@ -53,6 +53,10 @@
       path: '/demo-img'
     },
     {
+      name: '图片滤镜',
+      path: '/demo-filter'
+    },
+    {
       name: '更新日志',
       path: '/changelog'
     }

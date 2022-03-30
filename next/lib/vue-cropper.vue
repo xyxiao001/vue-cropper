@@ -185,11 +185,9 @@ watch(cropping, (val) => {
   }
 })
 
-watch(filter, (val) => {
-  if (val) {
-    imgLoading.value = true;
-    checkedImg(img.value)
-  }
+watch(filter, () => {
+  imgLoading.value = true;
+  checkedImg(img.value)
 })
 
 watch(mode, () => {
