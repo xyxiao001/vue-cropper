@@ -30,7 +30,7 @@
 
   const cropper = ref()
   const loading = ref(false)
-  const filter = ref(0);
+  const filter = ref(1);
   const options = [
      {
       label: '无滤镜',
@@ -83,7 +83,7 @@
 
   const cropper = ref()
   const loading = ref(false)
-  const filter = ref(0);
+  const filter = ref(1);
   const options = [
      {
       label: '无滤镜',

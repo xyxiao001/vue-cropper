@@ -255,25 +255,11 @@ const checkedImg = async (url: string) => {
   try {
     result = await getExif(img)
   } catch (error) {
-    console.log(error)
     result.orientation = 1
   }
   let orientation = result.orientation || -1
   orientation = checkOrientationImage(orientation)
-  // console.log(`图片加载成功,orientation为${orientation}`)
-
-  // 图片不需要进行处理的
-  // if ((orientation === 1 || orientation === -1) && !this.filter) {
-  //   try {
-  //     await this.renderImgLayout(url)
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  //   this.imgs = this.img
-  //   this.isLoading = false
-  //   return
-  // }
-
+  
   let newCanvas: HTMLCanvasElement = document.createElement('canvas')
   try {
     newCanvas = await resetImg(img, newCanvas, orientation) ?? newCanvas
