@@ -1632,7 +1632,7 @@ if (typeof window !== "undefined" && window.Vue) {
   window.Vue.createApp({}).component("VueCropper", VueCropper);
 }
 const globalCropper = {
-  version: "1.0.3",
+  version: "1.0.4",
   install,
   VueCropper
 };

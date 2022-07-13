@@ -1,5 +1,5 @@
 import VueCropper from './vue-cropper.vue'
-import { vueCropperGlobal } from './typings'
+import type { vueCropperGlobal } from './typings'
 
 const install = function(Vue: any) {
   Vue.component('VueCropper', VueCropper)
@@ -12,7 +12,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 
 export const globalCropper: vueCropperGlobal = {
-  version: '1.0.3',
+  version: '1.0.4',
   install,
   VueCropper,
 }
