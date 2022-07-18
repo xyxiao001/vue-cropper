@@ -11,7 +11,7 @@
 			<div class="show-info">
 				<h2>install</h2>
 				<codes>
-					<div slot="body">{{ code0 }}</div>
+					<template #body>{{ code0 }}</template>
 				</codes>
 			</div>
 			<div class="show-info">
@@ -204,7 +204,7 @@
 				</div>
 				
 				<codes>
-					<div slot="body">{{ code1 }}</div>
+					<template #body>{{ code1 }}</template>
 				</codes>
 			</div>
 		</div>

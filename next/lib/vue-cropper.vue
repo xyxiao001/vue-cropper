@@ -1851,7 +1851,7 @@ export default defineComponent({
     this.showPreview();
     this.checkedImg();
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("mousemove", this.moveCrop);
     window.removeEventListener("mouseup", this.leaveCrop);
     window.removeEventListener("touchmove", this.moveCrop);

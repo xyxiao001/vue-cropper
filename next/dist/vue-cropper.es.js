@@ -1482,7 +1482,7 @@ const _sfc_main = defineComponent({
     this.showPreview();
     this.checkedImg();
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("mousemove", this.moveCrop);
     window.removeEventListener("mouseup", this.leaveCrop);
     window.removeEventListener("touchmove", this.moveCrop);
@@ -1624,7 +1624,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 544);
 }
-var VueCropper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-be5e5ddc"]]);
+var VueCropper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-26736c2c"]]);
 const install = function(Vue) {
   Vue.component("VueCropper", VueCropper);
 };
@@ -1632,7 +1632,7 @@ if (typeof window !== "undefined" && window.Vue) {
   window.Vue.createApp({}).component("VueCropper", VueCropper);
 }
 const globalCropper = {
-  version: "1.0.4",
+  version: "1.0.5",
   install,
   VueCropper
 };
