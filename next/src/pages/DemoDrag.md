@@ -74,7 +74,7 @@
   import { loadFile } from '../../lib/common.ts'
 
   const cropper = ref()
-  const currentImg = ref('http://cdn.xyxiao.cn/Portrait_2.jpg')
+  const currentImg = ref('https://p6-addone.byteimg.com/tos-cn-i-hhc0kcolqq/e140e367ab964968a3e1a3ab73a469e9.jpeg~tplv-hhc0kcolqq-image-v7:1920:q50.image')
   const loading = ref(false)
   const click = () => {
     loading.value = true;

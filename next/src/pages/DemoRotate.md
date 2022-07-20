@@ -12,7 +12,7 @@
 >
 </vue-cropper>
 <p>
-  <el-checkbox v-model="centerBox" label="图片能否超过截图框" size="large" />
+  <!-- <el-checkbox v-model="centerBox" label="图片能否超过截图框" size="large" /> -->
 </p>
 <p>
   <span>图片角度--</span>
