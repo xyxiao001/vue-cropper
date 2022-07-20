@@ -11,6 +11,7 @@ import DemoDrag from './pages/DemoDrag.md'
 import DemoCrop from './pages/DemoCrop.md'
 import DemoImg from './pages/DemoImg.md'
 import DemoFilter from './pages/DemoFilter.md'
+import DemoRotate from './pages/DemoRotate.md'
 import Demo from './components/Demo.vue'
 import { createRouter, createWebHashHistory} from 'vue-router'
 import ElementPlus from 'element-plus'
@@ -85,6 +86,11 @@ const router = createRouter({
       name: 'DemoFilter',
       path: '/demo-filter',
       component: DemoFilter,
+    },
+    {
+      name: 'DemoRotate',
+      path: '/demo-rotate',
+      component: DemoRotate,
     },
   ], // `routes: routes` 的缩写
 })

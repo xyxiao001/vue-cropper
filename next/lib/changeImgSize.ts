@@ -1,4 +1,4 @@
-import { InterfaceLayoutStyle } from './interface'
+import type { InterfaceLayoutStyle } from './interface'
 
 // 当前是否在缩放
 let scaling = false

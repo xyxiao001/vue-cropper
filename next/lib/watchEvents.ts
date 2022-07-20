@@ -1,7 +1,7 @@
 /**
  * WatchEvent 消息通知
  */
-import { InterfaceMessageEvent } from './interface'
+import type { InterfaceMessageEvent } from './interface'
 
 class WatchEvent {
   handlers: Map<string, Array<(message: InterfaceMessageEvent) => void>>

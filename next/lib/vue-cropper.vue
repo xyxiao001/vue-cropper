@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, reactive, ref, toRefs, watch, useSlots } from 'vue'
-import { InterfaceAxis, InterfaceImgLoad, InterfaceLayout, InterfaceLayoutStyle, InterfaceMessageEvent, InterfaceModeHandle, InterfaceTransformStyle } from './interface'
+import type { InterfaceAxis, InterfaceImgLoad, InterfaceLayout, InterfaceLayoutStyle, InterfaceMessageEvent, InterfaceModeHandle, InterfaceTransformStyle } from './interface'
 import {
   loadImg,
   getExif,
@@ -197,6 +197,13 @@ watch(mode, () => {
 
 watch(defaultRotate, (val) => {
   setRotate(val)
+})
+
+
+watch(centerBox, (val) => {
+  if (centerBox?.value) {
+    reboundImg()
+  }
 })
 
 const imgLoadEmit = (obj: InterfaceImgLoad) => {
@@ -499,7 +506,7 @@ const reboundImg = (): void => {
     { ...LayoutContainer.imgAxis },
     { ...LayoutContainer.imgLayout },
   )
-  // console.log(crossing)
+  console.log(crossing, '回弹坐标--')
   if (LayoutContainer.imgAxis.scale < crossing.scale) {
     setAnimation(LayoutContainer.imgAxis.scale, crossing.scale, BOUNDARY_DURATION, value => {
       setScale(value, true)

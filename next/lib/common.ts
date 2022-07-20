@@ -1,6 +1,6 @@
 import exif from './exif'
 
-import {
+import type {
   InterfaceLayoutStyle,
   InterfaceModeHandle,
   InterfaceRenderImgLayout,
@@ -208,8 +208,6 @@ export const getImgCanvas = (
 
   ctx.drawImage(img, dx, dy, width, height)
   ctx.restore()
-  // console.log(canvas, dx, dy)
-  // document.body.append(canvas)
   return canvas
 }
 
@@ -258,10 +256,9 @@ export const getCropImgData = async (options: any): Promise<string> => {
       canvas.height = height
 
       // 是否填充背景颜色 transparent
-      const fillColor = 'transparent'
       // const fillColor = 'transparent'
-      ctx.fillStyle = fillColor
-      ctx.fillRect(0, 0, width, height)
+      // ctx.fillStyle = fillColor
+      // ctx.fillRect(0, 0, width, height)
 
       // 绘制图片
       ctx.drawImage(imgCanvas, dx, dy, imgCanvas.width, imgCanvas.height)
@@ -294,7 +291,6 @@ export const boundaryCalculation = (
 ): InterfaceBoundary => {
   // 返回各个方向允许的值，以及图片的最小缩放比例
   // 先不管有旋转的情况，默认为没有旋转的返回
-
   const boundary: InterfaceBoundary = {
     left: 0,
     right: 0,
@@ -305,15 +301,19 @@ export const boundaryCalculation = (
   // 根据当前比例去计算 需不要去放大图片
   let scale = imgAxis.scale
 
-  let imgWidth = imgLayout.width * scale
-  let imgHeight = imgLayout.height * scale
+  // 如果有角度，那么宽高需要取最大值去处理
+  let width = imgLayout.width;
+  let height = imgLayout.height;
+
+  let imgWidth = width * scale
+  let imgHeight = height * scale
 
   if (imgWidth < cropLayout.width || imgHeight < cropLayout.height) {
-    scale = Math.max(cropLayout.width / imgLayout.width, cropLayout.height / imgLayout.height)
+    scale = Math.max(cropLayout.width / width, cropLayout.height / height)
   }
 
-  imgWidth = imgLayout.width * scale
-  imgHeight = imgLayout.height * scale
+  imgWidth = width * scale
+  imgHeight = height * scale
 
   boundary.scale = scale
 
@@ -329,7 +329,7 @@ export const boundaryCalculation = (
   // 下面最小的值
   boundary.bottom = cropAxis.y + cropLayout.height - imgHeight
 
-  const rotate = -imgAxis.rotate
+  const rotate = imgAxis.rotate
   // 此时应该判断 如果当前操作是属于放大缩小， 选择才采用当前判断 获取图片的四个点的坐标轴。 这时代表采取新的检测方式去判断
   // 移动距离的计算可以先获得点到矩形中心的向量，然后计算该向量在矩形边框上的投影向量，最后可以用投影向量的长度减去边框长度的一半得到
   const rectImg = getRectPoints(imgAxis.x, imgAxis.y, imgWidth, imgHeight, rotate)

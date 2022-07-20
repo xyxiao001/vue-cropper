@@ -57,6 +57,10 @@
       path: '/demo-filter'
     },
     {
+      name: '图片旋转',
+      path: '/demo-rotate'
+    },
+    {
       name: '更新日志',
       path: '/changelog'
     }
