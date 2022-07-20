@@ -24,7 +24,7 @@
   "homepage": "https://github.com/xyxiao001/vue-cropper#readme",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "serve": "vite preview"
   },
   "devDependencies": {
