@@ -54,7 +54,7 @@
 
   const cropper = ref()
   const loading = ref(false)
-  const centerBox = ref(true)
+  const centerBox = ref(false)
   const rotate = ref(30)
   const wrapper = {
     width: '500px',
