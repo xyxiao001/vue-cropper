@@ -577,18 +577,18 @@ export default {
         img.crossOrigin = "";
       }
 
-      if (this.isIE) {
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function() {
-          var url = URL.createObjectURL(this.response);
-          img.src = url;
-        };
-        xhr.open("GET", this.img, true);
-        xhr.responseType = "blob";
-        xhr.send();
-      } else {
+      //if (this.isIE) {
+      // var xhr = new XMLHttpRequest();
+      // xhr.onload = function() {
+      //    var url = URL.createObjectURL(this.response);
+      //    img.src = url;
+      //  };
+      //  xhr.open("GET", this.img, true);
+      //  xhr.responseType = "blob";
+      //  xhr.send();
+      // } else {
         img.src = this.img;
-      }
+      // }
     },
     // 当按下鼠标键
     startMove(e) {
