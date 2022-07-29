@@ -23,25 +23,27 @@ import './style/index.scss'
 
 interface InterfaceVueCropperProps {
   // 图片地址
-  img?: string
+  img?: string;
   // 外层容器宽高
-  wrapper?: InterfaceLayout
+  wrapper?: InterfaceLayout;
   // 截图框大小
-  cropLayout?: InterfaceLayoutStyle,
+  cropLayout?: InterfaceLayoutStyle;
   // 主题色
-  color?: string,
+  color?: string;
   // 滤镜函数
-  filter?: ((canvas: HTMLCanvasElement) => HTMLCanvasElement) | null,
+  filter?: ((canvas: HTMLCanvasElement) => HTMLCanvasElement) | null;
   // 输出格式
-  outputType?: string,
+  outputType?: string;
   // 布局方式
-  mode?: keyof InterfaceModeHandle,
+  mode?: keyof InterfaceModeHandle;
   // 截图框的颜色
-  cropColor?: string,
+  cropColor?: string;
   // 默认旋转角度
-  defaultRotate?: number,
+  defaultRotate?: number;
   // 截图框是否限制图片里面
-  centerBox?: boolean
+  centerBox?: boolean;
+  // 图片不能小于外层容易
+  centerWrapper?: boolean;
 }
 const props = withDefaults(defineProps<InterfaceVueCropperProps>(), {
   img: '',
@@ -61,6 +63,7 @@ const props = withDefaults(defineProps<InterfaceVueCropperProps>(), {
   cropColor: '#fff',
   defaultRotate: 0,
   centerBox: false,
+  centerWrapper: false,
 })
 // 组件处理
 const cropperRef = ref()
@@ -155,7 +158,7 @@ const setWaitFunc = ref(0)
 const isImgTouchScale = ref(false)
 
 // 处理 props
-const { img, filter, mode, defaultRotate, outputType, centerBox, cropLayout } = toRefs(props);
+const { img, filter, mode, defaultRotate, outputType, centerBox, cropLayout, centerWrapper } = toRefs(props);
 
 watch(img, (val) => {
   if (val && val !== imgs.value) {
@@ -202,6 +205,12 @@ watch(defaultRotate, (val) => {
 
 watch(centerBox, (val) => {
   if (centerBox?.value) {
+    reboundImg()
+  }
+})
+
+watch(centerWrapper, (val) => {
+  if (centerWrapper?.value) {
     reboundImg()
   }
 })
@@ -265,7 +274,7 @@ const checkedImg = async (url: string) => {
     result.orientation = 1
   }
   let orientation = result.orientation || -1
-  orientation = checkOrientationImage(orientation)
+  orientation = checkOrientationImage(orientation) as number
   
   let newCanvas: HTMLCanvasElement = document.createElement('canvas')
   try {
@@ -496,17 +505,27 @@ const setImgAxis = (axis: InterfaceAxis) => {
 // 回弹图片
 const reboundImg = (): void => {
   isImgTouchScale.value = false
-  if (!centerBox.value) {
+  if (!centerBox.value && !centerWrapper.value) {
     return
   }
+  let crossing
   // 这个时候去校验下是否图片已经被拖拽出了不可限制区域，添加回弹
-  const crossing = detectionBoundary(
-    { ...LayoutContainer.cropAxis },
-    { ...cropLayout.value },
-    { ...LayoutContainer.imgAxis },
-    { ...LayoutContainer.imgLayout },
-  )
-  console.log(crossing, '回弹坐标--')
+  if (centerBox.value) {
+    crossing = detectionBoundary(
+      { ...LayoutContainer.cropAxis },
+      { ...cropLayout.value },
+      { ...LayoutContainer.imgAxis },
+      { ...LayoutContainer.imgLayout },
+    )
+  } else {
+    crossing = detectionBoundary(
+      { x: 0, y: 0 },
+      { ...LayoutContainer.wrapLayout },
+      { ...LayoutContainer.imgAxis },
+      { ...LayoutContainer.imgLayout },
+    )
+  }
+  
   if (LayoutContainer.imgAxis.scale < crossing.scale) {
     setAnimation(LayoutContainer.imgAxis.scale, crossing.scale, BOUNDARY_DURATION, value => {
       setScale(value, true)
