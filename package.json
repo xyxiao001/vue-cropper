@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/xyxiao001/vue-cropper#readme",
   "scripts": {
-    "build": "rm -rf ./dist && webpack --config webpack.config.js"
+    "build": "rm -rf ./dist && webpack --config webpack.config.js",
+    "build2": "webpack --config webpack.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
