@@ -46,7 +46,7 @@
         class="crop-info"
         v-if="info"
         :style="{'top': cropInfo.top}"
-      >{{ this.cropInfo.width }} × {{ this.cropInfo.height }}</span>
+      >{{ cropInfo.width }} × {{ cropInfo.height }}</span>
       <span v-if="!fixedBox">
         <span
           class="crop-line line-w"
@@ -1101,6 +1101,8 @@ export default {
             this.cropW = fixedWidth;
           }
         }
+	// 触发截图框改变大小事件
+	this.$emit('crop-sizing', {cropW: this.cropW, cropH: this.cropH})
       });
     },
 
