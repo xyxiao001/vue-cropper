@@ -1,25 +1,23 @@
 {
-  "name": "vue-cropper",
-  "version": "0.5.8",
-  "description": "A simple Vue picture clipping plugin",
+  "name": "vue-cropper-wenge",
+  "version": "0.0.1",
+  "description": "A simple Vue picture clipping plugin used by xyxiao001",
   "keywords": [
     "vue",
     "cropper",
-    "vue-cropper",
-    "vue-component",
-    "vue-cropper-component"
+    "vue-cropper-wenge"
   ],
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xyxiao001/vue-cropper.git"
+    "url": "git+https://github.com/WHmuse/vue-cropper.git"
   },
-  "author": "goodboy",
+  "author": "ruixuancui",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/xyxiao001/vue-cropper/issues"
+    "url": "https://github.com/WHmuse/vue-cropper/issues"
   },
-  "homepage": "https://github.com/xyxiao001/vue-cropper#readme",
+  "homepage": "https://github.com/WHmuse/vue-cropper#readme",
   "scripts": {
     "build": "rm -rf ./dist && webpack --config webpack.config.js"
   },
