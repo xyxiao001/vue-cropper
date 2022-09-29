@@ -7,14 +7,14 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist/'),
     filename: 'index.js',
-    library: 'vue-cropper',
+    library: 'vue-cropper-wenge',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
   resolve: {
     extensions: ['.js', '.vue'],
     alias: {
-      'vue$': 'vue/dist/vue.common.js'
+      vue$: 'vue/dist/vue.common.js'
     }
   },
   module: {
@@ -36,14 +36,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        use: ['style-loader', 'css-loader']
       }
     ]
   },
-  mode: "production",
+  mode: 'production',
   plugins: [
     // 请确保引入这个插件！
     new VueLoaderPlugin()

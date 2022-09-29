@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/WHmuse/vue-cropper#readme",
   "scripts": {
-    "build": "rm -rf ./dist && webpack --config webpack.config.js"
+    "build": "rimraf ./dist && webpack --config webpack.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
