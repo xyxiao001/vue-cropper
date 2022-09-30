@@ -1801,13 +1801,12 @@ export default {
       this.rotate = 0;
     },
     
-    // 图片镜像
+    // 图片镜像-待开发
     rotateMirror() {
       this.scaleX = -this.scaleX;
       let img = this.$refs.cropperImg
-      let imgCut = this.$refs.cropperImgCut
+      // let imgCut = this.$refs.cropperImgCut
       img.style.transform=`scaleX(${this.scaleX})`
-      imgCut.style.transform=`scaleX(${this.scaleX})`
       // console.log('mirror', this.x, this.y, this.moveX, this.moveY);
     },
 
