@@ -16,8 +16,8 @@
 ####   Install
 ```
 
-npm install vue-cropper
-yarn add vue-cropper
+npm install vue-cropper-wenge
+yarn add vue-cropper-wenge
 
 ```
 

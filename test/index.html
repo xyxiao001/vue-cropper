@@ -179,6 +179,7 @@
       <button @click="changeScale(-1)" class="btn">-</button>
       <button @click="rotateLeft" class="btn">rotateLeft</button>
       <button @click="rotateRight" class="btn">rotateRight</button>
+      <button @click="rotateMirror" class="btn">rotateMirror</button>
       <button @click="finish('base64')" class="btn">preview(base64)</button>
       <button @click="finish('blob')" class="btn">preview(blob)</button>
       <a @click="down('base64')" class="btn">download(base64)</a>
@@ -248,7 +249,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
   <script src="../dist/index.js"></script>
   <script>
-    Vue.use(window['vue-cropper'])
+    Vue.use(window['vue-cropper-wenge'])
     var a = new Vue({
       el: '#app',
       data: {
@@ -322,6 +323,9 @@
         },
         rotateLeft() {
           this.$refs.cropper.rotateLeft()
+        },
+        rotateMirror() {
+          this.$refs.cropper.rotateMirror()
         },
         rotateRight() {
           this.$refs.cropper.rotateRight()

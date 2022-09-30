@@ -34,10 +34,10 @@ module.exports = {
   ...
   build: {
     vendor: [
-      'vue-cropper
+      'vue-cropper-wenge'
     ...
     plugins: [
-      { src: '~/plugins/vue-cropper', ssr: false }
+      { src: '~/plugins/vue-cropper-wenge', ssr: false }
     ]
   }
 }

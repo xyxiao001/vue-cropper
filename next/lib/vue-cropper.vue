@@ -1790,7 +1790,6 @@ export default defineComponent({
     rotateClear() {
       this.rotate = 0;
     },
-
     // 图片坐标点校验
     checkoutImgAxis(x, y, scale) {
       x = x || this.x;

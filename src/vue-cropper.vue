@@ -3,6 +3,7 @@
     <div class="cropper-box" v-if="imgs">
       <div
         class="cropper-box-canvas"
+        id="cropper-box-canvas"
         v-show="!loading"
         :style="{
 					'width': trueWidth + 'px',
@@ -39,6 +40,7 @@
 						}"
           :src="imgs"
           alt="cropper-img"
+          ref="cropperImgCut"
         >
       </span>
       <span class="cropper-face cropper-move" @mousedown="cropMove" @touchstart="cropMove"></span>
@@ -122,6 +124,9 @@ export default {
       // 容器高宽
       w: 0,
       h: 0,
+      // 镜像
+      scaleX:1,
+      scaleY:1,
       // 图片缩放比例
       scale: 1,
       // 图片偏移x轴
@@ -1365,6 +1370,7 @@ export default {
           //保存状态
           setCanvasSize(width, height);
           ctx.save();
+          ctx.scale(this.scaleX, 1);
           switch (rotate) {
             case 0:
               if (!this.full) {
@@ -1568,7 +1574,7 @@ export default {
       obj.html = `
       <div class="show-preview" style="width: ${obj.w}px; height: ${
         obj.h
-      }px,; overflow: hidden">
+      }px; overflow: hidden; transform: scaleX(${this.scaleX})">
         <div style="width: ${w}px; height: ${h}px">
           <img src=${obj.url} style="width: ${this.trueWidth}px; height: ${
         this.trueHeight
@@ -1794,6 +1800,16 @@ export default {
     rotateClear() {
       this.rotate = 0;
     },
+    
+    // 图片镜像
+    rotateMirror() {
+      this.scaleX = -this.scaleX;
+      let img = this.$refs.cropperImg
+      let imgCut = this.$refs.cropperImgCut
+      img.style.transform=`scaleX(${this.scaleX})`
+      imgCut.style.transform=`scaleX(${this.scaleX})`
+      // console.log('mirror', this.x, this.y, this.moveX, this.moveY);
+    },
 
     // 图片坐标点校验
     checkoutImgAxis(x, y, scale) {
@@ -1878,6 +1894,7 @@ export default {
   direction: ltr;
   touch-action: none;
   text-align: left;
+  background-color: rgb(230, 230, 230);
   /* background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC"); */
 }
 
@@ -1928,8 +1945,8 @@ export default {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  outline: 1px solid #39f;
-  outline-color: rgba(51, 153, 255, 0.75);
+  outline: 1px solid rgb(255, 255, 255);
+  outline-color: rgba(255, 255, 255, 0.75);
   user-select: none;
 }
 
@@ -1999,7 +2016,7 @@ export default {
   width: 8px;
   height: 8px;
   opacity: 0.75;
-  background-color: #39f;
+  background-color: rgb(255, 255, 255);
   border-radius: 100%;
 }
 
@@ -2061,7 +2078,7 @@ export default {
     width: 20px;
     height: 20px;
     opacity: 0.45;
-    background-color: #39f;
+    background-color: rgb(255, 255, 255);
     border-radius: 100%;
   }
 
