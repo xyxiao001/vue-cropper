@@ -1,6 +1,6 @@
 {
   "name": "vue-cropper-wenge",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "A simple Vue picture clipping plugin used by xyxiao001",
   "keywords": [
     "vue",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/WHmuse/vue-cropper.git"
   },
-  "author": "ruixuancui",
+  "author": "ruixuancui-",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/WHmuse/vue-cropper/issues"
