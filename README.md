@@ -315,7 +315,7 @@ this.$refs.cropper.getCropBlob(data => {
 ## 四、交流
 有什么意见，或者 bug，或者想一起开发 `vue-cropper`， 或者想一起开发其他插件
 ![群号 857471950](https://user-images.githubusercontent.com/15681693/134663362-a6940a73-4692-4cc0-985f-109579057014.JPG)
-
+![image](https://user-images.githubusercontent.com/15681693/200157148-f679bcd9-67da-4e88-927b-53790b61e1d6.png)
 
 
 
