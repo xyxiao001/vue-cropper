@@ -23,6 +23,7 @@
     <div
       v-show="cropping"
       class="cropper-crop-box"
+      :class="{'circle-cropper-box':isCircleCropping}"
       :style="{
 					'width': cropW + 'px',
 					'height': cropH + 'px',
@@ -178,7 +179,7 @@ export default {
       scalingSet: "",
       coeStatus: "",
       // 控制emit触发频率
-      isCanShow: true
+      isCanShow: true,
     };
   },
   props: {
@@ -304,6 +305,10 @@ export default {
         return 10;
       }
     },
+    isCircleCropping:{
+      type:Boolean,
+      default:true
+    }
   },
   computed: {
     cropInfo() {
@@ -1923,6 +1928,10 @@ export default {
   /*border: 2px solid #39f;*/
 }
 
+.circle-cropper-box{
+ overflow: hidden;
+  border-radius: 50%;
+}
 .cropper-view-box {
   display: block;
   overflow: hidden;
