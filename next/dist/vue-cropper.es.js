@@ -466,11 +466,15 @@ const _sfc_main = defineComponent({
       }
       ctx.drawImage(img, 0, 0, width, height);
       ctx.restore();
-      canvas.toBlob((blob) => {
-        let data = URL.createObjectURL(blob);
-        URL.revokeObjectURL(this.imgs);
-        this.imgs = data;
-      }, "image/" + this.outputType, 1);
+      canvas.toBlob(
+        (blob) => {
+          let data = URL.createObjectURL(blob);
+          URL.revokeObjectURL(this.imgs);
+          this.imgs = data;
+        },
+        "image/" + this.outputType,
+        1
+      );
     },
     checkedImg() {
       if (this.img === null || this.img === "") {
@@ -590,8 +594,12 @@ const _sfc_main = defineComponent({
         x: e.touches[1].clientX,
         y: e.touches[1].clientY
       };
-      var oldL = Math.sqrt(Math.pow(oldTouch1.x - oldTouch2.x, 2) + Math.pow(oldTouch1.y - oldTouch2.y, 2));
-      var newL = Math.sqrt(Math.pow(newTouch1.x - newTouch2.x, 2) + Math.pow(newTouch1.y - newTouch2.y, 2));
+      var oldL = Math.sqrt(
+        Math.pow(oldTouch1.x - oldTouch2.x, 2) + Math.pow(oldTouch1.y - oldTouch2.y, 2)
+      );
+      var newL = Math.sqrt(
+        Math.pow(newTouch1.x - newTouch2.x, 2) + Math.pow(newTouch1.y - newTouch2.y, 2)
+      );
       var cha = newL - oldL;
       var coe = 1;
       coe = coe / this.trueWidth > coe / this.trueHeight ? coe / this.trueHeight : coe / this.trueWidth;
@@ -1117,7 +1125,13 @@ const _sfc_main = defineComponent({
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 setCanvasSize(width / this.scale, height / this.scale);
-                ctx.drawImage(img, dx / this.scale, dy / this.scale, imgW / this.scale, imgH / this.scale);
+                ctx.drawImage(
+                  img,
+                  dx / this.scale,
+                  dy / this.scale,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
               }
               break;
             case 1:
@@ -1132,7 +1146,13 @@ const _sfc_main = defineComponent({
                 dx = dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
                 dy = dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2;
                 ctx.rotate(rotate * 90 * Math.PI / 180);
-                ctx.drawImage(img, dy, -dx - imgH / this.scale, imgW / this.scale, imgH / this.scale);
+                ctx.drawImage(
+                  img,
+                  dy,
+                  -dx - imgH / this.scale,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
               }
               break;
             case 2:
@@ -1145,7 +1165,13 @@ const _sfc_main = defineComponent({
                 ctx.rotate(rotate * 90 * Math.PI / 180);
                 dx = dx / this.scale;
                 dy = dy / this.scale;
-                ctx.drawImage(img, -dx - imgW / this.scale, -dy - imgH / this.scale, imgW / this.scale, imgH / this.scale);
+                ctx.drawImage(
+                  img,
+                  -dx - imgW / this.scale,
+                  -dy - imgH / this.scale,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
               }
               break;
             case 3:
@@ -1160,7 +1186,13 @@ const _sfc_main = defineComponent({
                 dx = dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
                 dy = dy / this.scale + (imgH / this.scale - imgW / this.scale) / 2;
                 ctx.rotate(rotate * 90 * Math.PI / 180);
-                ctx.drawImage(img, -dy - imgW / this.scale, dx, imgW / this.scale, imgH / this.scale);
+                ctx.drawImage(
+                  img,
+                  -dy - imgW / this.scale,
+                  dx,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
               }
               break;
             default:
@@ -1168,7 +1200,13 @@ const _sfc_main = defineComponent({
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 setCanvasSize(width / this.scale, height / this.scale);
-                ctx.drawImage(img, dx / this.scale, dy / this.scale, imgW / this.scale, imgH / this.scale);
+                ctx.drawImage(
+                  img,
+                  dx / this.scale,
+                  dy / this.scale,
+                  imgW / this.scale,
+                  imgH / this.scale
+                );
               }
           }
           ctx.restore();
@@ -1225,7 +1263,11 @@ const _sfc_main = defineComponent({
     },
     getCropBlob(cb) {
       this.getCropChecked((data) => {
-        data.toBlob((blob) => cb(blob), "image/" + this.outputType, this.outputSize);
+        data.toBlob(
+          (blob) => cb(blob),
+          "image/" + this.outputType,
+          this.outputSize
+        );
       });
     },
     showPreview() {
@@ -1305,9 +1347,7 @@ const _sfc_main = defineComponent({
       const arr = this.mode.split(" ");
       switch (arr[0]) {
         case "contain":
-          if (this.trueWidth > this.w) {
-            scale = this.w / this.trueWidth;
-          }
+          scale = this.w / this.trueWidth;
           if (this.trueHeight * scale > this.h) {
             scale = this.h / this.trueHeight;
           }
@@ -1624,7 +1664,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 544);
 }
-var VueCropper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-26736c2c"]]);
+var VueCropper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-16b35be6"]]);
 const install = function(Vue) {
   Vue.component("VueCropper", VueCropper);
 };

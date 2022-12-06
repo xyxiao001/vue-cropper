@@ -1633,11 +1633,8 @@ export default defineComponent({
       const arr = this.mode.split(" ");
       switch (arr[0]) {
         case "contain":
-          if (this.trueWidth > this.w) {
-            // 如果图片宽度大于容器宽度
-            scale = this.w / this.trueWidth;
-          }
-
+          // 始终保证图片宽或高中的相对长边为父容器100%
+          scale = this.w / this.trueWidth;
           if (this.trueHeight * scale > this.h) {
             scale = this.h / this.trueHeight;
           }
