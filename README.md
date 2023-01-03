@@ -314,7 +314,8 @@ this.$refs.cropper.getCropBlob(data => {
 
 ## 四、交流
 有什么意见，或者 bug，或者想一起开发 `vue-cropper`， 或者想一起开发其他插件
-![image](https://user-images.githubusercontent.com/15681693/207879418-653c922a-439b-4ba6-b193-074841bdb5ca.png)
+![img_v2_26beca6d-a44d-4734-ad5c-b60daf59184g](https://user-images.githubusercontent.com/15681693/210347908-09491766-d998-4d5f-9010-34dfc6b07105.jpg)
+
 
 Image layout mode mode achieves the same effect as css background
 Contain Centered layout Default does not scale Ensure the image is inside the container mode: 'contain'
