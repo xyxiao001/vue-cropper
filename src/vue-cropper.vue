@@ -1568,7 +1568,7 @@ export default {
       obj.html = `
       <div class="show-preview" style="width: ${obj.w}px; height: ${
         obj.h
-      }px,; overflow: hidden">
+      }px; overflow: hidden">
         <div style="width: ${w}px; height: ${h}px">
           <img src=${obj.url} style="width: ${this.trueWidth}px; height: ${
         this.trueHeight
