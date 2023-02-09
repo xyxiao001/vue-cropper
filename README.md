@@ -314,7 +314,8 @@ this.$refs.cropper.getCropBlob(data => {
 
 ## 四、交流
 有什么意见，或者 bug，或者想一起开发 `vue-cropper`， 或者想一起开发其他插件
-![img_v2_26beca6d-a44d-4734-ad5c-b60daf59184g](https://user-images.githubusercontent.com/15681693/210347908-09491766-d998-4d5f-9010-34dfc6b07105.jpg)
+![image](https://user-images.githubusercontent.com/15681693/217773662-87161f98-f804-4df5-8f96-b3fe3807350c.png)
+
 
 
 Image layout mode mode achieves the same effect as css background
