@@ -40,6 +40,7 @@
 						@cropMoving="cropMoving"
 						:enlarge="option.enlarge"
 						:mode="option.mode"
+						:circularCrop="option.circularCrop"
             :limitMinSize="option.limitMinSize"
 					></vueCropper>
 				</div>
@@ -72,7 +73,8 @@
 					<section class="pre-item">
 						<p>截图框大小</p>
 						<div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden',
-							'margin': '5px'}">
+							'margin': '5px'}"
+							:class="{'preview-circular':option.circularCrop}">
 							<div :style="previews.div">
 								<img :src="previews.url" :style="previews.img">
 							</div>
@@ -81,7 +83,8 @@
 
 					<section class="pre-item">
 						<p>中等大小</p>
-						<div :style="previewStyle1"> 
+						<div :style="previewStyle1"
+							:class="{'preview-circular':option.circularCrop}">
 							<div :style="previews.div">
 								<img :src="previews.url" :style="previews.img">
 							</div>
@@ -90,7 +93,8 @@
 
 					<section class="pre-item">
             <p>迷你大小</p>
-            <div :style="previewStyle2"> 
+            <div :style="previewStyle2"
+              :class="{'preview-circular':option.circularCrop}">
               <div :style="previews.div">
                 <img :src="previews.url" :style="previews.img">
               </div>
@@ -99,7 +103,8 @@
 
           <section class="pre-item" title="zoom: (100 / previews.w)">
             <p>固定为100宽度</p>
-            <div :style="previewStyle3"> 
+            <div :style="previewStyle3"
+              :class="{'preview-circular':option.circularCrop}">
               <div :style="previews.div">
                 <img :src="previews.url" :style="previews.img">
               </div>
@@ -109,7 +114,8 @@
 
           <section class="pre-item" title="zoom: (100 / previews.h)">
             <p>固定为100高度</p>
-            <div :style="previewStyle4">
+            <div :style="previewStyle4"
+              :class="{'preview-circular':option.circularCrop}">
               <div :style="previews.div">
                 <img :src="previews.url" :style="previews.img">
               </div>
@@ -194,6 +200,11 @@
 					<label class="c-item">
 						<span>是否按照截图框比例输出 默认为1 </span>
 						<input type="number" v-model="option.enlarge">
+					</label>
+					<label class="c-item">
+						<span>是否按照圆形（椭圆）裁剪 </span>
+						<input type="checkbox" v-model="option.circularCrop">
+						<span>circularCrop: {{ option.circularCrop}}</span>
 					</label>
 					<p>输出图片格式</p>
 					<label class="c-item">
@@ -824,5 +835,8 @@ code.language-html {
   .test {
     height: 400px;
   }
+}
+.preview-circular {
+  border-radius: 50%;
 }
 </style>

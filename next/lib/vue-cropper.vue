@@ -29,7 +29,8 @@
 					'transform': 'translate3d('+ cropOffsertX + 'px,' + cropOffsertY + 'px,' + '0)'
 				}"
     >
-      <span class="cropper-view-box">
+      <span class="cropper-view-box"
+        :class="{'cropper-view-box-round':circularCrop}">
         <img
           :style="{
 						'width': trueWidth + 'px',
@@ -303,6 +304,11 @@ export default defineComponent({
       default: () => {
         return 10;
       }
+    },
+    // 是否圆形裁剪（依赖裁剪图片的大小）
+    circularCrop: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -1336,6 +1342,7 @@ export default defineComponent({
       let trueHeight = this.trueHeight;
       let cropOffsertX = this.cropOffsertX;
       let cropOffsertY = this.cropOffsertY;
+      let circularCrop = this.circularCrop;
       img.onload = () => {
         if (this.cropW !== 0) {
           let ctx = canvas.getContext("2d");
@@ -1359,7 +1366,7 @@ export default defineComponent({
             (this.y - cropOffsertY + (this.trueHeight * (1 - this.scale)) / 2) *
             dpr;
           //保存状态
-          setCanvasSize(width, height);
+          setCanvasSize(ctx, width, height);
           ctx.save();
           switch (rotate) {
             case 0:
@@ -1367,7 +1374,7 @@ export default defineComponent({
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 // 输出原图比例截图
-                setCanvasSize(width / this.scale, height / this.scale);
+                setCanvasSize(ctx, width / this.scale, height / this.scale);
                 ctx.drawImage(
                   img,
                   dx / this.scale,
@@ -1386,7 +1393,7 @@ export default defineComponent({
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, dy, -dx - imgH, imgW, imgH);
               } else {
-                setCanvasSize(width / this.scale, height / this.scale);
+                setCanvasSize(ctx, width / this.scale, height / this.scale);
                 // 换算图片旋转后的坐标弥补
                 dx =
                   dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
@@ -1408,7 +1415,7 @@ export default defineComponent({
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, -dx - imgW, -dy - imgH, imgW, imgH);
               } else {
-                setCanvasSize(width / this.scale, height / this.scale);
+                setCanvasSize(ctx, width / this.scale, height / this.scale);
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 dx = dx / this.scale;
                 dy = dy / this.scale;
@@ -1430,7 +1437,7 @@ export default defineComponent({
                 ctx.rotate((rotate * 90 * Math.PI) / 180);
                 ctx.drawImage(img, -dy - imgW, dx, imgW, imgH);
               } else {
-                setCanvasSize(width / this.scale, height / this.scale);
+                setCanvasSize(ctx, width / this.scale, height / this.scale);
                 // 换算图片旋转后的坐标弥补
                 dx =
                   dx / this.scale + (imgW / this.scale - imgH / this.scale) / 2;
@@ -1451,7 +1458,7 @@ export default defineComponent({
                 ctx.drawImage(img, dx, dy, imgW, imgH);
               } else {
                 // 输出原图比例截图
-                setCanvasSize(width / this.scale, height / this.scale);
+                setCanvasSize(ctx, width / this.scale, height / this.scale);
                 ctx.drawImage(
                   img,
                   dx / this.scale,
@@ -1469,30 +1476,30 @@ export default defineComponent({
           ctx.save();
           switch (rotate) {
             case 0:
-              setCanvasSize(width, height);
+              setCanvasSize(ctx, width, height);
               ctx.drawImage(img, 0, 0, width, height);
               break;
             case 1:
             case -3:
               // 旋转90度 或者-270度 宽度和高度对调
-              setCanvasSize(height, width);
+              setCanvasSize(ctx, height, width);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, 0, -height, width, height);
               break;
             case 2:
             case -2:
-              setCanvasSize(width, height);
+              setCanvasSize(ctx, width, height);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, -width, -height, width, height);
               break;
             case 3:
             case -1:
-              setCanvasSize(height, width);
+              setCanvasSize(ctx, height, width);
               ctx.rotate((rotate * 90 * Math.PI) / 180);
               ctx.drawImage(img, -width, 0, width, height);
               break;
             default:
-              setCanvasSize(width, height);
+              setCanvasSize(ctx, width, height);
               ctx.drawImage(img, 0, 0, width, height);
           }
           ctx.restore();
@@ -1506,9 +1513,19 @@ export default defineComponent({
       }
       img.src = this.imgs;
 
-      function setCanvasSize(width, height) {
+      function setCanvasSize(ctx, width, height) {
         canvas.width = Math.round(width);
         canvas.height = Math.round(height);
+
+        if (circularCrop && ctx.ellipse) {
+          const centerX = width / 2;
+          const centerY = height / 2;
+
+          ctx.beginPath();
+          ctx.ellipse(centerX, centerY, centerX, centerY, 0, 0, 2 * Math.PI);
+          ctx.closePath();
+          ctx.clip();
+        }
       }
     },
 
@@ -1927,6 +1944,10 @@ export default defineComponent({
   outline: 1px solid #39f;
   outline-color: rgba(51, 153, 255, 0.75);
   user-select: none;
+}
+
+.cropper-view-box-round {
+  border-radius: 50%;
 }
 
 .cropper-view-box img {
