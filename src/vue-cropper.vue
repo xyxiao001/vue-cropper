@@ -302,7 +302,14 @@ export default {
       type: [Number, Array, String],
       default: () => {
         return 10;
-      }
+      },
+      validator: function(value){
+				if(Array.isArray(value)){
+          return Number(value[0]) >= 0 && Number(value[1]) >= 0
+        }else{
+          return Number(value)>= 0
+        }
+			}
     },
   },
   computed: {
@@ -993,13 +1000,15 @@ export default {
           wrapperH = imgH;
         }
       }
-
+      const [minCropW,minCropH] = this.checkCropLimitSize()
       this.$nextTick(() => {
         var fw = nowX - this.cropX;
         var fh = nowY - this.cropY;
         if (this.canChangeX) {
           if (this.changeCropTypeX === 1) {
-            if (this.cropOldW - fw > 0) {
+            if(this.cropOldW - fw < minCropW){
+              this.cropW = minCropW
+            }else if (this.cropOldW - fw > 0) {
               this.cropW =
                 wrapperW - this.cropChangeX - fw <= wrapperW - minX
                   ? this.cropOldW - fw
@@ -1016,7 +1025,9 @@ export default {
               this.cropOffsertX = this.cropChangeX + this.cropOldW;
             }
           } else if (this.changeCropTypeX === 2) {
-            if (this.cropOldW + fw > 0) {
+            if(this.cropOldW + fw < minCropW){
+              this.cropW = minCropW
+            }else if (this.cropOldW + fw > 0) {
               this.cropW =
                 this.cropOldW + fw + this.cropOffsertX <= wrapperW
                   ? this.cropOldW + fw
@@ -1040,7 +1051,9 @@ export default {
 
         if (this.canChangeY) {
           if (this.changeCropTypeY === 1) {
-            if (this.cropOldH - fh > 0) {
+            if(this.cropOldH - fh < minCropH){
+              this.cropH = minCropH
+            }else if (this.cropOldH - fh > 0) {
               this.cropH =
                 wrapperH - this.cropChangeY - fh <= wrapperH - minY
                   ? this.cropOldH - fh
@@ -1057,7 +1070,9 @@ export default {
               this.cropOffsertY = this.cropChangeY + this.cropOldH;
             }
           } else if (this.changeCropTypeY === 2) {
-            if (this.cropOldH + fh > 0) {
+            if(this.cropOldH + fh < minCropH){
+              this.cropH = minCropH
+            }else if (this.cropOldH + fh > 0) {
               this.cropH =
                 this.cropOldH + fh + this.cropOffsertY <= wrapperH
                   ? this.cropOldH + fh
@@ -1081,7 +1096,10 @@ export default {
         if (this.canChangeX && this.fixed) {
           var fixedHeight =
             (this.cropW / this.fixedNumber[0]) * this.fixedNumber[1];
-          if (fixedHeight + this.cropOffsertY > wrapperH) {
+          if(fixedHeight < minCropH){
+            this.cropH = minCropH
+            this.cropW = this.fixedNumber[0] * minCropH / this.fixedNumber[1]
+          }else if (fixedHeight + this.cropOffsertY > wrapperH) {
             this.cropH = wrapperH - this.cropOffsertY;
             this.cropW =
               (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
@@ -1093,7 +1111,10 @@ export default {
         if (this.canChangeY && this.fixed) {
           var fixedWidth =
             (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
-          if (fixedWidth + this.cropOffsertX > wrapperW) {
+          if(fixedWidth < minCropW){
+            this.cropW = minCropW
+            this.cropH = this.fixedNumber[1] * minCropW / this.fixedNumber[0];
+          }else if (fixedWidth + this.cropOffsertX > wrapperW) {
             this.cropW = wrapperW - this.cropOffsertX;
             this.cropH =
               (this.cropW / this.fixedNumber[0]) * this.fixedNumber[1];
@@ -1110,7 +1131,7 @@ export default {
       let { cropW, cropH, limitMinSize } = this;
 
       let limitMinNum = new Array;
-      if (!Array.isArray[limitMinSize]) {
+      if (!Array.isArray(limitMinSize)) {
         limitMinNum = [limitMinSize, limitMinSize]
       } else {
         limitMinNum = limitMinSize

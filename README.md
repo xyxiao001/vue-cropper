@@ -152,6 +152,7 @@ infoTrue | true 为展示真实输出图片宽高 `false` 展示看到的截图�
 maxImgSize | 限制图片最大宽度和高度 | `2000` | 0 ~ max
 enlarge | 图片根据截图框输出比例倍数 | `1` | 0 ~ max(建议不要太大不然会卡死的呢)
 mode | 图片默认渲染方式 | `contain` | `contain` , `cover`, `100px`, `100%` auto
+limitMinSize | 裁剪框限制最小区域 | 10 | Number, Array, String
 
 ### 2. 可用回调方法
 
