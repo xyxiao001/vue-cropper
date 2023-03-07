@@ -1149,18 +1149,62 @@ export default {
       window.removeEventListener("touchmove", this.changeCropNow);
       window.removeEventListener("touchend", this.changeCropEnd);
     },
-
+    // 根据比例x/y,最小宽度，最小高度，现有宽度，现有高度，得到应该有的宽度和高度
+    calculateSize(x, y, minX, minY, w, h) {
+      const ratio = x / y;
+      let width = w;
+      let height = h;
+      // 先根据最小宽度来计算高度
+      if (width < minX) {
+        width = minX;
+        height = Math.ceil(width / ratio);
+      }
+      // 如果计算出来的高度小于最小高度，则根据最小高度来重新计算宽度和高度
+      if (height < minY) {
+        height = minY;
+        width = Math.ceil(height * ratio);
+        // 如果重新计算的宽度仍然小于最小宽度，则使用最小宽度，并重新计算高度
+        if (width < minX) {
+          width = minX;
+          height = Math.ceil(width / ratio);
+        }
+      }
+      // 如果计算出来的宽度或高度小于输入的宽度或高度，则分别使用输入的宽度或高度
+      if (width < w) {
+        width = w;
+        height = Math.ceil(width / ratio);
+      }
+      if (height < h) {
+        height = h;
+        width = Math.ceil(height * ratio);
+      }
+      return { width, height };
+    },
     // 创建完成
     endCrop() {
       if (this.cropW === 0 && this.cropH === 0) {
         this.cropping = false;
       }
-      const [minCropW, minCropH] = this.checkCropLimitSize();
-      if (minCropW > this.cropW) {
-        this.cropW = minCropW;
+      let [minCropW, minCropH] = this.checkCropLimitSize();
+      const { width, height } = this.calculateSize(
+        this.fixedNumber[0],
+        this.fixedNumber[1],
+        minCropW,
+        minCropH,
+        this.cropW,
+        this.cropH
+      );
+      if (width > this.cropW) {
+        this.cropW = width;
+        if (this.cropOffsertX + width > this.w) {
+          this.cropOffsertX = this.w - width;
+        }
       }
-      if (minCropH > this.cropH) {
-        this.cropH = minCropH;
+      if (height > this.cropH) {
+        this.cropH = height;
+        if (this.cropOffsertY + height > this.h) {
+          this.cropOffsertY = this.h - height;
+        }
       }
       window.removeEventListener("mousemove", this.createCrop);
       window.removeEventListener("mouseup", this.endCrop);
