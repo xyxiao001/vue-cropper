@@ -5,151 +5,151 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>test vue-cropper</title>
+  <title>test vue-cropper@vue2</title>
   <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-      .cut {
-        width: 500px;
-        height: 500px;
-        margin: 30px auto;
-      }
+    .cut {
+      width: 500px;
+      height: 500px;
+      margin: 30px auto;
+    }
 
-      .c-item {
-        max-width: 800px;
-        margin: 10px auto;
-        margin-top: 20px;
-      }
-    
-      .content {
-        margin: auto;
-        max-width: 1200px;
-        margin-bottom: 100px;
-      }
-    
-      .test-button {
-        display: flex;
-        flex-wrap: wrap;
-        align-content: center;
-        justify-content: center;
-      }
-    
-      .btn {
-        display: inline-block;
-        line-height: 1;
-        white-space: nowrap;
-        cursor: pointer;
-        background: #fff;
-        border: 1px solid #c0ccda;
-        color: #1f2d3d;
-        text-align: center;
-        box-sizing: border-box;
-        outline: none;
-        margin:20px 10px 0px 0px;
-        padding: 9px 15px;
-        font-size: 14px;
-        border-radius: 4px;
-        color: #fff;
-        background-color: #50bfff;
-        border-color: #50bfff;
-        transition: all .2s ease;
-        text-decoration: none;
-        user-select: none;
-      }
-    
-      .des {
-        line-height: 30px;
-      }
-    
-      code.language-html {
-        padding: 10px 20px;
-        margin: 10px 0px;
-        display: block;
-        background-color: #333;
-        color: #fff;
-        overflow-x: auto;
-        font-family: Consolas, Monaco, Droid, Sans, Mono, Source, Code, Pro, Menlo, Lucida, Sans, Type, Writer, Ubuntu, Mono;
-        border-radius: 5px;
-        white-space: pre;
-      }
-    
-      .show-info {
-        margin-bottom: 50px;
-      }
-    
-      .show-info h2 {
-        line-height: 50px;
-      }
-    
-      /*.title, .title:hover, .title-focus, .title:visited {
+    .c-item {
+      max-width: 800px;
+      margin: 10px auto;
+      margin-top: 20px;
+    }
+
+    .content {
+      margin: auto;
+      max-width: 1200px;
+      margin-bottom: 100px;
+    }
+
+    .test-button {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: center;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      line-height: 1;
+      white-space: nowrap;
+      cursor: pointer;
+      background: #fff;
+      border: 1px solid #c0ccda;
+      color: #1f2d3d;
+      text-align: center;
+      box-sizing: border-box;
+      outline: none;
+      margin: 20px 10px 0px 0px;
+      padding: 9px 15px;
+      font-size: 14px;
+      border-radius: 4px;
+      color: #fff;
+      background-color: #50bfff;
+      border-color: #50bfff;
+      transition: all .2s ease;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .des {
+      line-height: 30px;
+    }
+
+    code.language-html {
+      padding: 10px 20px;
+      margin: 10px 0px;
+      display: block;
+      background-color: #333;
+      color: #fff;
+      overflow-x: auto;
+      font-family: Consolas, Monaco, Droid, Sans, Mono, Source, Code, Pro, Menlo, Lucida, Sans, Type, Writer, Ubuntu, Mono;
+      border-radius: 5px;
+      white-space: pre;
+    }
+
+    .show-info {
+      margin-bottom: 50px;
+    }
+
+    .show-info h2 {
+      line-height: 50px;
+    }
+
+    /*.title, .title:hover, .title-focus, .title:visited {
         color: black;
       }*/
-    
-      .title {
-        display: block;
-        text-decoration: none;
-        text-align: center;
-        line-height: 1.5;
-        margin: 20px 0px;
-        background-image: -webkit-linear-gradient(left,#3498db,#f47920 10%,#d71345 20%,#f7acbc 30%,#ffd400 40%,#3498db 50%,#f47920 60%,#d71345 70%,#f7acbc 80%,#ffd400 90%,#3498db);
-        color: transparent;
-        -webkit-background-clip: text;
-        background-size: 200% 100%;
-        animation: slide 5s infinite linear;
-        font-size: 40px;
+
+    .title {
+      display: block;
+      text-decoration: none;
+      text-align: center;
+      line-height: 1.5;
+      margin: 20px 0px;
+      background-image: -webkit-linear-gradient(left, #3498db, #f47920 10%, #d71345 20%, #f7acbc 30%, #ffd400 40%, #3498db 50%, #f47920 60%, #d71345 70%, #f7acbc 80%, #ffd400 90%, #3498db);
+      color: transparent;
+      -webkit-background-clip: text;
+      background-size: 200% 100%;
+      animation: slide 5s infinite linear;
+      font-size: 40px;
+    }
+
+    .test {
+      height: 500px;
+    }
+
+    .model {
+      position: fixed;
+      z-index: 10;
+      width: 100vw;
+      height: 100vh;
+      overflow: auto;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .model-show {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .model img {
+      display: block;
+      margin: auto;
+      max-width: 80%;
+      user-select: none;
+      background-position: 0px 0px, 10px 10px;
+      background-size: 20px 20px;
+      background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
+    }
+
+    .c-item {
+      display: block;
+      user-select: none;
+    }
+
+    @keyframes slide {
+      0% {
+        background-position: 0 0;
       }
-    
-      .test {
-        height: 500px;
+
+      100% {
+        background-position: -100% 0;
       }
-    
-      .model {
-        position: fixed;
-        z-index: 10;
-        width: 100vw;
-        height: 100vh;
-        overflow: auto;
-        top: 0;
-        left: 0;
-        background: rgba(0, 0, 0, 0.8);
-      }
-    
-      .model-show {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100vw;
-        height: 100vh;
-      }
-    
-      .model img {
-        display: block;
-        margin: auto;
-        max-width: 80%;
-        user-select: none;
-        background-position: 0px 0px, 10px 10px;
-        background-size: 20px 20px;
-        background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
-      }
-    
-      .c-item {
-        display: block;
-        user-select: none;
-      }
-    
-      @keyframes slide {
-        0%  {
-          background-position: 0 0;
-        }
-        100% {
-          background-position: -100% 0;
-        }
-      }
-    
-    </style>    
+    }
+  </style>
 </head>
 
 <body>
@@ -161,16 +161,13 @@
     </div>
     <p>例子</p>
     <div class="cut">
-      <vue-cropper ref="cropper" :img="option.img" :output-size="option.size" :output-type="option.outputType" :info="true" :full="option.full"
-        :can-move="option.canMove" :can-move-box="option.canMoveBox" :fixed-box="option.fixedBox" :original="option.original"
-        :auto-crop="option.autoCrop" :auto-crop-width="option.autoCropWidth" :auto-crop-height="option.autoCropHeight" :center-box="option.centerBox"
-				@real-time="realTime" :high="option.high" ></vue-cropper>
+      <vue-cropper ref="cropper" v-bind="option"></vue-cropper>
     </div>
     <div class="test-button">
       <button @click="changeImg" class="btn">changeImg</button>
       <label class="btn" for="uploads">upload</label>
-      <input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg"
-        @change="uploadImg($event, 1)">
+      <input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);"
+        accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
       <button @click="startCrop" v-if="!crap" class="btn">start</button>
       <button @click="stopCrop" v-else class="btn">stop</button>
       <button @click="clearCrop" class="btn">clear</button>
@@ -185,13 +182,47 @@
       <a @click="down('blob')" class="btn">download(blob)</a>
       <div style="display:block; width: 100%;">
         <label class="c-item">
+          <span>图片默认渲染方式</span>
+          <select v-model="option.mode">
+            <option value="contain">contain</option>
+            <option value="cover">cover</option>
+            <option value="400px auto">400px auto</option>
+            <option value="auto 400px">auto 400px</option>
+            <option value="50%">50%</option>
+            <option value="auto 50%">auto 50%</option>
+          </select>
+          <section>
+            类似css background属性设置 设置不符合规范不生效， 参照文档说明
+          </section>
+        </label>
+        <label class="c-item">
+          <span>上传时图片最大大小(默认会压缩尺寸到这个大小)</span>
+          <input type="nubmer" v-model="option.maxImgSize">
+        </label>
+        <label class="c-item">
           <span>上传图片是否显示原始宽高 (针对大图 可以铺满)</span>
           <input type="checkbox" v-model="option.original">
           <span>original: {{ option.original}}</span>
         </label>
         <label class="c-item">
+          <span>是否根据dpr生成适合屏幕的高清图片</span>
+          <input type="checkbox" v-model="option.high">
+          <span>high: {{ option.high}}</span>
+        </label>
+        <label class="c-item">
+          <span>是否输出原图比例的截图</span>
+          <input type="checkbox" v-model="option.full">
+          <span>full: {{ option.full}}</span>
+        </label>
+        <label class="c-item">
+          <span>截图信息展示是否是真实的输出宽高</span>
+          <input type="checkbox" v-model="option.infoTrue">
+          <span>infoTrue: {{ option.infoTrue}}</span>
+        </label>
+        <label class="c-item">
           <span>能否拖动图片</span>
           <input type="checkbox" v-model="option.canMove">
+          <span>canMove: {{ option.canMove}}</span>
         </label>
         <label class="c-item">
           <span>能否拖动截图框</span>
@@ -204,19 +235,29 @@
           <span>fixedBox: {{ option.fixedBox}}</span>
         </label>
         <label class="c-item">
-          <span>是否输出原图比例的截图</span>
-          <input type="checkbox" v-model="option.full">
-          <span>full: {{ option.full}}</span>
-        </label>
-        <label class="c-item">
           <span>是否自动生成截图框</span>
           <input type="checkbox" v-model="option.autoCrop">
           <span>autoCrop: {{ option.autoCrop}}</span>
         </label>
         <label class="c-item">
-          <span>是否根据dpr生成适合屏幕的高清图片</span>
-          <input type="checkbox" v-model="option.high">
-          <span>high: {{ option.high}}</span>
+          <span>是否开启截图框比例</span>
+          <input type="checkbox" v-model="option.fixed">
+          <span>fixed: {{ option.fixed}}</span>
+        </label>
+        <label class="c-item">
+          <span>固定截图框比例</span>
+          <span>宽度: </span><input type="number" v-model="option.fixedNumber[0]">
+          <span>高度: </span><input type="number" v-model="option.fixedNumber[1]">
+        </label>
+        <label class="c-item">
+          <span>截图框的最小限制</span>
+          <span>宽度: </span><input type="number" v-model="option.limitMinSize[0]">
+          <span>高度: </span><input type="number" v-model="option.limitMinSize[1]">
+        </label>
+        <label class="c-item">
+          <span>自动生成截图框的宽高</span>
+          <span>宽度: </span><input type="number" v-model="option.autoCropWidth">
+          <span>高度: </span><input type="number" v-model="option.autoCropHeight">
         </label>
         <label class="c-item">
           <span>截图框是否限制在图片里(只有在自动生成截图框时才能生效)</span>
@@ -224,27 +265,25 @@
           <span>centerBox: {{ option.centerBox}}</span>
         </label>
         <label class="c-item">
-          <p>输出图片格式</p>
-          <label>jpg
-            <input type="radio" name="type" value="jpeg" v-model="option.outputType">
-          </label>
-          <label>png
-            <input type="radio" name="type" value="png" v-model="option.outputType">
-          </label>
-          <label>webp
-            <input type="radio" name="type" value="webp" v-model="option.outputType">
-          </label>
+          <span>是否按照截图框比例输出 默认为1 </span>
+          <input type="number" v-model="option.enlarge">
+        </label>
+        <p>输出图片格式</p>
+        <label class="c-item">
+          <label>jpg <input type="radio" name="type" value="jpeg" v-model="option.outputType"></label>
+          <label>png <input type="radio" name="type" value="png" v-model="option.outputType"></label>
+          <label>webp <input type="radio" name="type" value="webp" v-model="option.outputType"></label>
         </label>
       </div>
     </div>
-    <div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
+    <div class="show-preview"
+      :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
       <div :style="previews.div">
         <img :src="previews.url" :style="previews.img">
       </div>
     </div>
   </div>
 
-  <!-- <script src="https://vuejs.org/js/vue.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
   <script src="../dist/index.js"></script>
   <script>
@@ -257,30 +296,36 @@
         crap: false,
         previews: {},
         lists: [
+          // {
+          // 	img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
+          // },
           {
-            img: 'http://ofyaji162.bkt.clouddn.com/touxiang.jpg'
+            img: "https://avatars2.githubusercontent.com/u/15681693?s=460&v=4"
           },
           {
-            img: 'https://o90cnn3g2.qnssl.com/0C3ABE8D05322EAC3120DDB11F9D1F72.png'
+            img: "http://cdn.xyxiao.cn/Landscape_1.jpg"
           },
           {
-            img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
+            img: "http://cdn.xyxiao.cn/Landscape_2.jpg"
           },
           {
-            img: 'http://ofyaji162.bkt.clouddn.com/bg2.jpg',
+            img: "http://cdn.xyxiao.cn/Landscape_3.jpg"
           },
           {
-            img: 'http://ofyaji162.bkt.clouddn.com/can.jpg'
+            img: "http://cdn.xyxiao.cn/Landscape_4.jpg"
           },
           {
-            img: 'http://ofyaji162.bkt.clouddn.com/nightcat.jpg'
+            img: "http://cdn.xyxiao.cn/Portrait_1.jpg"
+          },
+          {
+            img: "http://cdn.xyxiao.cn/Portrait_2.jpg"
           }
         ],
         option: {
-          img: 'https://avatars3.githubusercontent.com/u/15681693',
+          img: "https://avatars2.githubusercontent.com/u/15681693?s=460&v=4",
           size: 1,
           full: false,
-          outputType: 'png',
+          outputType: "png",
           canMove: true,
           fixedBox: false,
           original: false,
@@ -290,7 +335,14 @@
           autoCropWidth: 200,
           autoCropHeight: 150,
           centerBox: false,
-          high: true
+          high: false,
+          cropData: {},
+          enlarge: 1,
+          mode: 'contain',
+          maxImgSize: 3000,
+          limitMinSize: [50, 50],
+          fixed: false,
+          fixedNumber: [2, 1],
         },
         show: true
       },

@@ -12,7 +12,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 
 export const globalCropper: vueCropperGlobal = {
-  version: '1.0.5',
+  version: '1.0.6',
   install,
   VueCropper,
 }

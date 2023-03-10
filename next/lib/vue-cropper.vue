@@ -411,7 +411,7 @@ export default defineComponent({
           this.goAutoCrop(this.cropW, this.cropH);
         }
       }
-    }
+    },
   },
   methods: {
     getVersion (name) {
@@ -620,10 +620,6 @@ export default defineComponent({
           window.addEventListener("mouseup", this.leaveImg);
         }
         // 触发图片移动事件
-        this.$emit("imgMoving", {
-          moving: true,
-          axis: this.getImgAxis()
-        });
         this.$emit("img-moving", {
           moving: true,
           axis: this.getImgAxis()
@@ -787,10 +783,6 @@ export default defineComponent({
         this.x = changeX;
         this.y = changeY;
         // 触发图片移动事件
-        this.$emit("imgMoving", {
-          moving: true,
-          axis: this.getImgAxis()
-        });
         this.$emit("img-moving", {
           moving: true,
           axis: this.getImgAxis()
@@ -804,10 +796,6 @@ export default defineComponent({
       window.removeEventListener("mouseup", this.leaveImg);
       window.removeEventListener("touchend", this.leaveImg);
       // 触发图片移动事件
-      this.$emit("imgMoving", {
-        moving: false,
-        axis: this.getImgAxis()
-      });
       this.$emit("img-moving", {
         moving: false,
         axis: this.getImgAxis()
@@ -1092,14 +1080,16 @@ export default defineComponent({
             }
           }
         }
-
         if (this.canChangeX && this.fixed) {
           var fixedHeight =
             (this.cropW / this.fixedNumber[0]) * this.fixedNumber[1];
           if (fixedHeight < minCropH) {
             this.cropH = minCropH
             this.cropW = this.fixedNumber[0] * minCropH / this.fixedNumber[1]
-            this.cropOffsertX = this.cropOldW + this.cropChangeX - this.cropW
+            // 这里需要去修改 offsetX的值，去调整因为高度变化而导致的宽度变化
+            if (this.changeCropTypeX === 1) {
+              this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW)
+            }
           } else if (fixedHeight + this.cropOffsertY > wrapperH) {
             this.cropH = wrapperH - this.cropOffsertY;
             this.cropW =
@@ -1251,10 +1241,6 @@ export default defineComponent({
       this.cropX = newX;
       this.cropY = newY;
       // 触发截图框移动事件
-      this.$emit("cropMoving", {
-        moving: true,
-        axis: this.getCropAxis()
-      });
       this.$emit("crop-moving", {
         moving: true,
         axis: this.getCropAxis()
@@ -1320,10 +1306,6 @@ export default defineComponent({
         this.cropOffsertY = cy;
 
         // 触发截图框移动事件
-        this.$emit("cropMoving", {
-          moving: true,
-          axis: this.getCropAxis()
-        });
         this.$emit("crop-moving", {
           moving: true,
           axis: this.getCropAxis()
@@ -1393,10 +1375,6 @@ export default defineComponent({
       window.removeEventListener("touchmove", this.moveCrop);
       window.removeEventListener("touchend", this.leaveCrop);
       // 触发截图框移动事件
-      this.$emit("cropMoving", {
-        moving: false,
-        axis: this.getCropAxis()
-      });
       this.$emit("crop-moving", {
         moving: false,
         axis: this.getCropAxis()
@@ -1648,7 +1626,6 @@ export default defineComponent({
         .rotate * 90}deg)">
         </div>
       </div>`;
-      this.$emit("realTime", obj);
       this.$emit("real-time", obj);
     },
     // reload 图片布局函数
@@ -1687,14 +1664,12 @@ export default defineComponent({
           }
           // 图片加载成功的回调
           this.$emit("img-load", "success");
-          this.$emit("imgLoad", "success");        
           setTimeout(() => {
             this.showPreview();
           }, 20);
         });
       };
       img.onerror = () => {
-        this.$emit("imgLoad", "error");
         this.$emit("img-load", "error");
       };
       img.src = this.imgs;

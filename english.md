@@ -363,7 +363,7 @@ Thank you for your contribution from [https://github.com/hzsrc].
 Add preview box to various proportions, and restore image screenshots decimal problem.
 
 ### 0.44
-修复引入方式的问题
+fix required
 ```
 Repairing the way of introduction
 import { VueCropper }  from vue-cropper 
