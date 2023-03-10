@@ -1,9 +1,9 @@
 # vue-cropper
 一个优雅的图片裁剪插件
 
-[ [查看演示 Demo](http://github.xyxiao.cn/vue-cropper/example/) ]  
-[ [README_english](https://github.com/xyxiao001/vue-cropper/blob/master/english.md) ]  
-[ [更新日志](https://github.com/xyxiao001/vue-cropper/blob/master/CHANGELOG.md) ]
+[ [查看演示 Demo](https://github.xyxiao.cn/vue-cropper/docs/vue2.html) ]  
+[ [README_english](./english.md) ]  
+[ [更新日志](./CHANGELOG.md) ]
 
 
 
