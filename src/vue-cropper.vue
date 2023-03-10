@@ -302,7 +302,14 @@ export default {
       type: [Number, Array, String],
       default: () => {
         return 10;
-      }
+      },
+      validator: function (value) {
+        if (Array.isArray(value)) {
+          return Number(value[0]) >= 0 && Number(value[1]) >= 0;
+        } else {
+          return Number(value) >= 0;
+        }
+      },
     },
   },
   computed: {
@@ -993,13 +1000,16 @@ export default {
           wrapperH = imgH;
         }
       }
-
+      const [minCropW,minCropH] = this.checkCropLimitSize()
       this.$nextTick(() => {
         var fw = nowX - this.cropX;
         var fh = nowY - this.cropY;
         if (this.canChangeX) {
           if (this.changeCropTypeX === 1) {
-            if (this.cropOldW - fw > 0) {
+            if (this.cropOldW - fw < minCropW) {
+              this.cropW = minCropW
+              this.cropOffsertX = this.cropOldW + this.cropChangeX - minX - minCropW
+            } else if (this.cropOldW - fw > 0) {
               this.cropW =
                 wrapperW - this.cropChangeX - fw <= wrapperW - minX
                   ? this.cropOldW - fw
@@ -1016,7 +1026,9 @@ export default {
               this.cropOffsertX = this.cropChangeX + this.cropOldW;
             }
           } else if (this.changeCropTypeX === 2) {
-            if (this.cropOldW + fw > 0) {
+            if (this.cropOldW + fw < minCropW) {
+              this.cropW = minCropW
+            } else if (this.cropOldW + fw > 0) {
               this.cropW =
                 this.cropOldW + fw + this.cropOffsertX <= wrapperW
                   ? this.cropOldW + fw
@@ -1040,7 +1052,10 @@ export default {
 
         if (this.canChangeY) {
           if (this.changeCropTypeY === 1) {
-            if (this.cropOldH - fh > 0) {
+            if (this.cropOldH - fh < minCropH) {
+              this.cropH = minCropH
+              this.cropOffsertY = this.cropOldH + this.cropChangeY - minY - minCropH
+            } else if (this.cropOldH - fh > 0) {
               this.cropH =
                 wrapperH - this.cropChangeY - fh <= wrapperH - minY
                   ? this.cropOldH - fh
@@ -1057,7 +1072,9 @@ export default {
               this.cropOffsertY = this.cropChangeY + this.cropOldH;
             }
           } else if (this.changeCropTypeY === 2) {
-            if (this.cropOldH + fh > 0) {
+            if (this.cropOldH + fh < minCropH) {
+              this.cropH = minCropH
+            } else if (this.cropOldH + fh > 0) {
               this.cropH =
                 this.cropOldH + fh + this.cropOffsertY <= wrapperH
                   ? this.cropOldH + fh
@@ -1081,7 +1098,11 @@ export default {
         if (this.canChangeX && this.fixed) {
           var fixedHeight =
             (this.cropW / this.fixedNumber[0]) * this.fixedNumber[1];
-          if (fixedHeight + this.cropOffsertY > wrapperH) {
+          if (fixedHeight < minCropH) {
+            this.cropH = minCropH
+            this.cropW = this.fixedNumber[0] * minCropH / this.fixedNumber[1]
+            this.cropOffsertX = this.cropOldW + this.cropChangeX - this.cropW
+          } else if (fixedHeight + this.cropOffsertY > wrapperH) {
             this.cropH = wrapperH - this.cropOffsertY;
             this.cropW =
               (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
@@ -1093,7 +1114,11 @@ export default {
         if (this.canChangeY && this.fixed) {
           var fixedWidth =
             (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
-          if (fixedWidth + this.cropOffsertX > wrapperW) {
+          if (fixedWidth < minCropW) {
+            this.cropW = minCropW
+            this.cropH = this.fixedNumber[1] * minCropW / this.fixedNumber[0];
+            this.cropOffsertY = this.cropOldH + this.cropChangeY - this.cropH
+          } else if (fixedWidth + this.cropOffsertX > wrapperW) {
             this.cropW = wrapperW - this.cropOffsertX;
             this.cropH =
               (this.cropW / this.fixedNumber[0]) * this.fixedNumber[1];
@@ -1110,7 +1135,7 @@ export default {
       let { cropW, cropH, limitMinSize } = this;
 
       let limitMinNum = new Array;
-      if (!Array.isArray[limitMinSize]) {
+      if (!Array.isArray(limitMinSize)) {
         limitMinNum = [limitMinSize, limitMinSize]
       } else {
         limitMinNum = limitMinSize
@@ -1128,11 +1153,62 @@ export default {
       window.removeEventListener("touchmove", this.changeCropNow);
       window.removeEventListener("touchend", this.changeCropEnd);
     },
-
+    // 根据比例x/y，最小宽度，最小高度，现有宽度，现有高度，得到应该有的宽度和高度
+    calculateSize(x, y, minX, minY, w, h) {
+      const ratio = x / y;
+      let width = w;
+      let height = h;
+      // 先根据最小宽度来计算高度
+      if (width < minX) {
+        width = minX;
+        height = Math.ceil(width / ratio);
+      }
+      // 如果计算出来的高度小于最小高度，则根据最小高度来重新计算宽度和高度
+      if (height < minY) {
+        height = minY;
+        width = Math.ceil(height * ratio);
+        // 如果重新计算的宽度仍然小于最小宽度，则使用最小宽度，并重新计算高度
+        if (width < minX) {
+          width = minX;
+          height = Math.ceil(width / ratio);
+        }
+      }
+      // 如果计算出来的宽度或高度小于输入的宽度或高度，则分别使用输入的宽度或高度
+      if (width < w) {
+        width = w;
+        height = Math.ceil(width / ratio);
+      }
+      if (height < h) {
+        height = h;
+        width = Math.ceil(height * ratio);
+      }
+      return { width, height };
+    },
     // 创建完成
     endCrop() {
       if (this.cropW === 0 && this.cropH === 0) {
         this.cropping = false;
+      }
+      let [minCropW, minCropH] = this.checkCropLimitSize();
+      const { width, height } = this.fixed ? this.calculateSize(
+        this.fixedNumber[0],
+        this.fixedNumber[1],
+        minCropW,
+        minCropH,
+        this.cropW,
+        this.cropH
+      ) : { width: minCropW, height: minCropH }
+      if (width > this.cropW) {
+        this.cropW = width;
+        if (this.cropOffsertX + width > this.w) {
+          this.cropOffsertX = this.w - width;
+        }
+      }
+      if (height > this.cropH) {
+        this.cropH = height;
+        if (this.cropOffsertY + height > this.h) {
+          this.cropOffsertY = this.h - height;
+        }
       }
       window.removeEventListener("mousemove", this.createCrop);
       window.removeEventListener("mouseup", this.endCrop);
