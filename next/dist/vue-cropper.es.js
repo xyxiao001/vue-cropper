@@ -1059,7 +1059,7 @@ const O = /* @__PURE__ */ A(N, [["render", U], ["__scopeId", "data-v-9dc5c1aa"]]
 };
 typeof window < "u" && window.Vue && window.Vue.createApp({}).component("VueCropper", O);
 const V = {
-  version: "1.0.6",
+  version: "1.0.7",
   install: F,
   VueCropper: O
 };
