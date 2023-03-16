@@ -1094,6 +1094,9 @@ export default defineComponent({
             this.cropH = wrapperH - this.cropOffsertY;
             this.cropW =
               (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
+            if (this.changeCropTypeX === 1) {
+              this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW)
+            }
           } else {
             this.cropH = fixedHeight;
           }
