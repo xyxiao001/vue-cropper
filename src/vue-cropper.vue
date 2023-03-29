@@ -1105,11 +1105,17 @@ export default {
           if (fixedHeight < minCropH) {
             this.cropH = minCropH
             this.cropW = this.fixedNumber[0] * minCropH / this.fixedNumber[1]
-            this.cropOffsertX = this.cropOldW + this.cropChangeX - this.cropW
+            // 这里需要去修改 offsetX的值，去调整因为高度变化而导致的宽度变化
+            if (this.changeCropTypeX === 1) {
+              this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW)
+            }
           } else if (fixedHeight + this.cropOffsertY > wrapperH) {
             this.cropH = wrapperH - this.cropOffsertY;
             this.cropW =
               (this.cropH / this.fixedNumber[1]) * this.fixedNumber[0];
+            if (this.changeCropTypeX === 1) {
+              this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW)
+            }
           } else {
             this.cropH = fixedHeight;
           }
@@ -1121,10 +1127,6 @@ export default {
           if (fixedWidth < minCropW) {
             this.cropW = minCropW
             this.cropH = this.fixedNumber[1] * minCropW / this.fixedNumber[0];
-            // 这里需要去修改 offsetX的值，去调整因为高度变化而导致的宽度变化
-            if (this.changeCropTypeX === 1) {
-              this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW)
-            }
           } else if (fixedWidth + this.cropOffsertX > wrapperW) {
             this.cropW = wrapperW - this.cropOffsertX;
             this.cropH =
