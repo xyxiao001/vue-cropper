@@ -967,6 +967,10 @@ export default {
           this.canChangeY = 0;
         }
       }
+      this.$emit('changeCropSize', {
+        width: this.cropW,
+        height: this.cropH
+      })
       this.$emit('change-crop-size', {
         width: this.cropW,
         height: this.cropH
@@ -1130,6 +1134,7 @@ export default {
           }
         }
 	// 触发截图框改变大小事件
+	this.$emit('cropSizing', {cropW: this.cropW, cropH: this.cropH})
 	this.$emit('crop-sizing', {cropW: this.cropW, cropH: this.cropH})
       });
     },
