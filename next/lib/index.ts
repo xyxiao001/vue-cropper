@@ -1,18 +1,13 @@
 import VueCropper from './vue-cropper.vue'
 import type { vueCropperGlobal } from './typings'
+import type { App } from 'vue';
 
-const install = function(Vue: any) {
-  Vue.component('VueCropper', VueCropper)
+const install = function(app: App) {
+  app.component('VueCropper', VueCropper)
 }
-
-/* istanbul ignore if */
-if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.createApp({}).component('VueCropper', VueCropper);
-}
-
 
 export const globalCropper: vueCropperGlobal = {
-  version: '1.0.7',
+  version: '1.0.8',
   install,
   VueCropper,
 }

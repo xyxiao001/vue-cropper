@@ -1,15 +1,10 @@
 import VueCropper from '../vue-cropper.vue'
 import { globalCropper } from '../index'
+import type { App } from 'vue';
 export interface vueCropperGlobal {
   version: string,
-  install: (app: any, ...options: any[]) => any,
+  install: (app: App) => void,
   VueCropper: typeof VueCropper
-}
-
-declare global {
-  interface Window { 
-    Vue: any
-  }
 }
 
 export {

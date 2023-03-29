@@ -1,9 +1,9 @@
-import { defineComponent as M, openBlock as C, createElementBlock as x, withDirectives as X, createElementVNode as v, normalizeStyle as y, vShow as H, createCommentVNode as b, normalizeClass as S, toDisplayString as Y } from "vue";
-const W = {};
-W.getData = (t) => new Promise((e, i) => {
+import { defineComponent as M, openBlock as C, createElementBlock as x, withDirectives as O, createElementVNode as v, normalizeStyle as y, vShow as X, createCommentVNode as b, normalizeClass as S, toDisplayString as H } from "vue";
+const Y = {};
+Y.getData = (t) => new Promise((e, i) => {
   let s = {};
   I(t).then((r) => {
-    s.arrayBuffer = r, s.orientation = T(r), e(s);
+    s.arrayBuffer = r, s.orientation = k(r), e(s);
   }).catch((r) => {
     i(r);
   });
@@ -47,13 +47,13 @@ function L(t) {
     r[o] = e.charCodeAt(o);
   return s;
 }
-function k(t, e, i) {
+function T(t, e, i) {
   var s = "", r;
   for (r = e, i += e; r < i; r++)
     s += String.fromCharCode(t.getUint8(r));
   return s;
 }
-function T(t) {
+function k(t) {
   var e = new DataView(t), i = e.byteLength, s, r, o, h, n, l, c, a, p, u;
   if (e.getUint8(0) === 255 && e.getUint8(1) === 216)
     for (p = 2; p < i; ) {
@@ -63,7 +63,7 @@ function T(t) {
       }
       p++;
     }
-  if (c && (r = c + 4, o = c + 10, k(e, r, 4) === "Exif" && (l = e.getUint16(o), n = l === 18761, (n || l === 19789) && e.getUint16(o + 2, n) === 42 && (h = e.getUint32(o + 4, n), h >= 8 && (a = o + h)))), a) {
+  if (c && (r = c + 4, o = c + 10, T(e, r, 4) === "Exif" && (l = e.getUint16(o), n = l === 18761, (n || l === 19789) && e.getUint16(o + 2, n) === 42 && (h = e.getUint32(o + 4, n), h >= 8 && (a = o + h)))), a) {
     for (i = e.getUint16(a, n), u = 0; u < i; u++)
       if (p = a + u * 12 + 2, e.getUint16(p, n) === 274) {
         p += 8, s = e.getUint16(p, n);
@@ -72,12 +72,12 @@ function T(t) {
   }
   return s;
 }
-const A = (t, e) => {
+const N = (t, e) => {
   const i = t.__vccOpts || t;
   for (const [s, r] of e)
     i[s] = r;
   return i;
-}, N = M({
+}, A = M({
   data: function() {
     return {
       // 容器高宽
@@ -397,7 +397,7 @@ const A = (t, e) => {
         if (this.img === "")
           return this.$emit("img-load", "error"), !1;
         let i = t.width, s = t.height;
-        W.getData(t).then((r) => {
+        Y.getData(t).then((r) => {
           this.orientation = r.orientation || 1;
           let o = Number(this.maxImgSize);
           if (!this.orientation && i < o & s < o) {
@@ -566,7 +566,7 @@ const A = (t, e) => {
         var c = e - this.cropX, a = i - this.cropY;
         if (this.canChangeX && (this.changeCropTypeX === 1 ? this.cropOldW - c < n ? (this.cropW = n, this.cropOffsertX = this.cropOldW + this.cropChangeX - o - n) : this.cropOldW - c > 0 ? (this.cropW = s - this.cropChangeX - c <= s - o ? this.cropOldW - c : this.cropOldW + this.cropChangeX - o, this.cropOffsertX = s - this.cropChangeX - c <= s - o ? this.cropChangeX + c : o) : (this.cropW = Math.abs(c) + this.cropChangeX <= s ? Math.abs(c) - this.cropOldW : s - this.cropOldW - this.cropChangeX, this.cropOffsertX = this.cropChangeX + this.cropOldW) : this.changeCropTypeX === 2 && (this.cropOldW + c < n ? this.cropW = n : this.cropOldW + c > 0 ? (this.cropW = this.cropOldW + c + this.cropOffsertX <= s ? this.cropOldW + c : s - this.cropOffsertX, this.cropOffsertX = this.cropChangeX) : (this.cropW = s - this.cropChangeX + Math.abs(c + this.cropOldW) <= s - o ? Math.abs(c + this.cropOldW) : this.cropChangeX - o, this.cropOffsertX = s - this.cropChangeX + Math.abs(c + this.cropOldW) <= s - o ? this.cropChangeX - Math.abs(c + this.cropOldW) : o))), this.canChangeY && (this.changeCropTypeY === 1 ? this.cropOldH - a < l ? (this.cropH = l, this.cropOffsertY = this.cropOldH + this.cropChangeY - h - l) : this.cropOldH - a > 0 ? (this.cropH = r - this.cropChangeY - a <= r - h ? this.cropOldH - a : this.cropOldH + this.cropChangeY - h, this.cropOffsertY = r - this.cropChangeY - a <= r - h ? this.cropChangeY + a : h) : (this.cropH = Math.abs(a) + this.cropChangeY <= r ? Math.abs(a) - this.cropOldH : r - this.cropOldH - this.cropChangeY, this.cropOffsertY = this.cropChangeY + this.cropOldH) : this.changeCropTypeY === 2 && (this.cropOldH + a < l ? this.cropH = l : this.cropOldH + a > 0 ? (this.cropH = this.cropOldH + a + this.cropOffsertY <= r ? this.cropOldH + a : r - this.cropOffsertY, this.cropOffsertY = this.cropChangeY) : (this.cropH = r - this.cropChangeY + Math.abs(a + this.cropOldH) <= r - h ? Math.abs(a + this.cropOldH) : this.cropChangeY - h, this.cropOffsertY = r - this.cropChangeY + Math.abs(a + this.cropOldH) <= r - h ? this.cropChangeY - Math.abs(a + this.cropOldH) : h))), this.canChangeX && this.fixed) {
           var p = this.cropW / this.fixedNumber[0] * this.fixedNumber[1];
-          p < l ? (this.cropH = l, this.cropW = this.fixedNumber[0] * l / this.fixedNumber[1], this.changeCropTypeX === 1 && (this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW))) : p + this.cropOffsertY > r ? (this.cropH = r - this.cropOffsertY, this.cropW = this.cropH / this.fixedNumber[1] * this.fixedNumber[0]) : this.cropH = p;
+          p < l ? (this.cropH = l, this.cropW = this.fixedNumber[0] * l / this.fixedNumber[1], this.changeCropTypeX === 1 && (this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW))) : p + this.cropOffsertY > r ? (this.cropH = r - this.cropOffsertY, this.cropW = this.cropH / this.fixedNumber[1] * this.fixedNumber[0], this.changeCropTypeX === 1 && (this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW))) : this.cropH = p;
         }
         if (this.canChangeY && this.fixed) {
           var u = this.cropH / this.fixedNumber[1] * this.fixedNumber[0];
@@ -936,7 +936,7 @@ function U(t, e, i, s, r, o) {
     onMouseout: e[29] || (e[29] = (...h) => t.cancelScale && t.cancelScale(...h))
   }, [
     t.imgs ? (C(), x("div", $, [
-      X(v("div", {
+      O(v("div", {
         class: "cropper-box-canvas",
         style: y({
           width: t.trueWidth + "px",
@@ -950,7 +950,7 @@ function U(t, e, i, s, r, o) {
           ref: "cropperImg"
         }, null, 8, z)
       ], 4), [
-        [H, !t.loading]
+        [X, !t.loading]
       ])
     ])) : b("", !0),
     v("div", {
@@ -958,7 +958,7 @@ function U(t, e, i, s, r, o) {
       onMousedown: e[0] || (e[0] = (...h) => t.startMove && t.startMove(...h)),
       onTouchstart: e[1] || (e[1] = (...h) => t.startMove && t.startMove(...h))
     }, null, 34),
-    X(v("div", {
+    O(v("div", {
       class: "cropper-crop-box",
       style: y({
         width: t.cropW + "px",
@@ -986,7 +986,7 @@ function U(t, e, i, s, r, o) {
         key: 0,
         class: "crop-info",
         style: y({ top: t.cropInfo.top })
-      }, Y(t.cropInfo.width) + " × " + Y(t.cropInfo.height), 5)) : b("", !0),
+      }, H(t.cropInfo.width) + " × " + H(t.cropInfo.height), 5)) : b("", !0),
       t.fixedBox ? b("", !0) : (C(), x("span", D, [
         v("span", {
           class: "crop-line line-w",
@@ -1050,21 +1050,19 @@ function U(t, e, i, s, r, o) {
         }, null, 32)
       ]))
     ], 4), [
-      [H, t.cropping]
+      [X, t.cropping]
     ])
   ], 544);
 }
-const O = /* @__PURE__ */ A(N, [["render", U], ["__scopeId", "data-v-9dc5c1aa"]]), F = function(t) {
-  t.component("VueCropper", O);
-};
-typeof window < "u" && window.Vue && window.Vue.createApp({}).component("VueCropper", O);
-const V = {
-  version: "1.0.7",
+const W = /* @__PURE__ */ N(A, [["render", U], ["__scopeId", "data-v-49e90ec5"]]), F = function(t) {
+  t.component("VueCropper", W);
+}, j = {
+  version: "1.0.8",
   install: F,
-  VueCropper: O
+  VueCropper: W
 };
 export {
-  O as VueCropper,
-  V as default,
-  V as globalCropper
+  W as VueCropper,
+  j as default,
+  j as globalCropper
 };
