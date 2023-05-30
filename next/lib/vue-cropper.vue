@@ -311,6 +311,11 @@ export default defineComponent({
         }
       },
     },
+    // 导出时,填充背景颜色
+    fillColor: {
+      type: String,
+      default: "",
+    },
   },
   computed: {
     cropInfo() {
@@ -1417,6 +1422,11 @@ export default defineComponent({
           //保存状态
           setCanvasSize(width, height);
           ctx.save();
+          // 填充背景颜色
+          if (this.fillColor) {
+            ctx.fillStyle = this.fillColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
           switch (rotate) {
             case 0:
               if (!this.full) {
@@ -1523,6 +1533,11 @@ export default defineComponent({
           let height = trueHeight * this.scale;
           let ctx = canvas.getContext("2d");
           ctx.save();
+          // 填充背景颜色
+          if (this.fillColor) {
+            ctx.fillStyle = this.fillColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
           switch (rotate) {
             case 0:
               setCanvasSize(width, height);

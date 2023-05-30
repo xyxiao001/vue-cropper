@@ -101,6 +101,11 @@
 
 
 				<div style="display:block; width: 100%;">
+          <label class="c-item">
+            <span>超出裁剪框的颜色</span>
+            <input type="color" v-model="option.fillColor" />
+            <button @click="option.fillColor = 'transparent'" class="btn">清空颜色</button>
+          </label>
 					<label class="c-item">
 						<span>图片默认渲染方式</span>
 						<select v-model="option.mode">
@@ -271,6 +276,7 @@ export default {
         limitMinSize: [50, 50],
         fixed: false,
         fixedNumber: [2, 1],
+        fillColor: '',
       },
       downImg: "#",
       previewStyle1: {},
