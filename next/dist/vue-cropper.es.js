@@ -54,7 +54,7 @@ function T(t, e, i) {
   return s;
 }
 function k(t) {
-  var e = new DataView(t), i = e.byteLength, s, r, o, h, n, l, c, a, p, u;
+  var e = new DataView(t), i = e.byteLength, s, r, o, h, n, l, c, a, p, f;
   if (e.getUint8(0) === 255 && e.getUint8(1) === 216)
     for (p = 2; p < i; ) {
       if (e.getUint8(p) === 255 && e.getUint8(p + 1) === 225) {
@@ -64,8 +64,8 @@ function k(t) {
       p++;
     }
   if (c && (r = c + 4, o = c + 10, T(e, r, 4) === "Exif" && (l = e.getUint16(o), n = l === 18761, (n || l === 19789) && e.getUint16(o + 2, n) === 42 && (h = e.getUint32(o + 4, n), h >= 8 && (a = o + h)))), a) {
-    for (i = e.getUint16(a, n), u = 0; u < i; u++)
-      if (p = a + u * 12 + 2, e.getUint16(p, n) === 274) {
+    for (i = e.getUint16(a, n), f = 0; f < i; f++)
+      if (p = a + f * 12 + 2, e.getUint16(p, n) === 274) {
         p += 8, s = e.getUint16(p, n);
         break;
       }
@@ -262,6 +262,11 @@ const N = (t, e) => {
       validator: function(t) {
         return Array.isArray(t) ? Number(t[0]) >= 0 && Number(t[1]) >= 0 : Number(t) >= 0;
       }
+    },
+    // 导出时,填充背景颜色
+    fillColor: {
+      type: String,
+      default: ""
     }
   },
   computed: {
@@ -470,19 +475,19 @@ const N = (t, e) => {
       let e = "clientX" in t ? t.clientX : t.touches[0].clientX, i = "clientY" in t ? t.clientY : t.touches[0].clientY, s, r;
       s = e - this.moveX, r = i - this.moveY, this.$nextTick(() => {
         if (this.centerBox) {
-          let o = this.getImgAxis(s, r, this.scale), h = this.getCropAxis(), n = this.trueHeight * this.scale, l = this.trueWidth * this.scale, c, a, p, u;
+          let o = this.getImgAxis(s, r, this.scale), h = this.getCropAxis(), n = this.trueHeight * this.scale, l = this.trueWidth * this.scale, c, a, p, f;
           switch (this.rotate) {
             case 1:
             case -1:
             case 3:
             case -3:
-              c = this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2 + (n - l) / 2, a = this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2 + (l - n) / 2, p = c - n + this.cropW, u = a - l + this.cropH;
+              c = this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2 + (n - l) / 2, a = this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2 + (l - n) / 2, p = c - n + this.cropW, f = a - l + this.cropH;
               break;
             default:
-              c = this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2, a = this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2, p = c - l + this.cropW, u = a - n + this.cropH;
+              c = this.cropOffsertX - this.trueWidth * (1 - this.scale) / 2, a = this.cropOffsertY - this.trueHeight * (1 - this.scale) / 2, p = c - l + this.cropW, f = a - n + this.cropH;
               break;
           }
-          o.x1 >= h.x1 && (s = c), o.y1 >= h.y1 && (r = a), o.x2 <= h.x2 && (s = p), o.y2 <= h.y2 && (r = u);
+          o.x1 >= h.x1 && (s = c), o.y1 >= h.y1 && (r = a), o.x2 <= h.x2 && (s = p), o.y2 <= h.y2 && (r = f);
         }
         this.x = s, this.y = r, this.$emit("img-moving", {
           moving: !0,
@@ -569,8 +574,8 @@ const N = (t, e) => {
           p < l ? (this.cropH = l, this.cropW = this.fixedNumber[0] * l / this.fixedNumber[1], this.changeCropTypeX === 1 && (this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW))) : p + this.cropOffsertY > r ? (this.cropH = r - this.cropOffsertY, this.cropW = this.cropH / this.fixedNumber[1] * this.fixedNumber[0], this.changeCropTypeX === 1 && (this.cropOffsertX = this.cropChangeX + (this.cropOldW - this.cropW))) : this.cropH = p;
         }
         if (this.canChangeY && this.fixed) {
-          var u = this.cropH / this.fixedNumber[1] * this.fixedNumber[0];
-          u < n ? (this.cropW = n, this.cropH = this.fixedNumber[1] * n / this.fixedNumber[0], this.cropOffsertY = this.cropOldH + this.cropChangeY - this.cropH) : u + this.cropOffsertX > s ? (this.cropW = s - this.cropOffsertX, this.cropH = this.cropW / this.fixedNumber[0] * this.fixedNumber[1]) : this.cropW = u;
+          var f = this.cropH / this.fixedNumber[1] * this.fixedNumber[0];
+          f < n ? (this.cropW = n, this.cropH = this.fixedNumber[1] * n / this.fixedNumber[0], this.cropOffsertY = this.cropOldH + this.cropChangeY - this.cropH) : f + this.cropOffsertX > s ? (this.cropW = s - this.cropOffsertX, this.cropH = this.cropW / this.fixedNumber[0] * this.fixedNumber[1]) : this.cropW = f;
         }
       });
     },
@@ -688,79 +693,79 @@ const N = (t, e) => {
         if (this.cropW !== 0) {
           let a = e.getContext("2d"), p = 1;
           this.high & !this.full && (p = window.devicePixelRatio), this.enlarge !== 1 & !this.full && (p = Math.abs(Number(this.enlarge)));
-          let u = this.cropW * p, w = this.cropH * p, f = r * this.scale * p, d = o * this.scale * p, g = (this.x - h + this.trueWidth * (1 - this.scale) / 2) * p, m = (this.y - n + this.trueHeight * (1 - this.scale) / 2) * p;
-          switch (c(u, w), a.save(), s) {
+          let f = this.cropW * p, w = this.cropH * p, u = r * this.scale * p, d = o * this.scale * p, g = (this.x - h + this.trueWidth * (1 - this.scale) / 2) * p, m = (this.y - n + this.trueHeight * (1 - this.scale) / 2) * p;
+          switch (c(f, w), a.save(), this.fillColor && (a.fillStyle = this.fillColor, a.fillRect(0, 0, e.width, e.height)), s) {
             case 0:
-              this.full ? (c(u / this.scale, w / this.scale), a.drawImage(
+              this.full ? (c(f / this.scale, w / this.scale), a.drawImage(
                 i,
                 g / this.scale,
                 m / this.scale,
-                f / this.scale,
+                u / this.scale,
                 d / this.scale
-              )) : a.drawImage(i, g, m, f, d);
+              )) : a.drawImage(i, g, m, u, d);
               break;
             case 1:
             case -3:
-              this.full ? (c(u / this.scale, w / this.scale), g = g / this.scale + (f / this.scale - d / this.scale) / 2, m = m / this.scale + (d / this.scale - f / this.scale) / 2, a.rotate(s * 90 * Math.PI / 180), a.drawImage(
+              this.full ? (c(f / this.scale, w / this.scale), g = g / this.scale + (u / this.scale - d / this.scale) / 2, m = m / this.scale + (d / this.scale - u / this.scale) / 2, a.rotate(s * 90 * Math.PI / 180), a.drawImage(
                 i,
                 m,
                 -g - d / this.scale,
-                f / this.scale,
+                u / this.scale,
                 d / this.scale
-              )) : (g = g + (f - d) / 2, m = m + (d - f) / 2, a.rotate(s * 90 * Math.PI / 180), a.drawImage(i, m, -g - d, f, d));
+              )) : (g = g + (u - d) / 2, m = m + (d - u) / 2, a.rotate(s * 90 * Math.PI / 180), a.drawImage(i, m, -g - d, u, d));
               break;
             case 2:
             case -2:
-              this.full ? (c(u / this.scale, w / this.scale), a.rotate(s * 90 * Math.PI / 180), g = g / this.scale, m = m / this.scale, a.drawImage(
+              this.full ? (c(f / this.scale, w / this.scale), a.rotate(s * 90 * Math.PI / 180), g = g / this.scale, m = m / this.scale, a.drawImage(
                 i,
-                -g - f / this.scale,
+                -g - u / this.scale,
                 -m - d / this.scale,
-                f / this.scale,
+                u / this.scale,
                 d / this.scale
-              )) : (a.rotate(s * 90 * Math.PI / 180), a.drawImage(i, -g - f, -m - d, f, d));
+              )) : (a.rotate(s * 90 * Math.PI / 180), a.drawImage(i, -g - u, -m - d, u, d));
               break;
             case 3:
             case -1:
-              this.full ? (c(u / this.scale, w / this.scale), g = g / this.scale + (f / this.scale - d / this.scale) / 2, m = m / this.scale + (d / this.scale - f / this.scale) / 2, a.rotate(s * 90 * Math.PI / 180), a.drawImage(
+              this.full ? (c(f / this.scale, w / this.scale), g = g / this.scale + (u / this.scale - d / this.scale) / 2, m = m / this.scale + (d / this.scale - u / this.scale) / 2, a.rotate(s * 90 * Math.PI / 180), a.drawImage(
                 i,
-                -m - f / this.scale,
+                -m - u / this.scale,
                 g,
-                f / this.scale,
+                u / this.scale,
                 d / this.scale
-              )) : (g = g + (f - d) / 2, m = m + (d - f) / 2, a.rotate(s * 90 * Math.PI / 180), a.drawImage(i, -m - f, g, f, d));
+              )) : (g = g + (u - d) / 2, m = m + (d - u) / 2, a.rotate(s * 90 * Math.PI / 180), a.drawImage(i, -m - u, g, u, d));
               break;
             default:
-              this.full ? (c(u / this.scale, w / this.scale), a.drawImage(
+              this.full ? (c(f / this.scale, w / this.scale), a.drawImage(
                 i,
                 g / this.scale,
                 m / this.scale,
-                f / this.scale,
+                u / this.scale,
                 d / this.scale
-              )) : a.drawImage(i, g, m, f, d);
+              )) : a.drawImage(i, g, m, u, d);
           }
           a.restore();
         } else {
-          let a = r * this.scale, p = o * this.scale, u = e.getContext("2d");
-          switch (u.save(), s) {
+          let a = r * this.scale, p = o * this.scale, f = e.getContext("2d");
+          switch (f.save(), this.fillColor && (f.fillStyle = this.fillColor, f.fillRect(0, 0, e.width, e.height)), s) {
             case 0:
-              c(a, p), u.drawImage(i, 0, 0, a, p);
+              c(a, p), f.drawImage(i, 0, 0, a, p);
               break;
             case 1:
             case -3:
-              c(p, a), u.rotate(s * 90 * Math.PI / 180), u.drawImage(i, 0, -p, a, p);
+              c(p, a), f.rotate(s * 90 * Math.PI / 180), f.drawImage(i, 0, -p, a, p);
               break;
             case 2:
             case -2:
-              c(a, p), u.rotate(s * 90 * Math.PI / 180), u.drawImage(i, -a, -p, a, p);
+              c(a, p), f.rotate(s * 90 * Math.PI / 180), f.drawImage(i, -a, -p, a, p);
               break;
             case 3:
             case -1:
-              c(p, a), u.rotate(s * 90 * Math.PI / 180), u.drawImage(i, -a, 0, a, p);
+              c(p, a), f.rotate(s * 90 * Math.PI / 180), f.drawImage(i, -a, 0, a, p);
               break;
             default:
-              c(a, p), u.drawImage(i, 0, 0, a, p);
+              c(a, p), f.drawImage(i, 0, 0, a, p);
           }
-          u.restore();
+          f.restore();
         }
         t(e);
       };
@@ -1054,10 +1059,10 @@ function U(t, e, i, s, r, o) {
     ])
   ], 544);
 }
-const W = /* @__PURE__ */ N(A, [["render", U], ["__scopeId", "data-v-49e90ec5"]]), F = function(t) {
+const W = /* @__PURE__ */ N(A, [["render", U], ["__scopeId", "data-v-18751258"]]), F = function(t) {
   t.component("VueCropper", W);
 }, j = {
-  version: "1.0.8",
+  version: "1.0.9",
   install: F,
   VueCropper: W
 };
