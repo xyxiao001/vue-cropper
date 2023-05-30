@@ -153,6 +153,7 @@ maxImgSize | 限制图片最大宽度和高度 | `2000` | 0 ~ max
 enlarge | 图片根据截图框输出比例倍数 | `1` | 0 ~ max(建议不要太大不然会卡死的呢)
 mode | 图片默认渲染方式 | `contain` | `contain` , `cover`, `100px`, `100%` auto
 limitMinSize | 裁剪框限制最小区域 | 10 | Number, Array, String
+fillColor | 导出时背景颜色填充 | 空 | `#ffffff`, `white`
 
 ### 2. 可用回调方法
 
