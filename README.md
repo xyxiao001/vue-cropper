@@ -140,7 +140,7 @@ autoCrop | 是否默认生成截图框 | `false` | `true`, `false`
 autoCropWidth | 默认生成截图框宽度 | 容器的 80% | 0 ~ max
 autoCropHeight | 默认生成截图框高度 | 容器的 80% | 0 ~ max
 fixed | 是否开启截图框宽高固定比例 | `false` | `true`, `false`
-fixedNumber | 截图框的宽高比例 | `[1, 1]` | `[ 宽度 ,  高度 ]`
+fixedNumber | 截图框的宽高比例, 开启`fixed`生效 | `[1, 1]` | `[ 宽度 ,  高度 ]`
 full | 是否输出原图比例的截图 | `false` | `true`, `false`
 fixedBox | 固定截图框大小 | 不允许改变 | `false` | `true`, `false`
 canMove | 上传图片是否可以移动 | `true` | `true`, `false`
