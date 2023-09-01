@@ -4,7 +4,11 @@ Exif.getData = (img) => new Promise((reslove, reject) => {
   let obj = {};
   getImageData(img).then(data => {
     obj.arrayBuffer = data;
-    obj.orientation = getOrientation(data);
+    try {
+      obj.orientation = getOrientation(data);
+    } catch {
+      obj.orientation = -1;
+    }
     reslove(obj)
   }).catch(error => {
     reject(error)
@@ -65,17 +69,19 @@ function objectURLToBlob(url, callback) {
 
 
 
-function base64ToArrayBuffer(base64) {
+function base64ToArrayBuffer(base64, contentType) {
+  contentType = contentType || base64.match(/^data\:([^\;]+)\;base64,/mi)[1] || ''; // e.g. 'data:image/jpeg;base64,...' => 'image/jpeg'
   base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
   var binary = atob(base64);
   var len = binary.length;
   var buffer = new ArrayBuffer(len);
-  var view = new Uint8Array(buffer);
+  var view = new Uint16Array(buffer);
   for (var i = 0; i < len; i++) {
-    view[i] = binary.charCodeAt(i);
+      view[i] = binary.charCodeAt(i);
   }
   return buffer;
 }
+
 // 步骤二，Unicode码转字符串
 // ArrayBuffer对象 Unicode码转字符串
 function getStringFromCharCode(dataView, start, length) {
