@@ -551,7 +551,7 @@ export default defineComponent({
       let img = new Image();
       img.onload = () => {
         if (this.img === "") {
-          this.$emit("img-load", "error");
+          this.$emit("img-load", new Error('图片不能为空'));
           return false;
         }
 
@@ -575,11 +575,15 @@ export default defineComponent({
             height = max;
           }
           this.checkOrientationImage(img, this.orientation, width, height);
+        }).catch(error => {
+          this.$emit("img-load", "error");
+          this.$emit("img-load-error", error);
         });
       };
 
-      img.onerror = () => {
+      img.onerror = (error) => {
         this.$emit("img-load", "error");
+        this.$emit("img-load-error", error);
       };
 
       // 判断如果不是base64图片 再添加crossOrigin属性，否则会导致iOS低版本(10.2)无法显示图片

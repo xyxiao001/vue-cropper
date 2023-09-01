@@ -3,7 +3,13 @@ const Y = {};
 Y.getData = (t) => new Promise((e, i) => {
   let s = {};
   I(t).then((r) => {
-    s.arrayBuffer = r, s.orientation = k(r), e(s);
+    s.arrayBuffer = r;
+    try {
+      s.orientation = T(r);
+    } catch {
+      s.orientation = -1;
+    }
+    e(s);
   }).catch((r) => {
     i(r);
   });
@@ -41,19 +47,19 @@ function E(t, e) {
     (this.status == 200 || this.status === 0) && e(this.response);
   }, i.send();
 }
-function L(t) {
-  t = t.replace(/^data\:([^\;]+)\;base64,/gmi, "");
-  for (var e = atob(t), i = e.length, s = new ArrayBuffer(i), r = new Uint8Array(s), o = 0; o < i; o++)
-    r[o] = e.charCodeAt(o);
-  return s;
+function L(t, e) {
+  e = e || t.match(/^data\:([^\;]+)\;base64,/mi)[1] || "", t = t.replace(/^data\:([^\;]+)\;base64,/gmi, "");
+  for (var i = atob(t), s = i.length, r = new ArrayBuffer(s), o = new Uint16Array(r), h = 0; h < s; h++)
+    o[h] = i.charCodeAt(h);
+  return r;
 }
-function T(t, e, i) {
+function k(t, e, i) {
   var s = "", r;
   for (r = e, i += e; r < i; r++)
     s += String.fromCharCode(t.getUint8(r));
   return s;
 }
-function k(t) {
+function T(t) {
   var e = new DataView(t), i = e.byteLength, s, r, o, h, n, l, c, a, p, f;
   if (e.getUint8(0) === 255 && e.getUint8(1) === 216)
     for (p = 2; p < i; ) {
@@ -63,7 +69,7 @@ function k(t) {
       }
       p++;
     }
-  if (c && (r = c + 4, o = c + 10, T(e, r, 4) === "Exif" && (l = e.getUint16(o), n = l === 18761, (n || l === 19789) && e.getUint16(o + 2, n) === 42 && (h = e.getUint32(o + 4, n), h >= 8 && (a = o + h)))), a) {
+  if (c && (r = c + 4, o = c + 10, k(e, r, 4) === "Exif" && (l = e.getUint16(o), n = l === 18761, (n || l === 19789) && e.getUint16(o + 2, n) === 42 && (h = e.getUint32(o + 4, n), h >= 8 && (a = o + h)))), a) {
     for (i = e.getUint16(a, n), f = 0; f < i; f++)
       if (p = a + f * 12 + 2, e.getUint16(p, n) === 274) {
         p += 8, s = e.getUint16(p, n);
@@ -400,7 +406,7 @@ const N = (t, e) => {
       let t = new Image();
       if (t.onload = () => {
         if (this.img === "")
-          return this.$emit("img-load", "error"), !1;
+          return this.$emit("img-load", new Error("图片不能为空")), !1;
         let i = t.width, s = t.height;
         Y.getData(t).then((r) => {
           this.orientation = r.orientation || 1;
@@ -410,9 +416,11 @@ const N = (t, e) => {
             return;
           }
           i > o && (s = s / i * o, i = o), s > o && (i = i / s * o, s = o), this.checkOrientationImage(t, this.orientation, i, s);
+        }).catch((r) => {
+          this.$emit("img-load", "error"), this.$emit("img-load-error", r);
         });
-      }, t.onerror = () => {
-        this.$emit("img-load", "error");
+      }, t.onerror = (i) => {
+        this.$emit("img-load", "error"), this.$emit("img-load-error", i);
       }, this.img.substr(0, 4) !== "data" && (t.crossOrigin = ""), this.isIE) {
         var e = new XMLHttpRequest();
         e.onload = function() {
@@ -1059,10 +1067,10 @@ function U(t, e, i, s, r, o) {
     ])
   ], 544);
 }
-const W = /* @__PURE__ */ N(A, [["render", U], ["__scopeId", "data-v-18751258"]]), F = function(t) {
+const W = /* @__PURE__ */ N(A, [["render", U], ["__scopeId", "data-v-69939069"]]), F = function(t) {
   t.component("VueCropper", W);
 }, j = {
-  version: "1.0.9",
+  version: "1.1.0",
   install: F,
   VueCropper: W
 };
