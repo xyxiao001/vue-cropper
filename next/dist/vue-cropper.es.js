@@ -49,7 +49,7 @@ function E(t, e) {
 }
 function L(t, e) {
   e = e || t.match(/^data\:([^\;]+)\;base64,/mi)[1] || "", t = t.replace(/^data\:([^\;]+)\;base64,/gmi, "");
-  for (var i = atob(t), s = i.length, r = new ArrayBuffer(s), o = new Uint16Array(r), h = 0; h < s; h++)
+  for (var i = atob(t), s = i.length % 2 == 0 ? i.length : i.length + 1, r = new ArrayBuffer(s), o = new Uint16Array(r), h = 0; h < s; h++)
     o[h] = i.charCodeAt(h);
   return r;
 }
@@ -1070,7 +1070,7 @@ function U(t, e, i, s, r, o) {
 const W = /* @__PURE__ */ N(A, [["render", U], ["__scopeId", "data-v-69939069"]]), F = function(t) {
   t.component("VueCropper", W);
 }, j = {
-  version: "1.1.0",
+  version: "1.1.1",
   install: F,
   VueCropper: W
 };
