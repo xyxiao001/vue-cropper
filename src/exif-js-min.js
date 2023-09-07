@@ -73,7 +73,8 @@ function base64ToArrayBuffer(base64, contentType) {
   contentType = contentType || base64.match(/^data\:([^\;]+)\;base64,/mi)[1] || ''; // e.g. 'data:image/jpeg;base64,...' => 'image/jpeg'
   base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
   var binary = atob(base64);
-  var len = binary.length;
+  // byte length of Uint16Array should be a multiple of 2
+  var len = binary.length % 2 == 0 ? binary.length : binary.length + 1;
   var buffer = new ArrayBuffer(len);
   var view = new Uint16Array(buffer);
   for (var i = 0; i < len; i++) {
