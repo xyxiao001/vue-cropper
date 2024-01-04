@@ -1822,8 +1822,16 @@ export default {
       }
       // 截图框默认大小
       // 如果为0 那么计算容器大小 默认为80%
-      var w = cw ? cw : parseFloat(this.autoCropWidth);
-      var h = ch ? ch : parseFloat(this.autoCropHeight);
+      var w = cw ? cw : (
+            /^(\d{1,2}|100)%$/.test(this.autoCropWidth)
+                ? maxWidth * parseFloat(this.autoCropWidth) / 100
+                : parseFloat(this.autoCropWidth)
+      );
+      var h = ch ? ch : (
+            /^(\d{1,2}|100)%$/.test(this.autoCropHeight)
+                ? maxHeight * parseFloat(this.autoCropHeight) / 100
+                : parseFloat(this.autoCropHeight)
+      );
       if (w === 0 || h === 0) {
         w = maxWidth * 0.8;
         h = maxHeight * 0.8;
