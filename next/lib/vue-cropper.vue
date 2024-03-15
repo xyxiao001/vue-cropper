@@ -549,6 +549,7 @@ export default defineComponent({
       this.loading = true;
       this.scale = 1;
       this.rotate = 0;
+      this.imgIsQqualCrop = false;
       this.clearCrop();
       let img = new Image();
       img.onload = () => {
@@ -1844,6 +1845,7 @@ export default defineComponent({
       this.h = 0;
       this.trueWidth = 0;
       this.trueHeight = 0;
+      this.imgIsQqualCrop = false;
       this.clearCrop();
       this.$nextTick(() => {
         this.checkedImg();
