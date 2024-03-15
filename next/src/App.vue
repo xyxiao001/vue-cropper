@@ -253,6 +253,7 @@ export default {
         img: "",
         size: 1,
         full: false,
+        infoTrue: true,
         outputType: "png",
         canMove: true,
         fixedBox: false,
@@ -262,7 +263,7 @@ export default {
         // 只有自动截图开启 宽度高度才生效
         autoCropWidth: 200,
         autoCropHeight: 150,
-        centerBox: false,
+        centerBox: true,
         high: false,
         cropData: {},
 				enlarge: 1,
