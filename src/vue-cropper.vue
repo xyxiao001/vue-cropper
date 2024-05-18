@@ -178,7 +178,9 @@ export default {
       scalingSet: "",
       coeStatus: "",
       // 控制emit触发频率
-      isCanShow: true
+      isCanShow: true,
+      // 图片是否等于截图大小
+      imgIsQqualCrop: false
     };
   },
   props: {
@@ -1461,11 +1463,6 @@ export default {
           //保存状态
           setCanvasSize(width, height);
           ctx.save();
-          // 填充背景颜色
-          if (this.fillColor) {
-            ctx.fillStyle = this.fillColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-          }
           switch (rotate) {
             case 0:
               if (!this.full) {
@@ -1619,6 +1616,11 @@ export default {
       function setCanvasSize(width, height) {
         canvas.width = Math.round(width);
         canvas.height = Math.round(height);
+        // 填充背景颜色
+        if (this.fillColor) {
+          ctx.fillStyle = this.fillColor;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
       }
     },
 
@@ -1930,8 +1932,67 @@ export default {
         if (axis.y2 <= cropAxis.y2) {
           canGo = false;
         }
+        if (!canGo) {
+          this.changeImgScale(axis, cropAxis, scale);
+        }
       }
       return canGo;
+    },
+    // 缩放图片，将图片坐标适配截图框坐标
+    changeImgScale(axis, cropAxis, scale) {
+      // 左右旋转90度时，长宽互换位置, 也就是 1 和 -1的时候
+      let trueWidth = this.trueWidth;
+      let trueHeight = this.trueHeight;
+      let imgW = trueWidth * scale;
+      let imgH = trueHeight * scale;
+      if (imgW >= this.cropW && imgH >= this.cropH) {
+        this.scale = scale;
+      } else {
+        const cropWScale = this.cropW / trueWidth;
+        const cropHScale = this.cropH / trueHeight;
+        const cropScale = this.cropH <= trueHeight * cropWScale ? cropWScale : cropHScale;
+        this.scale = cropScale;
+        imgW = trueWidth * cropScale;
+        imgH = trueHeight * cropScale;
+      }
+      // 用来做移动坐标判断
+      if (!this.imgIsQqualCrop) {
+        // 左边的横坐标 图片不能超过截图框
+        if (axis.x1 >= cropAxis.x1) {
+          if (this.isRotateRightOrLeft) {
+            this.x = cropAxis.x1 - (trueWidth - imgW) / 2 - (imgW - imgH) / 2;
+          } else {
+            this.x = cropAxis.x1 - (trueWidth - imgW) / 2;
+          }
+        }
+        // 右边横坐标
+        if (axis.x2 <= cropAxis.x2) {
+          if (this.isRotateRightOrLeft) {
+            this.x = cropAxis.x1 - (trueWidth - imgW) / 2 - (imgW - imgH) / 2 - imgH + this.cropW;
+          } else {
+            this.x = cropAxis.x2 - (trueWidth - imgW) / 2 - imgW;
+          }
+        }
+        // 纵坐标上面
+        if (axis.y1 >= cropAxis.y1) {
+          if (this.isRotateRightOrLeft) {
+            this.y = cropAxis.y1 - (trueHeight - imgH) / 2 - (imgH - imgW) / 2;
+          } else {
+            this.y = cropAxis.y1 - (trueHeight - imgH) / 2;
+          }
+        }
+        // 纵坐标下面
+        if (axis.y2 <= cropAxis.y2) {
+          if (this.isRotateRightOrLeft) {
+            this.y = cropAxis.y2 - (trueHeight - imgH)/2 - (imgH - imgW) / 2 - imgW;
+          } else {
+            this.y = cropAxis.y2 - (trueHeight - imgH)/2 - imgH;
+          }
+        }
+      }
+      if (imgW < this.cropW || imgH < this.cropH) {
+        this.imgIsQqualCrop = true;
+      }
     }
   },
   mounted() {
