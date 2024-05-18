@@ -105,7 +105,7 @@
           <label class="c-item">
             <span>超出裁剪框的颜色</span>
             <input type="color" v-model="option.fillColor" />
-            <button @click="option.fillColor = 'transparent'" class="btn">清空颜色</button>
+            <button @click="option.fillColor = '#0000'" class="btn">清空颜色</button>
           </label>
 					<label class="c-item">
 						<span>图片默认渲染方式</span>
@@ -230,9 +230,9 @@ export default {
         url: ''
       },
       lists: [
-        // {
-        // 	img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
-        // },
+        {
+        	img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg'
+        },
         {
           img: "https://avatars2.githubusercontent.com/u/15681693?s=460&v=4"
         },
@@ -272,7 +272,7 @@ export default {
         limitMinSize: [50, 50],
         fixed: false,
         fixedNumber: [2, 1],
-        fillColor: '',
+        fillColor: '#000',
       },
       downImg: "#",
       previewStyle1: {},
@@ -452,7 +452,8 @@ export default {
     }
   },
   mounted() {
-    this.changeImg();
+    // this.changeImg();
+    this.option.img = 'http://p-xingtu.bytedance.net/tos-cn-i-gsukxh6lrl/imagex-store/tplv-gsukxh6lrl-compress-static/8ba6a1a9a6b7eff405ee45ba1153159a95ffa910049741fbf562bc2052b9b154~tplv-gsukxh6lrl-compress-static.jpeg'
 		this.code0 = `
 			npm install vue-cropper
 			// 组件内使用

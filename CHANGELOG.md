@@ -1,5 +1,10 @@
 # 更新日志
 ## vue3.x组件更新日志
+### v1.1.3
+- 修复长图缩放问题
+- 修复full场景 fillColor不生效问题
+- 修复build any type类型问题
+
 ### v1.1.2
 centerBox 缩放贴边问题修复 with LAQKing
 
@@ -39,6 +44,11 @@ centerBox 缩放贴边问题修复 with LAQKing
 - 支持 `vue3` 版本
 
 ## vue2.x组件更新日志
+### v0.6.5
+- 修复长图缩放问题
+- 修复full场景 fillColor不生效问题
+- 修复build any type类型问题
+
 ### v0.6.4
 修复部分 base64 图片长度导致展示问题
 ### v0.6.3
