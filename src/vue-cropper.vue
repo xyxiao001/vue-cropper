@@ -1432,6 +1432,7 @@ export default {
 
     getCropChecked(cb) {
       let canvas = document.createElement("canvas");
+      let ctx = canvas.getContext("2d");
       let img = new Image();
       let rotate = this.rotate;
       let trueWidth = this.trueWidth;
@@ -1440,7 +1441,6 @@ export default {
       let cropOffsertY = this.cropOffsertY;
       img.onload = () => {
         if (this.cropW !== 0) {
-          let ctx = canvas.getContext("2d");
           let dpr = 1;
           if (this.high & !this.full) {
             dpr = window.devicePixelRatio;
@@ -1567,13 +1567,7 @@ export default {
         } else {
           let width = trueWidth * this.scale;
           let height = trueHeight * this.scale;
-          let ctx = canvas.getContext("2d");
           ctx.save();
-          // 填充背景颜色
-          if (this.fillColor) {
-            ctx.fillStyle = this.fillColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-          }
           switch (rotate) {
             case 0:
               setCanvasSize(width, height);
@@ -1612,13 +1606,13 @@ export default {
         img.crossOrigin = "Anonymous";
       }
       img.src = this.imgs;
-
+      const fillColor = this.fillColor;
       function setCanvasSize(width, height) {
         canvas.width = Math.round(width);
         canvas.height = Math.round(height);
         // 填充背景颜色
-        if (this.fillColor) {
-          ctx.fillStyle = this.fillColor;
+        if (fillColor) {
+          ctx.fillStyle = fillColor;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
       }

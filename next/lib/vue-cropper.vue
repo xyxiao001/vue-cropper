@@ -1538,11 +1538,6 @@ export default defineComponent({
           let width = trueWidth * this.scale;
           let height = trueHeight * this.scale;
           ctx.save();
-          // 填充背景颜色
-          if (this.fillColor) {
-            ctx.fillStyle = this.fillColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-          }
           switch (rotate) {
             case 0:
               setCanvasSize(width, height);
