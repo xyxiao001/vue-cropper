@@ -1844,12 +1844,16 @@ export default {
         if (w > axis.x2 - axis.x1) {
           // 宽度超标
           w = axis.x2 - axis.x1;
-          h = (w / this.fixedNumber[0]) * this.fixedNumber[1];
+	  if (this.fixed) {
+	    h = (w / this.fixedNumber[0]) * this.fixedNumber[1];
+	  }
         }
         if (h > axis.y2 - axis.y1) {
           // 高度超标
           h = axis.y2 - axis.y1;
-          w = (h / this.fixedNumber[1]) * this.fixedNumber[0];
+	  if (this.fixed) {
+	    w = (h / this.fixedNumber[1]) * this.fixedNumber[0];
+	  }
         }
       }
       // 判断是否大于容器
