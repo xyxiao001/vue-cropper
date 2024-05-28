@@ -1056,7 +1056,7 @@ export default defineComponent({
           if (this.changeCropTypeY === 1) {
             if (this.cropOldH - fh < minCropH) {
               this.cropH = minCropH
-              this.cropOffsertY = this.cropOldH + this.cropChangeY - minY - minCropH
+              this.cropOffsertY = this.cropOldH + this.cropChangeY - minCropH
             } else if (this.cropOldH - fh > 0) {
               this.cropH =
                 wrapperH - this.cropChangeY - fh <= wrapperH - minY
