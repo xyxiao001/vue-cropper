@@ -2171,7 +2171,7 @@ export default {
 }
 
 .point2 {
-  top: -5px;
+  top: -4px;
   left: 50%;
   margin-left: -3px;
   cursor: n-resize;
