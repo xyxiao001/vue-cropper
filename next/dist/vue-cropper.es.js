@@ -760,7 +760,7 @@ const $ = (t, e) => {
           i.restore();
         } else {
           let p = o * this.scale, d = h * this.scale;
-          switch (i.save(), this.fillColor && (i.fillStyle = this.fillColor, i.fillRect(0, 0, e.width, e.height)), r) {
+          switch (i.save(), r) {
             case 0:
               f(p, d), i.drawImage(s, 0, 0, p, d);
               break;
@@ -1085,10 +1085,10 @@ function U(t, e, i, s, r, o) {
     ])
   ], 544);
 }
-const M = /* @__PURE__ */ $(z, [["render", U], ["__scopeId", "data-v-c21c565e"]]), F = function(t) {
+const M = /* @__PURE__ */ $(z, [["render", U], ["__scopeId", "data-v-a742df44"]]), F = function(t) {
   t.component("VueCropper", M);
 }, V = {
-  version: "1.1.3",
+  version: "1.1.4",
   install: F,
   VueCropper: M
 };
