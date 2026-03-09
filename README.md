@@ -1,4 +1,11 @@
 # vue-cropper
+
+> `Vue 3` 用户推荐使用新仓库 [cropper-next-vue](https://github.com/xyxiao001/cropper-next-vue)
+>
+> `cropper-next-vue` 是独立发布的 `Vue 3` 图片裁剪库，支持旋转后的边界判断、图片限制在裁剪框或容器内、高分屏导出和实时预览。
+>
+> 在线文档和示例访问地址: [https://cropper-next-vue.vercel.app/](https://cropper-next-vue.vercel.app/)
+
 一个优雅的图片裁剪插件
 
 [ [查看演示 Demo](https://github.xyxiao.cn/vue-cropper/docs/vue2.html) ]  
@@ -317,8 +324,6 @@ this.$refs.cropper.getCropBlob(data => {
 ## 四、交流
 有什么意见，或者 bug，或者想一起开发 `vue-cropper`， 或者想一起开发其他插件
 ![image](https://github.com/user-attachments/assets/740d67f7-d924-458e-bc88-b76b8a395feb)
-
-
 
 
 
