@@ -843,13 +843,15 @@ export default {
     changeSize(e) {
       e.preventDefault();
       let scale = this.scale;
-      var change = e.deltaY || e.wheelDelta;
-      // 根据图片本身大小 决定每次改变大小的系数, 图片越大系数越小
-      var isFirefox = navigator.userAgent.indexOf("Firefox");
-      change = isFirefox > 0 ? change * 30 : change;
-      // 修复ie的滚动缩放
-      if (this.isIE) {
-        change = -change;
+      let change;
+      // e是FF的事件。window.event是chrome/ie/opera的事件
+      let ee = e || window.event;
+      if (ee.wheelDelta) {
+        //IE/Opera/Chrome
+        change = -ee.wheelDelta;
+      } else if (ee.detail) {
+        //Firefox
+        change = -ee.detail;
       }
       // 1px - 0.2
       var coe = this.coe;
